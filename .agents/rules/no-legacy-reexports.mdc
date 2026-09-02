@@ -1,0 +1,36 @@
+---
+description: When moving code, update imports — never leave legacy re-export shims
+alwaysApply: true
+---
+
+# No Legacy Re-exports
+
+When relocating a function, type, or module to a new canonical path, move callers to the new path. Do not keep compatibility shims at the old location.
+
+## Do not
+
+- Re-export from the old file: `export { foo } from '$lib/new/path'`
+- Leave a stub file whose only job is forwarding to the new module
+- Keep the symbol in an old barrel (`index.ts`) after the move
+
+## Do instead
+
+1. Put the implementation in the canonical location (e.g. `$lib/utils.ts` for shared helpers).
+2. Update every import to the new path.
+3. Delete the old file and remove it from any barrel exports.
+
+```typescript
+// ❌ BAD — legacy shim after moving debounce to $lib/utils
+// src/lib/features/journal/utils/debounce.ts
+export { debounce } from '$lib/utils';
+
+// ❌ BAD — barrel still exposes moved symbol
+export * from './debounce';
+
+// ✅ GOOD — single source, direct imports
+import { debounce } from '$lib/utils';
+```
+
+## When unsure
+
+Prefer one canonical import path over multiple valid paths. If a symbol is shared across features, it belongs in `$lib/`, not under `$lib/features/<feature>/`.

@@ -1,0 +1,28 @@
+---
+description: Never commit unless the user explicitly asks
+alwaysApply: true
+---
+
+# No Git Commits Without Explicit Request
+
+Do not run `git commit` unless the user directly asks in their message.
+
+## Do not commit when
+
+- Implementation is finished
+- Tests pass
+- User says "done", "looks good", or "ship it" without asking for a commit
+- You think a commit would be helpful or tidy up the work
+
+## Only commit when
+
+- User explicitly says: "commit", "create a commit", "commit these changes", etc.
+- User rules in the message give a commit workflow to follow
+
+## If unclear
+
+Ask: "Want me to commit these changes?" — do not commit on your own.
+
+## Related commands
+
+Same rule applies to amend, push, and other git write operations unless the user explicitly requests them.

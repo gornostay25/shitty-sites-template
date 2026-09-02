@@ -1,0 +1,25 @@
+---
+description: This project has no test suite — do not suggest or add tests unless asked
+alwaysApply: true
+---
+
+# No Tests in This Project
+
+This repo has no automated test suite: no test files, no `test` scripts, no CI test jobs.
+
+## During brainstorming and design
+
+- Do **not** include a "testing" section or test strategy in design docs
+- Do **not** suggest unit, integration, or e2e tests as part of the plan
+- Skip TDD and test-driven workflows unless the user explicitly asks
+- Prefer manual verification steps when describing how to validate work
+
+## During implementation
+
+- Do **not** add test files (`*.test.ts`, `*_test.go`, etc.) unless the user explicitly asks
+- Do **not** add test dependencies or `test` scripts to `package.json` unless asked
+- Do **not** scaffold test infrastructure as part of a feature
+
+## When the user asks for tests
+
+Only then: add tests, discuss test strategy, or follow TDD as requested.
