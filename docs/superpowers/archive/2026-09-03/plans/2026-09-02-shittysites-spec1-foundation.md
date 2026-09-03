@@ -1,5 +1,7 @@
 # ShittySites Spec 1 — Foundation Implementation Plan
 
+**Status:** Implemented (archived 2026-09-03) — spec at [`../specs/2026-08-28-shittysites-template-design.md`](../specs/2026-08-28-shittysites-template-design.md)
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Replace the Marketing template shell with ShittySites foundation — config (D1 + R2 + KV cache), identity, SEO, unstyled Base layout with dark-mode demo, Tailwind wired, docs updated. Site runs on `bun dev` with minimal pages.
@@ -8,7 +10,7 @@
 
 **Tech Stack:** Astro 7 SSR, EmDash `@0.36.0`, Cloudflare (D1/R2/KV), `@tailwindcss/vite`, `@astrojs/react` (wired, no demo React pages), Bun
 
-**Spec reference:** `docs/superpowers/specs/2026-08-28-shittysites-template-design.md` (Spec 1 sections)
+**Spec reference:** [`../specs/2026-08-28-shittysites-template-design.md`](../specs/2026-08-28-shittysites-template-design.md) (Spec 1 sections)
 
 ## Global Constraints
 
@@ -508,4 +510,4 @@ File map, feature → doc table (object cache, dark mode, plugins placeholder), 
 | Strip Marketing | Task 1 |
 | Working dev server | Task 10 |
 
-**Handoff:** When Spec 1 verification passes, proceed to `docs/superpowers/plans/2026-09-02-shittysites-spec2-full-demo.md`.
+**Handoff:** When Spec 1 verification passes, proceed to [`../plans/2026-09-02-shittysites-spec2-full-demo.md`](../plans/2026-09-02-shittysites-spec2-full-demo.md).

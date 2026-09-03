@@ -4,7 +4,7 @@ Agency base template for client websites built on [EmDash](https://github.com/em
 
 **Not a finished design.** Demo markup is intentionally unstyled semantic HTML. Tailwind is wired in `src/styles/global.css` for client theming.
 
-Design spec: [docs/superpowers/specs/2026-08-28-shittysites-template-design.md](./docs/superpowers/specs/2026-08-28-shittysites-template-design.md)
+Design spec: [docs/superpowers/archive/2026-09-03/specs/2026-08-28-shittysites-template-design.md](./docs/superpowers/archive/2026-09-03/specs/2026-08-28-shittysites-template-design.md)
 
 ## What's Included (Spec 1 Foundation)
 
@@ -16,6 +16,14 @@ Design spec: [docs/superpowers/specs/2026-08-28-shittysites-template-design.md](
 - i18n configured for English only — see [AGENTS.md](./AGENTS.md) to add locales
 
 Spec 2 adds full demo routes, seed content, widgets, search, and the `demo-blocks` plugin. See [docs/SEED-REFERENCE.md](./docs/SEED-REFERENCE.md) when available.
+
+### Hub Feedback (`hub-feedback` plugin)
+
+Visual feedback widget for Shitty Hub — enabled in **Plugins → Hub Feedback**. Set **Hub API Key** and **Site ID** in plugin settings. Widget appears on all public pages when the plugin is active and both values are configured.
+
+- Plugin: `src/plugins/hub-feedback/`
+- API: `https://shitty-hub.gornostay25.dev/support`
+- Archived spec: [docs/superpowers/archive/2026-09-03/specs/2026-09-03-hub-feedback-plugin-design.md](./docs/superpowers/archive/2026-09-03/specs/2026-09-03-hub-feedback-plugin-design.md)
 
 ## Fork Workflow
 
@@ -125,9 +133,10 @@ Canonical URLs and Open Graph tags use `resolveSiteIdentity()` and `getSeoMeta()
 - **Cache:** KV (`CACHE` binding)
 - **Framework:** Astro 7 with `@astrojs/cloudflare`
 - **CSS:** Tailwind CSS 4 (`@tailwindcss/vite`) — imported, not used on demo markup
+- **Feedback widget:** `@fasterfixes/core`, `@floating-ui/react`, `modern-screenshot` (Hub Feedback plugin)
 
 ## Documentation
 
 - [EmDash docs](https://docs.emdashcms.com/) — live reference via MCP at `https://docs.emdashcms.com/mcp`
 - [AGENTS.md](./AGENTS.md) — AI agent guide for this template
-- [Design spec](./docs/superpowers/specs/2026-08-28-shittysites-template-design.md)
+- [Design spec](./docs/superpowers/archive/2026-09-03/specs/2026-08-28-shittysites-template-design.md)

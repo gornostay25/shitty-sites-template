@@ -14,13 +14,14 @@
  * Docs: https://docs.emdashcms.com/guides/dark-mode/
  */
 import { getSiteSettings } from "emdash";
-import { EmDashHead } from "emdash/ui";
+import { EmDashHead, EmDashBodyEnd } from "emdash/ui";
 import { createPublicPageContext } from "emdash/page";
 import type { SeoMeta } from "emdash";
 import "../styles/global.css";
 import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import SeoHead from "../components/SeoHead.astro";
+import HubFeedback from "../plugins/hub-feedback/astro/HubFeedback.astro";
 import { resolveSiteIdentity } from "../utils/site-identity";
 
 interface Props extends SeoMeta {
@@ -120,5 +121,8 @@ const pageCtx = createPublicPageContext({
 				});
 			});
 		</script>
+
+		<EmDashBodyEnd page={pageCtx} />
+		<HubFeedback />
 	</body>
 </html>

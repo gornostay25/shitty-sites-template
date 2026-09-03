@@ -5,6 +5,7 @@ import { defineConfig } from "astro/config";
 import { d1, r2, kvCache } from "@emdash-cms/cloudflare";
 import emdash from "emdash/astro";
 import { demoBlocksPlugin } from "./src/plugins/demo-blocks/index.ts";
+import { hubFeedbackPlugin } from "./src/plugins/hub-feedback/index.ts";
 
 export default defineConfig({
 	output: "server",
@@ -43,7 +44,7 @@ export default defineConfig({
 				defaultTtl: 3600,
 				keyPrefix: "em",
 			}),
-			plugins: [demoBlocksPlugin()],
+			plugins: [demoBlocksPlugin(), hubFeedbackPlugin()],
 		}),
 	],
 	// fonts: commented with pointer to Astro fonts docs — add via fontProviders when theming

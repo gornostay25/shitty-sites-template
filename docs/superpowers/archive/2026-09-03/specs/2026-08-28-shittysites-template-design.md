@@ -1,9 +1,15 @@
 # ShittySites Template — Design Spec
 
+**Status:** Implemented (archived 2026-09-03) — plans at [`../plans/2026-09-02-shittysites-spec1-foundation.md`](../plans/2026-09-02-shittysites-spec1-foundation.md), [`../plans/2026-09-02-shittysites-spec2-full-demo.md`](../plans/2026-09-02-shittysites-spec2-full-demo.md)  
 **Date:** 2026-08-28 (revised 2026-09-02)  
-**Status:** Approved  
 **Template name:** ShittySites Template  
 **EmDash version:** `@0.36.0`
+
+### Amendment log
+
+| Date       | Note                                                                                                                                                       |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-09-03 | **Superseded (partial):** Content entry types and byline patch documented separately. See [`./2026-09-03-content-entry-types-design.md`](./2026-09-03-content-entry-types-design.md). |
 
 ## Summary
 

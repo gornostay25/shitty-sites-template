@@ -1,6 +1,7 @@
 # Content Entry Types — Design Spec
 
-**Status:** Implemented  
+**Status:** Implemented (archived 2026-09-03)  
+**Supersedes (partially):** [`./2026-08-28-shittysites-template-design.md`](./2026-08-28-shittysites-template-design.md) — byline type patch and removal of content field casts after Spec 1/2  
 **Date:** 2026-09-03  
 **EmDash version:** 0.36.0 (+ bun patch)  
 **Scope:** Template-wide type cleanup (Option B)

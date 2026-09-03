@@ -1,5 +1,7 @@
 # ShittySites Spec 2 — Full Demo Implementation Plan
 
+**Status:** Implemented (archived 2026-09-03) — spec at [`../specs/2026-08-28-shittysites-template-design.md`](../specs/2026-08-28-shittysites-template-design.md)
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Expand foundation into full EmDash capability demo — comprehensive seed, all page routes, native demo-blocks plugin, widgets/menus/taxonomies/comments/bylines, SEED-REFERENCE.md.
@@ -8,9 +10,9 @@
 
 **Tech Stack:** EmDash `@0.36.0`, Astro SSR, Portable Text, Cloudflare Workers
 
-**Spec reference:** `docs/superpowers/specs/2026-08-28-shittysites-template-design.md` (Spec 2 sections)
+**Spec reference:** [`../specs/2026-08-28-shittysites-template-design.md`](../specs/2026-08-28-shittysites-template-design.md) (Spec 2 sections)
 
-**Prerequisite:** Spec 1 complete and verified (`docs/superpowers/plans/2026-09-02-shittysites-spec1-foundation.md`)
+**Prerequisite:** Spec 1 complete and verified ([`../plans/2026-09-02-shittysites-spec1-foundation.md`](../plans/2026-09-02-shittysites-spec1-foundation.md))
 
 ## Global Constraints
 
