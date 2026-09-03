@@ -1,0 +1,32 @@
+---
+import type { MenuItem } from "emdash";
+import MenuNav from "./MenuNav.astro";
+
+interface Props {
+	items: MenuItem[];
+	label?: string;
+}
+
+const { items, label } = Astro.props;
+---
+
+<nav aria-label={label}>
+	<ul>
+		{
+			items.map((item) => (
+				<li>
+					<a
+						href={item.url}
+						target={item.target}
+						rel={item.target === "_blank" ? "noopener noreferrer" : undefined}
+					>
+						{item.label}
+					</a>
+					{item.children.length > 0 && (
+						<MenuNav items={item.children} />
+					)}
+				</li>
+			))
+		}
+	</ul>
+</nav>

@@ -1,0 +1,34 @@
+---
+/**
+ * Custom Portable Text renderer for htmlBlock nodes.
+ * Sanitizes HTML before rendering — never use set:html with raw editor output.
+ *
+ * Docs: https://docs.emdashcms.com/guides/working-with-content/
+ */
+import sanitizeHtml from "sanitize-html";
+
+interface Props {
+	node: {
+		_type: "htmlBlock";
+		_key: string;
+		html: string;
+	};
+}
+
+const { node } = Astro.props;
+
+if (!node?.html) {
+	return null;
+}
+
+const sanitized = sanitizeHtml(node.html, {
+	allowedTags: [...sanitizeHtml.defaults.allowedTags, "img", "span", "iframe"],
+	allowedAttributes: {
+		...sanitizeHtml.defaults.allowedAttributes,
+		img: ["src", "alt", "width", "height"],
+		iframe: ["src", "width", "height", "allow", "allowfullscreen", "frameborder"],
+	},
+});
+---
+
+<div set:html={sanitized} />

@@ -1,0 +1,54 @@
+diff --git a/node_modules/emdash/.bun-tag-214a12e0ecd41052 b/.bun-tag-214a12e0ecd41052
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/node_modules/emdash/.bun-tag-697626b7bd3f3abc b/.bun-tag-697626b7bd3f3abc
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/node_modules/emdash/.bun-tag-cd4b6d564906df97 b/.bun-tag-cd4b6d564906df97
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/node_modules/emdash/.bun-tag-f7edf5edf47ecb89 b/.bun-tag-f7edf5edf47ecb89
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/dist/zod-generator-DylzusHh.mjs b/dist/zod-generator-DylzusHh.mjs
+index 11074fb7420d22f31092ddbb39f4507ce063df8d..62d87c2afe26b05ee4b1694835055007e9cae220 100644
+--- a/dist/zod-generator-DylzusHh.mjs
++++ b/dist/zod-generator-DylzusHh.mjs
+@@ -169,6 +169,7 @@ function generateTypeScript(collection, interfaceName = getInterfaceName(collect
+ 	lines.push(`  createdAt: Date;`);
+ 	lines.push(`  updatedAt: Date;`);
+ 	lines.push(`  publishedAt: Date | null;`);
++	lines.push(`  byline?: BylineSummary | null;`);
+ 	lines.push(`  bylines?: ContentBylineCredit[];`);
+ 	lines.push(`  terms?: Record<string, TaxonomyTerm[]>;`);
+ 	lines.push(`}`);
+@@ -186,7 +187,7 @@ function generateTypesFile(collections) {
+ 	lines.push(`/// <reference types="emdash/locals" />`);
+ 	lines.push(``);
+ 	const needsPortableText = collections.some((c) => c.fields.some((f) => f.type === "portableText"));
+-	const imports = ["ContentBylineCredit", "TaxonomyTerm"];
++	const imports = ["BylineSummary", "ContentBylineCredit", "TaxonomyTerm"];
+ 	if (needsPortableText) imports.push("PortableTextBlock");
+ 	lines.push(`import type { ${imports.join(", ")} } from "emdash";`);
+ 	lines.push(``);
+diff --git a/src/schema/zod-generator.ts b/src/schema/zod-generator.ts
+index f626bf1a14143fe77209265ef9e487a655da2b1c..60990a337f7bfdfe20f3ecf8e96c74a787505c4c 100644
+--- a/src/schema/zod-generator.ts
++++ b/src/schema/zod-generator.ts
+@@ -344,6 +344,7 @@ export function generateTypeScript(
+ 	lines.push(`  updatedAt: Date;`);
+ 	lines.push(`  publishedAt: Date | null;`);
+ 	// Bylines are eagerly loaded by getEmDashCollection/getEmDashEntry
++	lines.push(`  byline?: BylineSummary | null;`);
+ 	lines.push(`  bylines?: ContentBylineCredit[];`);
+ 	// Taxonomy terms are eagerly loaded by getEmDashCollection/getEmDashEntry,
+ 	// keyed by taxonomy name (e.g. data.terms?.tag)
+@@ -374,7 +375,7 @@ export function generateTypesFile(collections: CollectionWithFields[]): string {
+ 
+ 	// Build imports - ContentBylineCredit and TaxonomyTerm are always needed
+ 	// for the hydrated bylines/terms fields
+-	const imports = ["ContentBylineCredit", "TaxonomyTerm"];
++	const imports = ["BylineSummary", "ContentBylineCredit", "TaxonomyTerm"];
+ 	if (needsPortableText) {
+ 		imports.push("PortableTextBlock");
+ 	}

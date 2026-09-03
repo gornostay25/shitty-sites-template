@@ -2,7 +2,13 @@
 
 Companion to `seed/seed.json`. Maps each seed section to template files, EmDash docs, and fork guidance.
 
-**Fresh database:** seed applies automatically on first request when the database is empty and setup has not been completed. If you already ran the old starter seed, delete the local D1 database (`.wrangler` state) or use a clean project before expecting this seed to apply.
+**Fresh database:** seed applies automatically on first request when the database is empty and setup has not been completed. If you already ran the old starter seed, delete the local D1 database (`.wrangler/state`) or use a clean project before expecting this seed to apply.
+
+**Demo content:** schema/settings apply on first boot; entries (posts, pages, showcase) require dev bypass with `content=1`:
+
+`http://localhost:4321/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin&content=1`
+
+If dev bypass returns **500**, check the terminal — common cause: invalid keys inside `content.*.data` (e.g. `seo` belongs in `_emdash_seo`, not in collection field data). Fix the seed and reset `.wrangler/state`.
 
 ---
 
@@ -114,6 +120,50 @@ Fork: replace with client redirects; remove demo entries.
 
 ---
 
+## demo-blocks plugin (native)
+
+| Block type | Renderer |
+|------------|----------|
+| `demo.callout` | `src/plugins/demo-blocks/astro/Callout.astro` |
+| `demo.cta` | `src/plugins/demo-blocks/astro/CtaStrip.astro` |
+| `demo.stats` | `src/plugins/demo-blocks/astro/Stats.astro` |
+
+Registered via `demoBlocksPlugin()` in `astro.config.mjs`. PT renderers auto-merge — pages only override site-specific types (e.g. `htmlBlock`).
+
+Docs: [Native plugins](https://docs.emdashcms.com/plugins/creating-native-plugins/)
+
+Fork: remove plugin from `astro.config.mjs` and delete `src/plugins/demo-blocks/`.
+
+---
+
+## object cache (config, not seed)
+
+KV-backed query cache in `astro.config.mjs` → `objectCache: kvCache({ binding: "CACHE" })`.
+
+Requires `CACHE` KV namespace in `wrangler.jsonc`. Tune `defaultTtl` and `keyPrefix` per site.
+
+Docs: [Object cache](https://docs.emdashcms.com/deployment/object-cache/)
+
+---
+
+## dark mode (template, not seed)
+
+Theme switcher demo in `Base.astro` + minimal `light-dark()` tokens in `global.css`.
+
+Fork light-only sites: see AI comment block at top of `Base.astro`.
+
+Docs: [Dark mode](https://docs.emdashcms.com/guides/dark-mode/)
+
+---
+
+## media usage tracking (admin one-time step)
+
+**Settings → Media usage tracking** → enable and keep tab open until Ready. No cron in wrangler (removed in EmDash 0.36).
+
+Docs: [Media Library — Used in](https://docs.emdashcms.com/guides/media-library/)
+
+---
+
 ## content (demo entries)
 
 | Entry | Route | Notes |
@@ -122,11 +172,24 @@ Fork: replace with client redirects; remove demo entries.
 | `feature-guide` | `/feature-guide` | Full Width layout — feature index |
 | `contact` | `/contact` | Sidebar layout |
 | `welcome` | `/posts/welcome` | Bylines, comments, featured image |
-| `seo-demo` | `/posts/seo-demo` | Per-entry SEO overrides |
+| `seo-demo` | `/posts/seo-demo` | SEO panel demo — set overrides in admin (not in seed `data`) |
 | `scheduled-post` | (draft) | Schedule in admin — seed uses draft placeholder |
 | `all-fields` | `/showcase/all-fields` | Field type reference |
 
 Fork: replace all demo content with client copy; delete showcase entries entirely for production.
+
+**Do not put `seo` inside `content.*.data`.** Per-entry SEO is stored in `_emdash_seo`. At runtime it appears as `entry.data.seo` when loaded, but seed `data` must only contain collection field slugs.
+
+---
+
+## public/ (static assets)
+
+| Path | Served at | Purpose |
+|------|-----------|---------|
+| `public/hero-visual.svg` | `/hero-visual.svg` | Light-theme demo SVG |
+| `public/hero-visual-alt.svg` | `/hero-visual-alt.svg` | Dark-theme demo SVG |
+
+Files in `public/` are served from the site root with no build processing. Use root-relative URLs in templates (`/hero-visual.svg`). For optimized Astro assets use `src/assets/`; for CMS images use `<Image image={...} />`.
 
 ---
 
@@ -136,6 +199,7 @@ Fork: replace all demo content with client copy; delete showcase entries entirel
 |---------|-------|
 | Identity | `site-identity.ts`, `Base.astro` |
 | SEO | `seo.ts`, `SeoHead.astro` |
+| Demo blocks plugin | `src/plugins/demo-blocks/`, `astro.config.mjs` |
 | Page layouts | `PageDefault/FullWidth/Sidebar.astro`, `[slug].astro` |
 | Blog | `posts/index.astro`, `posts/[slug].astro` |
 | Taxonomies | `category/[slug].astro`, `tag/[slug].astro`, `PostTerms.astro` |

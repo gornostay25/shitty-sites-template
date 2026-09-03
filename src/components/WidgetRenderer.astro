@@ -1,0 +1,48 @@
+---
+/**
+ * Manual widget rendering alternative to `<WidgetArea />`.
+ * Prefer WidgetArea in layouts unless you need custom markup per widget type.
+ *
+ * Docs: https://docs.emdashcms.com/guides/widgets/
+ */
+import { getMenu, getWidgetArea } from "emdash";
+import { PortableText } from "emdash/ui";
+import MenuNav from "./MenuNav.astro";
+
+interface Props {
+	name: string;
+}
+
+const { name } = Astro.props;
+const area = await getWidgetArea(name);
+
+const widgets = await Promise.all(
+	(area?.widgets ?? []).map(async (widget) => ({
+		widget,
+		menu:
+			widget.type === "menu" && widget.menuName
+				? await getMenu(widget.menuName)
+				: null,
+	})),
+);
+---
+
+{
+	widgets.map(({ widget, menu }) => (
+		<section>
+			{widget.title && <h2>{widget.title}</h2>}
+			{widget.type === "content" && widget.content && (
+				<PortableText value={widget.content} />
+			)}
+			{menu && menu.items.length > 0 && (
+				<MenuNav items={menu.items} label={widget.title} />
+			)}
+			{widget.type === "component" && (
+				<p>
+					Component widget {widget.componentId} — use WidgetArea for
+					built-in rendering.
+				</p>
+			)}
+		</section>
+	))
+}

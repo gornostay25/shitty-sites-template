@@ -1,0 +1,32 @@
+---
+import type { SiteIdentity } from "../utils/site-identity";
+
+interface Props {
+	social: SiteIdentity["social"];
+}
+
+const { social } = Astro.props;
+
+const links = [
+	{ key: "twitter", label: "Twitter", href: social?.twitter ? `https://twitter.com/${social.twitter}` : null },
+	{ key: "github", label: "GitHub", href: social?.github ? `https://github.com/${social.github}` : null },
+	{ key: "facebook", label: "Facebook", href: social?.facebook ? `https://facebook.com/${social.facebook}` : null },
+	{ key: "instagram", label: "Instagram", href: social?.instagram ? `https://instagram.com/${social.instagram}` : null },
+	{ key: "linkedin", label: "LinkedIn", href: social?.linkedin ? `https://linkedin.com/in/${social.linkedin}` : null },
+	{ key: "youtube", label: "YouTube", href: social?.youtube ? `https://youtube.com/@${social.youtube}` : null },
+].filter((link) => link.href);
+---
+
+{links.length > 0 && (
+	<nav aria-label="Social links">
+		<ul>
+			{links.map((link) => (
+				<li>
+					<a href={link.href!} rel="noopener noreferrer">
+						{link.label}
+					</a>
+				</li>
+			))}
+		</ul>
+	</nav>
+)}

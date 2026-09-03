@@ -1,0 +1,15 @@
+---
+/** Fork agents: add Tailwind classes here when theming a client site. */
+interface Props {
+	headline?: string;
+	buttonLabel?: string;
+	buttonUrl?: string;
+}
+
+const { headline, buttonLabel, buttonUrl } = Astro.props;
+---
+
+<section>
+	{headline && <h2>{headline}</h2>}
+	{buttonLabel && buttonUrl && <a href={buttonUrl}>{buttonLabel}</a>}
+</section>

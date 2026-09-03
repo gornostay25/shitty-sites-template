@@ -1,0 +1,79 @@
+---
+/**
+ * Route: /posts/{slug}
+ * Features: Image + darkVariant, comments, bylines, terms, preview, sidebar widgets
+ * Admin: Content → Posts; Comments in post editor
+ * Docs: https://docs.emdashcms.com/guides/querying-content/
+ * Fork: remove Comments/PostMeta/PostTerms if client has no blog
+ */
+import { getEmDashEntry, getSiteSettings } from "emdash";
+import { Comments, CommentForm } from "emdash/ui/comments";
+import { Image, PortableText, WidgetArea } from "emdash/ui";
+import Base from "../../layouts/Base.astro";
+import HtmlBlock from "../../components/HtmlBlock.astro";
+import PostMeta from "../../components/PostMeta.astro";
+import PostTerms from "../../components/PostTerms.astro";
+import { resolveSiteIdentity } from "../../utils/site-identity";
+import { buildContentSeo } from "../../utils/seo";
+
+const { slug } = Astro.params;
+if (!slug) return Astro.redirect("/404");
+
+const { entry: post, isPreview, cacheHint } = await getEmDashEntry("posts", slug);
+if (!post) return Astro.redirect("/404");
+
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+
+const settings = await getSiteSettings();
+const identity = resolveSiteIdentity(settings);
+const contentId = post.data.id;
+
+const seo = buildContentSeo({
+	entry: post,
+	path: `/posts/${slug}`,
+	identity,
+	image: post.data.featured_image?.src,
+});
+---
+
+<Base
+	{...seo}
+	content={{ collection: "posts", id: contentId, slug: post.id }}
+>
+	{isPreview && (
+		<p role="status">Preview mode — unpublished changes may be visible.</p>
+	)}
+
+	<article>
+		{
+			post.data.featured_image && (
+				<div {...post.edit.featured_image}>
+					<Image image={post.data.featured_image} />
+				</div>
+			)
+		}
+
+		<h1 {...post.edit.title}>{post.data.title}</h1>
+
+		<PostMeta post={post} identity={identity} />
+		<PostTerms post={post} />
+
+		{
+			post.data.content && (
+				<div {...post.edit.content}>
+					<PortableText
+						value={post.data.content}
+						components={{ type: { htmlBlock: HtmlBlock } }}
+					/>
+				</div>
+			)
+		}
+
+		<Comments collection="posts" contentId={contentId} threaded />
+		<CommentForm collection="posts" contentId={contentId} />
+	</article>
+
+	<aside>
+		<WidgetArea name="sidebar" />
+	</aside>
+</Base>

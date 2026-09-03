@@ -1,0 +1,53 @@
+---
+/**
+ * Route: /category/{slug}
+ * Features: hierarchical taxonomy archive
+ * Admin: Content → Taxonomies → Categories
+ * Docs: https://docs.emdashcms.com/guides/taxonomies/
+ * Fork: delete with category taxonomy if unused
+ */
+import { getEmDashCollection, getSiteSettings, getTerm } from "emdash";
+import Base from "../../layouts/Base.astro";
+import { resolveSiteIdentity } from "../../utils/site-identity";
+import { buildStaticPageSeo } from "../../utils/seo";
+
+const { slug } = Astro.params;
+if (!slug) return Astro.redirect("/404");
+
+const term = await getTerm("category", slug);
+if (!term) return Astro.redirect("/404");
+
+const settings = await getSiteSettings();
+const identity = resolveSiteIdentity(settings);
+const seo = buildStaticPageSeo({
+	title: term.label,
+	path: `/category/${slug}`,
+	identity,
+});
+
+const { entries: posts, cacheHint } = await getEmDashCollection("posts", {
+	where: { category: term.slug },
+	orderBy: { published_at: "desc" },
+});
+
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+---
+
+<Base {...seo}>
+	<article>
+		<h1>{term.label}</h1>
+		{
+			posts.length === 0 ? (
+				<p>No posts in this category.</p>
+			) : (
+				<ul>
+					{posts.map((post) => (
+						<li>
+							<a href={`/posts/${post.id}`}>{post.data.title}</a>
+						</li>
+					))}
+				</ul>
+			)
+		}
+	</article>
+</Base>

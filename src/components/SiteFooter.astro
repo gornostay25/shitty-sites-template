@@ -1,0 +1,29 @@
+---
+import { getMenu } from "emdash";
+import { WidgetArea } from "emdash/ui";
+import type { SiteIdentity } from "../utils/site-identity";
+import MenuNav from "./MenuNav.astro";
+import SocialLinks from "./SocialLinks.astro";
+
+interface Props {
+	identity: SiteIdentity;
+}
+
+const { identity } = Astro.props;
+const footerMenu = await getMenu("footer");
+---
+
+<footer>
+	<!-- Apply Tailwind classes when theming a client site -->
+	<WidgetArea name="footer" />
+
+	{footerMenu && footerMenu.items.length > 0 && (
+		<MenuNav items={footerMenu.items} label="Footer navigation" />
+	)}
+
+	<SocialLinks social={identity.social} />
+
+	<p>
+		&copy; {new Date().getFullYear()} {identity.siteTitle}
+	</p>
+</footer>

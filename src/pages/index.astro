@@ -1,49 +1,65 @@
 ---
-import { getEmDashEntry } from "emdash";
+/**
+ * Route: /
+ * Features: recent posts, feature-guide link, programmatic section render
+ * Admin: Settings → General (site identity)
+ * Docs: https://docs.emdashcms.com/guides/querying-content/
+ * Fork: replace home layout when client needs custom homepage
+ */
+import { getEmDashCollection, getSection, getSiteSettings } from "emdash";
+import { PortableText } from "emdash/ui";
 import Base from "../layouts/Base.astro";
-import MarketingBlocks from "../components/MarketingBlocks.astro";
+import { resolveSiteIdentity } from "../utils/site-identity";
+import { buildStaticPageSeo } from "../utils/seo";
 
-const { entry: page, cacheHint } = await getEmDashEntry("pages", "home");
+const settings = await getSiteSettings();
+const identity = resolveSiteIdentity(settings);
+const seo = buildStaticPageSeo({ path: "/", identity });
 
-if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+const [{ entries: posts, cacheHint: postsCache }, newsletterSection] =
+	await Promise.all([
+		getEmDashCollection("posts", {
+			limit: identity.postsPerPage,
+			orderBy: { published_at: "desc" },
+		}),
+		getSection("newsletter-cta"),
+	]);
 
-const pageTitle = page?.data.title;
-const pageContent = page?.data.content;
+if (Astro.cache?.enabled) Astro.cache.set(postsCache);
 ---
 
-<Base
-	title={pageTitle !== "Home" ? pageTitle : undefined}
-	description="Build products people actually want. The all-in-one platform for modern teams."
->
-	{
-		pageContent ? (
-			<MarketingBlocks value={pageContent} />
-		) : (
-			<div class="empty-state">
-				<h1>Welcome to Acme</h1>
-				<p>Edit the home page content in the admin to get started.</p>
-				<a href="/_emdash/admin" class="btn btn-primary">
-					Open Admin
-				</a>
-			</div>
-		)
-	}
+<Base {...seo}>
+	<article>
+		<h1>{identity.siteTitle}</h1>
+		<p>{identity.siteTagline}</p>
+		<p><a href="/feature-guide">Feature guide</a> — full EmDash capability index.</p>
+
+		<section>
+			<h2>Recent posts</h2>
+			{
+				posts.length === 0 ? (
+					<p>No posts yet.</p>
+				) : (
+					<ul>
+						{posts.map((post) => (
+							<li>
+								<a href={`/posts/${post.id}`}>{post.data.title}</a>
+								{post.data.excerpt && <p>{post.data.excerpt}</p>}
+							</li>
+						))}
+					</ul>
+				)
+			}
+			<p><a href="/posts">All posts</a></p>
+		</section>
+
+		{
+			newsletterSection && (
+				<section>
+					<h2>{newsletterSection.title}</h2>
+					<PortableText value={newsletterSection.content} />
+				</section>
+			)
+		}
+	</article>
 </Base>
-
-<style>
-	.empty-state {
-		text-align: center;
-		padding: var(--spacing-5xl) var(--spacing-lg);
-		max-width: var(--max-width);
-		margin: 0 auto;
-	}
-
-	.empty-state h1 {
-		margin-bottom: var(--spacing-md);
-	}
-
-	.empty-state p {
-		color: var(--color-muted);
-		margin-bottom: var(--spacing-xl);
-	}
-</style>

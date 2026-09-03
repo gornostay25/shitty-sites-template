@@ -1,0 +1,137 @@
+---
+/**
+ * Route: /showcase/{slug}
+ * Features: all 16 EmDash field types on one entry
+ * Admin: Content → Showcase
+ * Docs: https://docs.emdashcms.com/guides/field-types/
+ * Fork: delete showcase collection, this route, and seed entries — dev reference only
+ */
+import { getEmDashEntry, getSiteSettings } from "emdash";
+import { Image, PortableText } from "emdash/ui";
+import Base from "../../layouts/Base.astro";
+import { resolveSiteIdentity } from "../../utils/site-identity";
+import { buildContentSeo } from "../../utils/seo";
+
+const { slug } = Astro.params;
+if (!slug) return Astro.redirect("/404");
+
+const { entry, cacheHint } = await getEmDashEntry("showcase", slug);
+if (!entry) return Astro.redirect("/404");
+
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+
+const settings = await getSiteSettings();
+const identity = resolveSiteIdentity(settings);
+const seo = buildContentSeo({
+	entry,
+	path: `/showcase/${slug}`,
+	identity,
+});
+
+const {
+	title,
+	field_string,
+	field_text,
+	field_url,
+	field_number,
+	field_integer,
+	field_boolean,
+	field_datetime,
+	field_select,
+	field_multi_select,
+	field_portable_text,
+	field_image,
+	field_file,
+	field_reference,
+	field_json,
+	field_slug,
+	field_repeater,
+} = entry.data;
+---
+
+<Base {...seo}>
+	<article>
+		<h1>{title}</h1>
+
+		<dl>
+			<dt>String</dt>
+			<dd>{field_string}</dd>
+
+			<dt>Text</dt>
+			<dd>{field_text}</dd>
+
+			<dt>URL</dt>
+			<dd>{field_url && <a href={field_url}>{field_url}</a>}</dd>
+
+			<dt>Number</dt>
+			<dd>{field_number}</dd>
+
+			<dt>Integer</dt>
+			<dd>{field_integer}</dd>
+
+			<dt>Boolean</dt>
+			<dd>{field_boolean ? "true" : "false"}</dd>
+
+			<dt>Datetime</dt>
+			<dd>{field_datetime}</dd>
+
+			<dt>Select</dt>
+			<dd>{field_select}</dd>
+
+			<dt>Multi select</dt>
+			<dd>{field_multi_select?.join(", ")}</dd>
+
+			<dt>Portable Text</dt>
+			<dd>
+				{field_portable_text && <PortableText value={field_portable_text} />}
+			</dd>
+
+			<dt>Image</dt>
+			<dd>
+				{
+					field_image && (
+						<>
+							{/* MediaValue: { id, src, alt, darkVariant? } — not a string URL */}
+							<Image image={field_image} />
+						</>
+					)
+				}
+			</dd>
+
+			<dt>File</dt>
+			<dd>
+				{
+					field_file && (
+						<a href={field_file.src ?? field_file.url}>
+							{field_file.filename ?? "Download file"}
+						</a>
+					)
+				}
+			</dd>
+
+			<dt>Reference</dt>
+			<dd>{field_reference}</dd>
+
+			<dt>JSON</dt>
+			<dd><pre>{JSON.stringify(field_json, null, 2)}</pre></dd>
+
+			<dt>Slug</dt>
+			<dd>{field_slug}</dd>
+
+			<dt>Repeater</dt>
+			<dd>
+				{
+					field_repeater && (
+						<ul>
+							{field_repeater.map((row) => (
+								<li>
+									{row.label}: {row.value}
+								</li>
+							))}
+						</ul>
+					)
+				}
+			</dd>
+		</dl>
+	</article>
+</Base>

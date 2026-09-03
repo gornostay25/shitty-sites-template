@@ -1,0 +1,44 @@
+---
+import { getMenu } from "emdash";
+import LiveSearch from "emdash/ui/search";
+import { Image } from "emdash/ui";
+import type { SiteIdentity } from "../utils/site-identity";
+import MenuNav from "./MenuNav.astro";
+
+interface Props {
+	identity: SiteIdentity;
+}
+
+const { identity } = Astro.props;
+const menu = await getMenu("primary");
+---
+
+<header>
+	<!-- Apply Tailwind classes when theming a client site -->
+	<a href="/">
+		{
+			identity.siteLogo?.url ? (
+				<Image
+					image={{
+						id: identity.siteLogo.mediaId,
+						src: identity.siteLogo.url,
+						alt: identity.siteLogo.alt,
+					}}
+					alt={identity.siteLogo.alt || identity.siteTitle}
+				/>
+			) : (
+				identity.siteTitle
+			)
+		}
+	</a>
+
+	{menu && menu.items.length > 0 && (
+		<MenuNav items={menu.items} label="Primary navigation" />
+	)}
+
+	{/*
+		LiveSearch scopes to Astro.currentLocale when i18n is enabled (EmDash 0.36).
+		Pass locale={null} to search across all locales.
+	*/}
+	<LiveSearch collections={["posts", "pages"]} placeholder="Search…" />
+</header>

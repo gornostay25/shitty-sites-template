@@ -1,0 +1,24 @@
+---
+/** Fork agents: add Tailwind classes here when theming a client site. */
+interface StatItem {
+	label?: string;
+	value?: string;
+}
+
+interface Props {
+	items?: StatItem[];
+}
+
+const { items = [] } = Astro.props;
+---
+
+<dl>
+	{
+		items.map((item) => (
+			<div>
+				{item.label && <dt>{item.label}</dt>}
+				{item.value && <dd>{item.value}</dd>}
+			</div>
+		))
+	}
+</dl>

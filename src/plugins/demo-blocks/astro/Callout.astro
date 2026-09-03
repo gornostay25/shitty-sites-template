@@ -1,0 +1,15 @@
+---
+/** Fork agents: add Tailwind classes here when theming a client site. */
+interface Props {
+	title?: string;
+	body?: string;
+	variant?: "info" | "warning";
+}
+
+const { title, body, variant = "info" } = Astro.props;
+---
+
+<aside data-variant={variant}>
+	{title && <h3>{title}</h3>}
+	{body && <p>{body}</p>}
+</aside>

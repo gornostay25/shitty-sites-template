@@ -1,0 +1,42 @@
+---
+import { getEntryTerms } from "emdash";
+import type { ContentEntry } from "emdash";
+import type { Post } from "../../emdash-env";
+
+interface Props {
+	post: ContentEntry<Post>;
+}
+
+const { post } = Astro.props;
+const contentId = post.data.id;
+
+const [categories, tags] = await Promise.all([
+	getEntryTerms("posts", contentId, "category"),
+	getEntryTerms("posts", contentId, "tag"),
+]);
+---
+
+{
+	(categories.length > 0 || tags.length > 0) && (
+		<nav aria-label="Post terms">
+			{categories.length > 0 && (
+				<ul>
+					{categories.map((term) => (
+						<li>
+							<a href={`/category/${term.slug}`}>{term.label}</a>
+						</li>
+					))}
+				</ul>
+			)}
+			{tags.length > 0 && (
+				<ul>
+					{tags.map((term) => (
+						<li>
+							<a href={`/tag/${term.slug}`}>{term.label}</a>
+						</li>
+					))}
+				</ul>
+			)}
+		</nav>
+	)
+}

@@ -2,33 +2,290 @@
 	"$schema": "https://emdashcms.com/seed.schema.json",
 	"version": "1",
 	"meta": {
-		"name": "Marketing Starter",
-		"description": "A conversion-focused marketing site with landing pages",
+		"name": "ShittySites Template",
+		"description": "Agency base template — full EmDash reference, unstyled on purpose",
 		"author": "EmDash"
 	},
 	"settings": {
-		"title": "Acme",
-		"tagline": "Build products people actually want"
+		"title": "ShittySites Demo",
+		"tagline": "Full EmDash capability reference — unstyled on purpose",
+		"url": "http://localhost:4321",
+		"postsPerPage": 5,
+		"dateFormat": "MMMM d, yyyy",
+		"timezone": "UTC",
+		"social": {
+			"twitter": "shittysites",
+			"github": "example"
+		},
+		"seo": {
+			"titleSeparator": " | ",
+			"robotsTxt": null,
+			"googleVerification": "",
+			"bingVerification": ""
+		}
 	},
 	"collections": [
 		{
-			"slug": "pages",
-			"label": "Pages",
-			"labelSingular": "Page",
-			"supports": ["drafts", "revisions", "seo"],
+			"slug": "posts",
+			"label": "Posts",
+			"labelSingular": "Post",
+			"supports": ["drafts", "revisions", "preview", "scheduling", "search", "seo"],
+			"commentsEnabled": true,
 			"fields": [
 				{
 					"slug": "title",
 					"label": "Title",
 					"type": "string",
-					"required": true
+					"required": true,
+					"searchable": true
+				},
+				{
+					"slug": "featured_image",
+					"label": "Featured Image",
+					"type": "image",
+					"options": {
+						"darkVariant": true
+					}
 				},
 				{
 					"slug": "content",
 					"label": "Content",
-					"type": "portableText"
+					"type": "portableText",
+					"searchable": true
+				},
+				{
+					"slug": "excerpt",
+					"label": "Excerpt",
+					"type": "text"
 				}
 			]
+		},
+		{
+			"slug": "pages",
+			"label": "Pages",
+			"labelSingular": "Page",
+			"urlPattern": "/{slug}",
+			"supports": ["drafts", "revisions", "search", "seo"],
+			"fields": [
+				{
+					"slug": "title",
+					"label": "Title",
+					"type": "string",
+					"required": true,
+					"searchable": true
+				},
+				{
+					"slug": "template",
+					"label": "Page Template",
+					"type": "select",
+					"defaultValue": "Default",
+					"validation": {
+						"options": ["Default", "Full Width", "Sidebar"]
+					}
+				},
+				{
+					"slug": "content",
+					"label": "Content",
+					"type": "portableText",
+					"searchable": true
+				}
+			]
+		},
+		{
+			"slug": "showcase",
+			"label": "Showcase",
+			"labelSingular": "Showcase Entry",
+			"urlPattern": "/showcase/{slug}",
+			"supports": ["drafts", "revisions", "search"],
+			"hidden": true,
+			"fields": [
+				{
+					"slug": "title",
+					"label": "Title",
+					"type": "string",
+					"required": true,
+					"searchable": true
+				},
+				{
+					"slug": "field_string",
+					"label": "String",
+					"type": "string"
+				},
+				{
+					"slug": "field_text",
+					"label": "Text",
+					"type": "text",
+					"options": {
+						"rows": 4
+					}
+				},
+				{
+					"slug": "field_url",
+					"label": "URL",
+					"type": "url"
+				},
+				{
+					"slug": "field_number",
+					"label": "Number",
+					"type": "number"
+				},
+				{
+					"slug": "field_integer",
+					"label": "Integer",
+					"type": "integer"
+				},
+				{
+					"slug": "field_boolean",
+					"label": "Boolean",
+					"type": "boolean"
+				},
+				{
+					"slug": "field_datetime",
+					"label": "Datetime",
+					"type": "datetime"
+				},
+				{
+					"slug": "field_select",
+					"label": "Select",
+					"type": "select",
+					"validation": {
+						"options": ["alpha", "beta", "gamma"]
+					}
+				},
+				{
+					"slug": "field_multi_select",
+					"label": "Multi Select",
+					"type": "multiSelect",
+					"validation": {
+						"options": ["red", "green", "blue"]
+					}
+				},
+				{
+					"slug": "field_portable_text",
+					"label": "Portable Text",
+					"type": "portableText"
+				},
+				{
+					"slug": "field_image",
+					"label": "Image",
+					"type": "image",
+					"options": {
+						"darkVariant": true
+					}
+				},
+				{
+					"slug": "field_file",
+					"label": "File",
+					"type": "file"
+				},
+				{
+					"slug": "field_reference",
+					"label": "Reference",
+					"type": "reference",
+					"options": {
+						"collection": "pages"
+					}
+				},
+				{
+					"slug": "field_json",
+					"label": "JSON",
+					"type": "json"
+				},
+				{
+					"slug": "field_slug",
+					"label": "Slug",
+					"type": "slug"
+				},
+				{
+					"slug": "field_repeater",
+					"label": "Repeater",
+					"type": "repeater",
+					"validation": {
+						"subFields": [
+							{
+								"slug": "label",
+								"label": "Label",
+								"type": "string"
+							},
+							{
+								"slug": "value",
+								"label": "Value",
+								"type": "string"
+							}
+						],
+						"maxItems": 6
+					}
+				}
+			]
+		}
+	],
+	"taxonomies": [
+		{
+			"name": "category",
+			"label": "Categories",
+			"labelSingular": "Category",
+			"hierarchical": true,
+			"collections": ["posts"],
+			"terms": [
+				{
+					"slug": "emdash",
+					"label": "EmDash",
+					"description": "EmDash platform topics"
+				},
+				{
+					"slug": "guides",
+					"label": "Guides",
+					"parent": "emdash",
+					"description": "How-to guides and walkthroughs"
+				},
+				{
+					"slug": "reference",
+					"label": "Reference",
+					"parent": "emdash",
+					"description": "Capability reference material"
+				}
+			]
+		},
+		{
+			"name": "tag",
+			"label": "Tags",
+			"labelSingular": "Tag",
+			"hierarchical": false,
+			"collections": ["posts"],
+			"terms": [
+				{ "slug": "welcome", "label": "Welcome" },
+				{ "slug": "demo", "label": "Demo" },
+				{ "slug": "seo", "label": "SEO" },
+				{ "slug": "dark-mode", "label": "Dark Mode" },
+				{ "slug": "comments", "label": "Comments" }
+			]
+		},
+		{
+			"name": "service-area",
+			"label": "Service Areas",
+			"labelSingular": "Service Area",
+			"hierarchical": false,
+			"collections": ["pages"],
+			"terms": [
+				{ "slug": "local", "label": "Local" },
+				{ "slug": "remote", "label": "Remote" },
+				{ "slug": "nationwide", "label": "Nationwide" }
+			]
+		}
+	],
+	"bylines": [
+		{
+			"id": "editorial",
+			"slug": "shittysites-editorial",
+			"displayName": "ShittySites Editorial",
+			"bio": "The ShittySites template editorial team."
+		},
+		{
+			"id": "guest-author",
+			"slug": "guest-contributor",
+			"displayName": "Guest Contributor",
+			"isGuest": true,
+			"bio": "Occasional guest author for demo multi-byline posts."
 		}
 	],
 	"menus": [
@@ -38,151 +295,382 @@
 			"items": [
 				{
 					"type": "custom",
-					"label": "Features",
-					"url": "/#features"
+					"label": "Home",
+					"url": "/"
+				},
+				{
+					"type": "collection",
+					"label": "Posts",
+					"collection": "posts"
+				},
+				{
+					"type": "page",
+					"ref": "about"
+				},
+				{
+					"type": "post",
+					"ref": "welcome",
+					"label": "Welcome Post"
+				},
+				{
+					"type": "taxonomy",
+					"label": "Guides",
+					"ref": "guides",
+					"collection": "category"
 				},
 				{
 					"type": "custom",
-					"label": "Pricing",
-					"url": "/pricing"
-				},
-				{
-					"type": "custom",
-					"label": "Contact",
-					"url": "/contact"
+					"label": "More",
+					"url": "#",
+					"children": [
+						{
+							"type": "custom",
+							"label": "Feature Guide",
+							"url": "/feature-guide"
+						},
+						{
+							"type": "custom",
+							"label": "Showcase",
+							"url": "/showcase/all-fields"
+						},
+						{
+							"type": "page",
+							"ref": "contact",
+							"label": "Contact"
+						},
+						{
+							"type": "custom",
+							"label": "Search",
+							"url": "/search"
+						}
+					]
 				}
 			]
 		},
 		{
-			"name": "footer_product",
-			"label": "Footer: Product",
+			"name": "footer",
+			"label": "Footer Navigation",
 			"items": [
-				{ "type": "custom", "label": "Features", "url": "/#features" },
-				{ "type": "custom", "label": "Pricing", "url": "/pricing" },
-				{ "type": "custom", "label": "Changelog", "url": "/changelog" }
+				{
+					"type": "custom",
+					"label": "Posts",
+					"url": "/posts"
+				},
+				{
+					"type": "custom",
+					"label": "Search",
+					"url": "/search"
+				},
+				{
+					"type": "page",
+					"ref": "about"
+				},
+				{
+					"type": "page",
+					"ref": "feature-guide",
+					"label": "Feature Guide"
+				},
+				{
+					"type": "page",
+					"ref": "contact"
+				}
+			]
+		}
+	],
+	"redirects": [
+		{
+			"source": "/old-about",
+			"destination": "/about",
+			"type": 301
+		},
+		{
+			"source": "/blog",
+			"destination": "/posts",
+			"type": 308
+		}
+	],
+	"widgetAreas": [
+		{
+			"name": "sidebar",
+			"label": "Sidebar",
+			"description": "Widget area on post detail and Sidebar page layout",
+			"widgets": [
+				{
+					"type": "component",
+					"componentId": "core:search",
+					"title": "Search",
+					"props": {
+						"placeholder": "Search posts and pages…"
+					}
+				},
+				{
+					"type": "component",
+					"componentId": "core:categories",
+					"title": "Categories",
+					"props": {
+						"showCount": true,
+						"hierarchical": true
+					}
+				},
+				{
+					"type": "component",
+					"componentId": "core:recent-posts",
+					"title": "Recent Posts",
+					"props": {
+						"count": 5,
+						"showDate": true
+					}
+				},
+				{
+					"type": "component",
+					"componentId": "core:tags",
+					"title": "Tags",
+					"props": {
+						"showCount": true,
+						"limit": 20
+					}
+				},
+				{
+					"type": "component",
+					"componentId": "core:archives",
+					"title": "Archives",
+					"props": {
+						"type": "monthly",
+						"limit": 6
+					}
+				},
+				{
+					"type": "content",
+					"title": "About this demo",
+					"content": [
+						{
+							"_type": "block",
+							"_key": "sidebar-about",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "sidebar-about-span",
+									"text": "ShittySites is an unstyled EmDash reference. Fork agents delete unused seed sections together with matching routes.",
+									"marks": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"type": "menu",
+					"title": "Quick Links",
+					"menuName": "footer"
+				}
 			]
 		},
 		{
-			"name": "footer_company",
-			"label": "Footer: Company",
-			"items": [
-				{ "type": "custom", "label": "About", "url": "/about" },
-				{ "type": "custom", "label": "Blog", "url": "/blog" },
-				{ "type": "custom", "label": "Careers", "url": "/careers" }
+			"name": "footer",
+			"label": "Footer",
+			"description": "Footer widget area in SiteFooter",
+			"widgets": [
+				{
+					"type": "content",
+					"title": "ShittySites Demo",
+					"content": [
+						{
+							"_type": "block",
+							"_key": "footer-tagline",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "footer-tagline-span",
+									"text": "Full EmDash capability reference — unstyled on purpose. Set site URL in Settings before deploy.",
+									"marks": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"type": "menu",
+					"title": "Footer Menu",
+					"menuName": "footer"
+				}
+			]
+		}
+	],
+	"sections": [
+		{
+			"slug": "hero-centered",
+			"title": "Centered Hero",
+			"description": "Full-width hero with centered heading and supporting copy",
+			"keywords": ["hero", "banner", "header", "landing", "centered"],
+			"content": [
+				{
+					"_type": "block",
+					"_key": "hero-h1",
+					"style": "h1",
+					"markDefs": [],
+					"children": [
+						{
+							"_type": "span",
+							"_key": "hero-h1-span",
+							"text": "Build on EmDash",
+							"marks": []
+						}
+					]
+				},
+				{
+					"_type": "block",
+					"_key": "hero-lead",
+					"style": "normal",
+					"markDefs": [],
+					"children": [
+						{
+							"_type": "span",
+							"_key": "hero-lead-span",
+							"text": "Every route in this template is server-rendered. Demo markup is semantic HTML only — add Tailwind when you fork for a client.",
+							"marks": []
+						}
+					]
+				}
 			]
 		},
 		{
-			"name": "footer_support",
-			"label": "Footer: Support",
-			"items": [
-				{ "type": "custom", "label": "Documentation", "url": "/docs" },
-				{ "type": "custom", "label": "Contact", "url": "/contact" },
-				{ "type": "custom", "label": "Status", "url": "/status" }
+			"slug": "newsletter-cta",
+			"title": "Newsletter CTA",
+			"description": "Call-to-action block for newsletter signup demos",
+			"keywords": ["newsletter", "subscribe", "email", "cta"],
+			"content": [
+				{
+					"_type": "block",
+					"_key": "newsletter-h3",
+					"style": "h3",
+					"markDefs": [],
+					"children": [
+						{
+							"_type": "span",
+							"_key": "newsletter-h3-span",
+							"text": "Stay in the loop",
+							"marks": []
+						}
+					]
+				},
+				{
+					"_type": "block",
+					"_key": "newsletter-body",
+					"style": "normal",
+					"markDefs": [],
+					"children": [
+						{
+							"_type": "span",
+							"_key": "newsletter-body-span",
+							"text": "Get notified when new posts are published. Rendered via getSection(\"newsletter-cta\") on the home page.",
+							"marks": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"slug": "feature-callout",
+			"title": "Feature Callout",
+			"description": "Highlight a single platform feature",
+			"keywords": ["feature", "callout", "highlight", "capability"],
+			"content": [
+				{
+					"_type": "block",
+					"_key": "feature-h3",
+					"style": "h3",
+					"markDefs": [],
+					"children": [
+						{
+							"_type": "span",
+							"_key": "feature-h3-span",
+							"text": "Portable Text + native plugins",
+							"marks": []
+						}
+					]
+				},
+				{
+					"_type": "block",
+					"_key": "feature-body",
+					"style": "normal",
+					"markDefs": [],
+					"children": [
+						{
+							"_type": "span",
+							"_key": "feature-body-span",
+							"text": "Insert this section with /section in the editor. Plugin blocks auto-merge into PortableText via componentsEntry.",
+							"marks": []
+						}
+					]
+				}
 			]
 		}
 	],
 	"content": {
-		"pages": [
+		"posts": [
 			{
-				"id": "home",
-				"slug": "home",
+				"id": "welcome",
+				"slug": "welcome",
 				"status": "published",
+				"bylines": [
+					{ "byline": "editorial" },
+					{ "byline": "guest-author", "roleLabel": "Guest essay" }
+				],
+				"taxonomies": {
+					"category": ["guides"],
+					"tag": ["welcome", "demo", "comments"]
+				},
 				"data": {
-					"title": "Home",
+					"title": "Welcome to ShittySites",
+					"excerpt": "Your first demo post — bylines, taxonomies, featured image, and comments.",
+					"featured_image": {
+						"$media": {
+							"url": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&h=630&fit=crop",
+							"alt": "Laptop displaying code on a desk",
+							"filename": "welcome-featured.jpg"
+						}
+					},
 					"content": [
 						{
-							"_type": "marketing.hero",
-							"_key": "hero",
-							"headline": "Build products people actually want",
-							"subheadline": "The all-in-one platform for modern teams. Ship faster, collaborate better, and focus on what matters.",
-							"primaryCtaLabel": "Start Free Trial",
-							"primaryCtaUrl": "/signup",
-							"secondaryCtaLabel": "Watch Demo",
-							"secondaryCtaUrl": "/demo"
-						},
-						{
-							"_type": "marketing.features",
-							"_key": "features",
-							"headline": "Everything you need to ship",
-							"subheadline": "Powerful features that help your team move faster without sacrificing quality.",
-							"features": [
+							"_type": "block",
+							"_key": "welcome-p1",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
 								{
-									"icon": "zap",
-									"title": "Lightning Fast",
-									"description": "Built for speed from the ground up. Your team will notice the difference from day one."
-								},
-								{
-									"icon": "shield",
-									"title": "Enterprise Security",
-									"description": "SOC 2 compliant with end-to-end encryption. Your data stays yours."
-								},
-								{
-									"icon": "users",
-									"title": "Team Collaboration",
-									"description": "Real-time collaboration features that make working together feel effortless."
-								},
-								{
-									"icon": "chart",
-									"title": "Powerful Analytics",
-									"description": "Understand how your team works with detailed insights and reporting."
-								},
-								{
-									"icon": "code",
-									"title": "Developer Friendly",
-									"description": "A robust API and CLI tools that integrate with your existing workflow."
-								},
-								{
-									"icon": "globe",
-									"title": "Global Scale",
-									"description": "Deployed to edge locations worldwide. Fast for everyone, everywhere."
+									"_type": "span",
+									"_key": "welcome-p1-span",
+									"text": "This post demonstrates multi-author bylines, hierarchical categories, flat tags, a featured image, and threaded comments. Leave a comment below to verify the comments UI.",
+									"marks": []
 								}
 							]
 						},
 						{
-							"_type": "marketing.testimonials",
-							"_key": "testimonials",
-							"headline": "Trusted by teams everywhere",
-							"testimonials": [
+							"_type": "block",
+							"_key": "welcome-p2",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
 								{
-									"quote": "We cut our deployment time by 80%. The team actually enjoys shipping now.",
-									"author": "Sarah Chen",
-									"role": "CTO",
-									"company": "Streamline"
+									"_type": "span",
+									"_key": "welcome-p2-span",
+									"text": "Use ",
+									"marks": []
 								},
 								{
-									"quote": "The best developer experience I've used. Everything just works the way you'd expect.",
-									"author": "Marcus Johnson",
-									"role": "Lead Engineer",
-									"company": "Volt Labs"
+									"_type": "span",
+									"_key": "welcome-p2-code",
+									"text": "post.data.id",
+									"marks": ["code"]
 								},
 								{
-									"quote": "Finally, a tool that doesn't get in the way. Our team is more productive than ever.",
-									"author": "Elena Rodriguez",
-									"role": "VP Engineering",
-									"company": "Nexus"
-								}
-							]
-						},
-						{
-							"_type": "marketing.faq",
-							"_key": "faq",
-							"headline": "Frequently asked questions",
-							"items": [
-								{
-									"question": "How long does setup take?",
-									"answer": "Most teams are up and running in under 15 minutes. Our onboarding wizard guides you through connecting your existing tools and inviting your team."
-								},
-								{
-									"question": "Can I migrate from my current tool?",
-									"answer": "Yes. We have built-in importers for all major platforms, and our support team can help with custom migrations for larger teams."
-								},
-								{
-									"question": "What kind of support do you offer?",
-									"answer": "All plans include email support with a 24-hour response time. Pro and Enterprise plans include priority support with dedicated account managers."
-								},
-								{
-									"question": "Is there a free trial?",
-									"answer": "Yes, all plans come with a 14-day free trial. No credit card required. You can upgrade, downgrade, or cancel at any time."
+									"_type": "span",
+									"_key": "welcome-p2-rest",
+									"text": " (ULID) for Comments and CommentForm — not post.id (slug).",
+									"marks": []
 								}
 							]
 						}
@@ -190,69 +678,218 @@
 				}
 			},
 			{
-				"id": "pricing",
-				"slug": "pricing",
+				"id": "seo-demo",
+				"slug": "seo-demo",
 				"status": "published",
+				"taxonomies": {
+					"category": ["reference"],
+					"tag": ["seo", "demo"]
+				},
 				"data": {
-					"title": "Pricing",
+					"title": "SEO Overrides Demo",
+					"excerpt": "Per-entry SEO title and description — set overrides in the post editor SEO panel.",
 					"content": [
 						{
-							"_type": "marketing.hero",
-							"_key": "pricing-hero",
-							"headline": "Simple, transparent pricing",
-							"subheadline": "No hidden fees. No surprises. Start free and scale as you grow.",
-							"centered": true
+							"_type": "block",
+							"_key": "seo-p1",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "seo-p1-span",
+									"text": "Open Settings → SEO for site-wide defaults. Per-entry overrides live in the post editor SEO panel (not in seed data — SEO is stored in _emdash_seo, not collection fields).",
+									"marks": []
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"id": "dark-scheme",
+				"slug": "dark-scheme",
+				"status": "published",
+				"taxonomies": {
+					"category": ["reference"],
+					"tag": ["dark-mode", "demo"]
+				},
+				"data": {
+					"title": "Dark Scheme Featured Image",
+					"excerpt": "Featured image with light and dark variants — swap themes to compare.",
+					"featured_image": {
+						"$media": {
+							"url": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&h=630&fit=crop",
+							"alt": "Light theme — laptop with bright workspace",
+							"filename": "dark-scheme-light.jpg"
 						},
+						"darkVariant": {
+							"$media": {
+								"url": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&h=630&fit=crop",
+								"alt": "Dark theme — code editor on dark background",
+								"filename": "dark-scheme-dark.jpg"
+							}
+						}
+					},
+					"content": [
 						{
-							"_type": "marketing.pricing",
-							"_key": "pricing-plans",
-							"plans": [
+							"_type": "block",
+							"_key": "dark-p1",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
 								{
-									"name": "Starter",
-									"price": "$0",
-									"period": "/month",
-									"description": "Perfect for trying things out",
-									"features": "Up to 3 team members\n5 projects\nBasic analytics\nCommunity support\n1GB storage",
-									"ctaLabel": "Get Started",
-									"ctaUrl": "/signup"
-								},
+									"_type": "span",
+									"_key": "dark-p1-span",
+									"text": "Toggle Light / Dark / System in the header. The Image component renders both featured_image variants and shows the one matching the active color scheme.",
+									"marks": []
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"id": "scheduled-post",
+				"slug": "scheduled-post",
+				"status": "draft",
+				"taxonomies": {
+					"category": ["guides"],
+					"tag": ["demo"]
+				},
+				"data": {
+					"title": "Scheduled Post (Draft Placeholder)",
+					"excerpt": "Seed as draft — schedule in admin to demo publishing workflow.",
+					"content": [
+						{
+							"_type": "block",
+							"_key": "sched-p1",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
 								{
-									"name": "Pro",
-									"price": "$29",
-									"period": "/user/month",
-									"description": "For growing teams",
-									"features": "Unlimited team members\nUnlimited projects\nAdvanced analytics\nPriority support\n100GB storage\nCustom integrations\nAPI access",
-									"ctaLabel": "Start Free Trial",
-									"ctaUrl": "/signup?plan=pro",
-									"highlighted": true
-								},
+									"_type": "span",
+									"_key": "sched-p1-span",
+									"text": "This entry is seeded as a draft. Open it in admin, set a future publish date, and verify scheduling support on the posts collection.",
+									"marks": []
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"pages": [
+			{
+				"id": "about",
+				"slug": "about",
+				"status": "published",
+				"data": {
+					"title": "About",
+					"template": "Default",
+					"content": [
+						{
+							"_type": "block",
+							"_key": "about-h1",
+							"style": "h1",
+							"markDefs": [],
+							"children": [
 								{
-									"name": "Enterprise",
-									"price": "Custom",
-									"description": "For large organizations",
-									"features": "Everything in Pro\nDedicated support\nCustom contracts\nSLA guarantee\nUnlimited storage",
-									"ctaLabel": "Contact Sales",
-									"ctaUrl": "/contact"
+									"_type": "span",
+									"_key": "about-h1-span",
+									"text": "About ShittySites",
+									"marks": []
 								}
 							]
 						},
 						{
-							"_type": "marketing.faq",
-							"_key": "pricing-faq",
-							"headline": "Pricing FAQ",
-							"items": [
+							"_type": "block",
+							"_key": "about-lead",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
 								{
-									"question": "Can I change plans later?",
-									"answer": "Yes, you can upgrade or downgrade at any time. Changes take effect immediately and we'll prorate your billing."
-								},
-								{
-									"question": "What payment methods do you accept?",
-									"answer": "We accept all major credit cards, and Enterprise customers can pay via invoice with NET 30 terms."
-								},
-								{
-									"question": "Is there a discount for annual billing?",
-									"answer": "Yes, annual plans receive a 20% discount compared to monthly billing."
+									"_type": "span",
+									"_key": "about-lead-span",
+									"text": "Agency base template for rebuilding client sites on EmDash + Cloudflare. Every route is server-rendered; demo markup is unstyled on purpose.",
+									"marks": []
 								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "about-body",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "about-body-span",
+									"text": "Content mirrors the hero-centered section — insert /section in admin to embed reusable blocks. See /feature-guide for the full capability index.",
+									"marks": []
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"id": "feature-guide",
+				"slug": "feature-guide",
+				"status": "published",
+				"data": {
+					"title": "Feature Guide",
+					"template": "Full Width",
+					"content": [
+						{
+							"_type": "block",
+							"_key": "fg-h1",
+							"style": "h1",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "fg-h1-span",
+									"text": "EmDash Capability Index",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "fg-intro",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "fg-intro-span",
+									"text": "Master index of demo routes, admin paths, and native plugin blocks. Uses the Full Width page layout.",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "demo.callout",
+							"_key": "fg-callout",
+							"title": "Native plugin blocks",
+							"body": "Callout, CTA strip, and Stats row come from the demo-blocks native plugin. Renderers live in src/plugins/demo-blocks/astro/.",
+							"variant": "info"
+						},
+						{
+							"_type": "demo.cta",
+							"_key": "fg-cta",
+							"headline": "Explore every demo route",
+							"buttonLabel": "Browse posts",
+							"buttonUrl": "/posts"
+						},
+						{
+							"_type": "demo.stats",
+							"_key": "fg-stats",
+							"items": [
+								{ "label": "Collections", "value": "3" },
+								{ "label": "Taxonomies", "value": "3" },
+								{ "label": "Demo blocks", "value": "3" }
 							]
 						}
 					]
@@ -262,16 +899,110 @@
 				"id": "contact",
 				"slug": "contact",
 				"status": "published",
+				"taxonomies": {
+					"service-area": ["local", "remote"]
+				},
 				"data": {
 					"title": "Contact",
+					"template": "Sidebar",
 					"content": [
 						{
-							"_type": "marketing.hero",
-							"_key": "contact-hero",
-							"headline": "Get in touch",
-							"subheadline": "Have questions? Want a demo? We'd love to hear from you.",
-							"centered": true
+							"_type": "block",
+							"_key": "contact-h1",
+							"style": "h1",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "contact-h1-span",
+									"text": "Contact",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "contact-body",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "contact-body-span",
+									"text": "Sidebar layout page with WidgetArea in the aside. Service-area taxonomy is attached to this page for demo purposes.",
+									"marks": []
+								}
+							]
 						}
+					]
+				}
+			}
+		],
+		"showcase": [
+			{
+				"id": "all-fields",
+				"slug": "all-fields",
+				"status": "published",
+				"data": {
+					"title": "All Field Types",
+					"field_string": "Sample short text",
+					"field_text": "Multi-line text sample.\nSecond line for textarea demo.",
+					"field_url": "https://docs.emdashcms.com/",
+					"field_number": 42.5,
+					"field_integer": 7,
+					"field_boolean": true,
+					"field_datetime": "2026-09-02T12:00:00.000Z",
+					"field_select": "beta",
+					"field_multi_select": ["red", "blue"],
+					"field_portable_text": [
+						{
+							"_type": "block",
+							"_key": "showcase-pt",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "showcase-pt-span",
+									"text": "Portable Text field sample with valid block structure.",
+									"marks": []
+								}
+							]
+						}
+					],
+					"field_image": {
+						"$media": {
+							"url": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=800&fit=crop",
+							"alt": "Analytics dashboard on a laptop",
+							"filename": "showcase-light.jpg"
+						},
+						"darkVariant": {
+							"$media": {
+								"url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop",
+								"alt": "Dark analytics dashboard",
+								"filename": "showcase-dark.jpg"
+							}
+						}
+					},
+					"field_file": {
+						"$media": {
+							"url": "https://www.w3.org/WAI/WCAG21/Techniques/pdf/img/table-word.pdf",
+							"alt": "Sample PDF document",
+							"filename": "sample-document.pdf"
+						}
+					},
+					"field_reference": "$ref:about",
+					"field_json": {
+						"status": "demo",
+						"count": 16,
+						"nested": {
+							"fieldTypes": true
+						}
+					},
+					"field_slug": "all-fields",
+					"field_repeater": [
+						{ "label": "First row", "value": "Alpha" },
+						{ "label": "Second row", "value": "Beta" }
 					]
 				}
 			}

@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+/* Minimal tokens for theme switcher demo — not a design system */
+:root {
+	color-scheme: light dark;
+	--color-bg: light-dark(#ffffff, #0d0d0d);
+	--color-text: light-dark(#1a1a1a, #ededed);
+}
+:root.light {
+	color-scheme: light;
+}
+:root.dark {
+	color-scheme: dark;
+}
+
+body {
+	background: var(--color-bg);
+	color: var(--color-text);
+}

@@ -1,0 +1,66 @@
+---
+/**
+ * Route: /search
+ * Features: programmatic search + LiveSearch in header
+ * Admin: enable Search on content types; searchable fields in seed
+ * Docs: https://docs.emdashcms.com/guides/search/
+ * Fork: delete if client does not need on-site search
+ */
+import { getSiteSettings, search } from "emdash";
+import Base from "../layouts/Base.astro";
+import { resolveSiteIdentity } from "../utils/site-identity";
+import { buildStaticPageSeo } from "../utils/seo";
+
+const settings = await getSiteSettings();
+const identity = resolveSiteIdentity(settings);
+const query = Astro.url.searchParams.get("q")?.trim() ?? "";
+
+const seo = buildStaticPageSeo({
+	title: query ? `Search: ${query}` : "Search",
+	path: "/search",
+	identity,
+});
+
+const results = query
+	? await search(query, {
+			collections: ["posts", "pages"],
+			status: "published",
+			limit: 20,
+		})
+	: null;
+---
+
+<Base {...seo}>
+	<article>
+		<h1>Search</h1>
+		<p>Use the search field in the header, or pass ?q=your+query on this page.</p>
+
+		{
+			query && results && (
+				<section>
+					<h2>Results for “{query}”</h2>
+					{results.items.length === 0 ? (
+						<p>No results found.</p>
+					) : (
+						<ul>
+							{results.items.map((result) => (
+								<li>
+									<a
+										href={
+											result.collection === "posts"
+												? `/posts/${result.slug}`
+												: `/${result.slug}`
+										}
+									>
+										{result.title}
+									</a>
+									{result.snippet && <p set:html={result.snippet} />}
+								</li>
+							))}
+						</ul>
+					)}
+				</section>
+			)
+		}
+	</article>
+</Base>
