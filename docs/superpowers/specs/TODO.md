@@ -1,2 +1,0 @@
-- Setup demo template
-- Create skills to use this template

@@ -18,16 +18,8 @@
 	],
 	"kv_namespaces": [
 		{
-			"binding": "CACHE",
-			"id": "54198a915d184371b822199afec552da",
-			"preview_id": "aa675bd3e8814dee96b7a143599f641a",
-		},
-	],
-	// Worker Loader for plugin sandboxing
-	"worker_loaders": [
-		{
-			"binding": "LOADER",
-		},
+			"binding": "CACHE"
+		}
 	],
 	// General maintenance cron trigger — no dedicated media usage cron (removed in EmDash 0.36)
 	"triggers": {

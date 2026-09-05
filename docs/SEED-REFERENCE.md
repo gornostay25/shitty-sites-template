@@ -184,12 +184,7 @@ Fork: replace all demo content with client copy; delete showcase entries entirel
 
 ## public/ (static assets)
 
-| Path | Served at | Purpose |
-|------|-----------|---------|
-| `public/hero-visual.svg` | `/hero-visual.svg` | Light-theme demo SVG |
-| `public/hero-visual-alt.svg` | `/hero-visual-alt.svg` | Dark-theme demo SVG |
-
-Files in `public/` are served from the site root with no build processing. Use root-relative URLs in templates (`/hero-visual.svg`). For optimized Astro assets use `src/assets/`; for CMS images use `<Image image={...} />`.
+Files in `public/` are served from the site root with no build processing. For optimized Astro assets use `src/assets/`; for CMS images use `<Image image={...} />`.
 
 ---
 
@@ -206,4 +201,4 @@ Files in `public/` are served from the site root with no build processing. Use r
 | Search | `search.astro`, `SiteHeader.astro` (LiveSearch) |
 | Comments | `posts/[slug].astro` |
 | HTML blocks | `HtmlBlock.astro` |
-| i18n stub | `LanguageSwitcher.astro`, `astro.config.mjs` |
+| i18n | `LanguageSwitcher.astro` (reference stub), `astro.config.mjs`, bol-theme switcher (migration plan) |

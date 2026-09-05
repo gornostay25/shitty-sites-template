@@ -1,0 +1,282 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* shadcn/ui tokens */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Bar of Legends brand tokens */
+  --color-bg: var(--bol-bg);
+  --color-surface: var(--bol-surface);
+  --color-surface-2: var(--bol-surface-2);
+  --color-brand: var(--bol-accent);
+  --color-brand-muted: var(--bol-accent-muted);
+  --font-display: var(--font-display-src), "Arial Narrow", ui-sans-serif, sans-serif;
+  --font-body: var(--font-body-src), ui-sans-serif, system-ui, sans-serif;
+  --radius-card: 1rem;
+  --shadow-glow: 0 0 28px -6px rgb(242 179 61 / 0.35);
+}
+
+/*
+ * Design tokens — Bar of Legends premium dark brand.
+ * The spec-named tokens below are aliases of the --bol-* palette and are
+ * safe to consume from any component or plain CSS.
+ */
+:root {
+  /* raw palette */
+  --bol-bg: #0d0d0f;
+  --bol-surface: #16161a;
+  --bol-surface-2: #1e1e24;
+  --bol-accent: #f2b33d;
+  --bol-accent-muted: #45d0c8;
+
+  /* spec-named design tokens */
+  --color-bg: var(--bol-bg);
+  --color-surface: var(--bol-surface);
+  --color-accent: var(--bol-accent);
+  --color-accent-muted: var(--bol-accent-muted);
+  --font-display: var(--font-display-src), "Arial Narrow", ui-sans-serif, sans-serif;
+  --font-body: var(--font-body-src), ui-sans-serif, system-ui, sans-serif;
+  --radius-card: 1rem;
+  --shadow-glow: 0 0 28px -6px rgb(242 179 61 / 0.35);
+
+  /* shadcn/ui token values (dark-only site) */
+  --radius: 0.625rem;
+  --background: var(--bol-bg);
+  --foreground: #f2f0eb;
+  --card: var(--bol-surface);
+  --card-foreground: #f2f0eb;
+  --popover: #1a1a1e;
+  --popover-foreground: #f2f0eb;
+  --primary: #f2b33d;
+  --primary-foreground: #1c1305;
+  --secondary: #232329;
+  --secondary-foreground: #f2f0eb;
+  --muted: #1e1e24;
+  --muted-foreground: #a5a099;
+  --accent: #2a2318;
+  --accent-foreground: #f2f0eb;
+  --destructive: #e5484d;
+  --border: rgb(255 255 255 / 0.08);
+  --input: rgb(255 255 255 / 0.12);
+  --ring: #f2b33d;
+  --chart-1: #f2b33d;
+  --chart-2: #45d0c8;
+  --chart-3: #58d38c;
+  --chart-4: #e5484d;
+  --chart-5: #d9832b;
+  --sidebar: var(--bol-surface);
+  --sidebar-foreground: #f2f0eb;
+  --sidebar-primary: #f2b33d;
+  --sidebar-primary-foreground: #1c1305;
+  --sidebar-accent: #2a2318;
+  --sidebar-accent-foreground: #f2f0eb;
+  --sidebar-border: rgb(255 255 255 / 0.08);
+  --sidebar-ring: #f2b33d;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  ::selection {
+    background-color: rgb(242 179 61 / 0.35);
+    color: #fff8ea;
+  }
+  /* Visible focus rings for keyboard users on every interactive element */
+  a:focus-visible,
+  button:focus-visible,
+  [role="tab"]:focus-visible,
+  [role="button"]:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+}
+
+/* Cinematic slow zoom for the hero backdrop */
+@keyframes kenburns {
+  from {
+    transform: scale(1) translateY(0);
+  }
+  to {
+    transform: scale(1.09) translateY(-1.5%);
+  }
+}
+.animate-kenburns {
+  animation: kenburns 22s ease-in-out infinite alternate;
+}
+
+/* Soft pulse for the "open now" dot */
+@keyframes status-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(88 211 140 / 0.55);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgb(88 211 140 / 0);
+  }
+}
+.animate-status-pulse {
+  animation: status-pulse 2.2s ease-in-out infinite;
+}
+
+/* Slim dark scrollbar for overflow areas */
+.scrollbar-slim {
+  scrollbar-width: thin;
+  scrollbar-color: #3a3a42 transparent;
+}
+.scrollbar-slim::-webkit-scrollbar {
+  width: 6px;
+}
+.scrollbar-slim::-webkit-scrollbar-thumb {
+  background: #3a3a42;
+  border-radius: 9999px;
+}
+
+/* ---- Leaflet map: dark brand theme ----
+   Overrides are scoped under .leaflet-container so they win over
+   leaflet.css regardless of import order. */
+.leaflet-container {
+  background: #0f0f12;
+  font-family: var(--font-body);
+}
+.leaflet-container .leaflet-popup-content-wrapper,
+.leaflet-container .leaflet-popup-tip {
+  background: var(--bol-surface-2);
+  color: #f2f0eb;
+  box-shadow: 0 10px 26px rgb(0 0 0 / 0.55);
+}
+.leaflet-container .leaflet-popup-content-wrapper {
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 0.75rem;
+}
+.leaflet-container .leaflet-popup-content {
+  margin: 12px 16px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.leaflet-container .leaflet-popup-content strong {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+.leaflet-container .leaflet-popup a.leaflet-popup-close-button {
+  color: #a5a099;
+}
+.leaflet-container .leaflet-popup a.leaflet-popup-close-button:hover {
+  color: var(--color-accent);
+}
+.leaflet-container .leaflet-bar {
+  border: 1px solid rgb(255 255 255 / 0.12);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.45);
+}
+.leaflet-container .leaflet-bar a {
+  background: var(--bol-surface-2);
+  color: #f2f0eb;
+  border-bottom: 1px solid rgb(255 255 255 / 0.12);
+}
+.leaflet-container .leaflet-bar a:hover {
+  background: #26262d;
+  color: var(--color-accent);
+}
+.leaflet-container .leaflet-control-attribution {
+  background: rgb(13 13 15 / 0.72);
+  color: #8a857c;
+  font-size: 10px;
+  padding: 1px 6px;
+}
+.leaflet-container .leaflet-control-attribution a {
+  color: var(--color-accent-muted);
+}
+
+/* Amber venue pin (Leaflet divIcon) */
+.venue-pin-anchor {
+  background: none;
+  border: none;
+}
+.venue-pin {
+  position: relative;
+  display: block;
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(160deg, #ffd27a, var(--color-accent) 55%, #d9832b);
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  box-shadow:
+    0 0 18px rgb(242 179 61 / 0.55),
+    0 6px 12px rgb(0 0 0 / 0.5);
+}
+.venue-pin::after {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border-radius: 999px;
+  background: #17120a;
+}
+
+/* FasterFixes floating trigger: keep clear of the fixed mobile action bar */
+@media (max-width: 767px) {
+  [data-ff-widget] > div {
+    bottom: calc(5rem + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* Respect reduced-motion: no autoplay-style movement, no smooth scrolling */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-kenburns,
+  .animate-status-pulse,
+  .motion-safe\:animate-kenburns,
+  .motion-safe\:animate-bounce {
+    animation: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

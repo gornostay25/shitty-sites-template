@@ -67,20 +67,7 @@ See [SEED-REFERENCE.md](./docs/SEED-REFERENCE.md) for troubleshooting.
 
 ### Static files (`public/`)
 
-Files in `public/` are copied as-is to the site root — no bundling, no hashing.
-
-| File | URL |
-|------|-----|
-| `public/hero-visual.svg` | `/hero-visual.svg` |
-| `public/hero-visual-alt.svg` | `/hero-visual-alt.svg` |
-
-Use `public/` for assets that must keep a fixed URL (favicons, `robots.txt` overrides, theme SVGs, PDFs linked from HTML). Reference them with root-relative paths:
-
-```astro
-<img src="/hero-visual.svg" alt="Demo illustration" />
-```
-
-For images processed by Astro (optimization, imports), use `src/assets/` instead. CMS media belongs in the EmDash media library (`<Image image={...} />`), not in `public/`.
+Files in `public/` are copied as-is to the site root — no bundling, no hashing. Use for assets that must keep a fixed URL (favicons, `robots.txt`, PDFs). For optimized images use `src/assets/`; for CMS media use `<Image image={...} />`.
 
 ```bash
 bun run typecheck   # Astro type check
