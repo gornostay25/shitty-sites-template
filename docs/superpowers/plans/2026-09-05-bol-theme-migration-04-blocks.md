@@ -10,6 +10,22 @@
 
 ---
 
+## Official documentation
+
+Verify against live docs ([Docs MCP](https://docs.emdashcms.com/docs-mcp/) · [llms.txt](https://docs.emdashcms.com/llms.txt)) before implementing.
+
+| Task | Read first |
+|------|------------|
+| 13 — block types | [Block Kit](https://docs.emdashcms.com/plugins/creating-plugins/block-kit/) · [Your first native plugin — PT blocks](https://docs.emdashcms.com/plugins/creating-native-plugins/your-first-native-plugin/) |
+| 14–17 — renderers | [Portable Text components](https://docs.emdashcms.com/plugins/creating-native-plugins/portable-text-components/) · [Querying content](https://docs.emdashcms.com/guides/querying-content/) · [Media library / Image](https://docs.emdashcms.com/guides/media-library/) |
+| 15 — menu block | [Taxonomies](https://docs.emdashcms.com/guides/taxonomies/) (category terms on `menu_items`) |
+
+**Reference in repo:** `src/plugins/demo-blocks/` (Block Kit + `blockComponents` pattern — rewrite, do not copy).
+
+**Project skills:** `.agents/skills/creating-plugins/references/portable-text-blocks.md` · `.agents/skills/building-emdash-site/references/querying-and-rendering.md`
+
+---
+
 ## Files touched in this part
 
 | Path | Responsibility |
@@ -103,7 +119,7 @@ Adjust after 375px pass — do not copy prototype classes blindly.
 - Create: `src/plugins/bol-theme/astro/islands/VenueMap.tsx`
 - Create: `src/plugins/bol-theme/styles/leaflet.css`
 
-- [ ] **Step 1: Contact.astro** — hours table, address, phone, email, socials; respect block toggles
+- [ ] **Step 1: Contact.astro** — hours table (skip closed days), `venue.address`, phone, email, socials; map link from `mapsUrl` on public venue payload; respect block toggles; section labels from `getUiStrings(locale)`
 
 - [ ] **Step 2: OpenNowBadge** — client island, local time via `computeStatus()`
 

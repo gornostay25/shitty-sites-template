@@ -1,11 +1,11 @@
 import cloudflare from "@astrojs/cloudflare";
 import react from "@astrojs/react";
 import tailwindcss from "@tailwindcss/vite";
-import { defineConfig } from "astro/config";
+import { defineConfig, fontProviders } from "astro/config";
 import { d1, r2, kvCache } from "@emdash-cms/cloudflare";
 import emdash from "emdash/astro";
+import { bolThemePlugin } from "./src/plugins/bol-theme/index.ts";
 import { demoBlocksPlugin } from "./src/plugins/demo-blocks/index.ts";
-import { hubFeedbackPlugin } from "./src/plugins/hub-feedback/index.ts";
 
 export default defineConfig({
 	output: "server",
@@ -13,10 +13,28 @@ export default defineConfig({
 	vite: { plugins: [tailwindcss()] },
 	i18n: {
 		defaultLocale: "en",
-		locales: ["en"],
+		locales: ["en", "hu", "de"],
+		fallback: { hu: "en", de: "en" },
 		// Do NOT use prefixDefaultLocale — breaks /_emdash/admin
-		// To add locales: locales: ["en", "uk"], fallback: { uk: "en" }
 	},
+	fonts: [
+		{
+			name: "Bebas Neue",
+			cssVariable: "--font-display-src",
+			provider: fontProviders.google(),
+			weights: [400],
+			subsets: ["latin", "latin-ext"],
+			fallbacks: ["Arial Narrow", "ui-sans-serif", "sans-serif"],
+		},
+		{
+			name: "Manrope",
+			cssVariable: "--font-body-src",
+			provider: fontProviders.google(),
+			weights: [400, 500, 600, 700],
+			subsets: ["latin", "latin-ext"],
+			fallbacks: ["ui-sans-serif", "system-ui", "sans-serif"],
+		},
+	],
 	integrations: [
 		react(), // kept — client islands / native plugin React admin UI; demo pages are Astro-only
 		emdash({
@@ -44,9 +62,8 @@ export default defineConfig({
 				defaultTtl: 3600,
 				keyPrefix: "em",
 			}),
-			plugins: [demoBlocksPlugin(), hubFeedbackPlugin()],
+			plugins: [bolThemePlugin(), demoBlocksPlugin()],
 		}),
 	],
-	// fonts: commented with pointer to Astro fonts docs — add via fontProviders when theming
 	devToolbar: { enabled: false },
 });

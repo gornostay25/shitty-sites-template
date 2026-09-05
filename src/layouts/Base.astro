@@ -1,18 +1,5 @@
 ---
-/**
- * THEME SWITCHER — optional fork customization
- *
- * Demo includes Light / Dark / System so editors can preview darkVariant images
- * and verify the EmDash Image component scheme switching.
- *
- * Light-only client site:
- *   1. Delete the theme-switcher block and its client script
- *   2. Delete the inline head cookie script
- *   3. Add class="light" on html to pin light scheme
- *   4. Remove darkVariant from image fields in seed if unused
- *
- * Docs: https://docs.emdashcms.com/guides/dark-mode/
- */
+import { Font } from "astro:assets";
 import { getSiteSettings } from "emdash";
 import { EmDashHead, EmDashBodyEnd } from "emdash/ui";
 import { createPublicPageContext } from "emdash/page";
@@ -21,7 +8,6 @@ import "../styles/global.css";
 import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import SeoHead from "../components/SeoHead.astro";
-import HubFeedback from "../plugins/hub-feedback/astro/HubFeedback.astro";
 import { resolveSiteIdentity } from "../utils/site-identity";
 
 interface Props extends SeoMeta {
@@ -35,6 +21,7 @@ interface Props extends SeoMeta {
 const { content, ...seo } = Astro.props;
 const settings = await getSiteSettings();
 const identity = resolveSiteIdentity(settings);
+const locale = Astro.currentLocale ?? "en";
 
 const pageCtx = createPublicPageContext({
 	Astro,
@@ -51,78 +38,34 @@ const pageCtx = createPublicPageContext({
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale} class="dark">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<Font cssVariable="--font-display-src" preload />
+		<Font cssVariable="--font-body-src" preload />
 		<SeoHead {...seo} />
 		<EmDashHead page={pageCtx} />
-		<script is:inline>
-			(function () {
-				var c = document.cookie;
-				var i = c.indexOf("theme=");
-				var theme = i >= 0 ? c.slice(i + 6).split(";")[0] : null;
-				if (theme === "dark" || theme === "light") {
-					document.documentElement.classList.add(theme);
-				}
-			})();
-		</script>
 	</head>
-	<body>
-		<!-- Apply Tailwind classes when theming a client site -->
+	<body class="antialiased">
+		<a
+			href="#main-content"
+			class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:rounded-md focus:bg-brand focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-[#1c1305]"
+		>
+			Skip to content
+		</a>
+
 		<SiteHeader identity={identity} />
 
-		<main>
+		<main
+			id="main-content"
+			class="pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:pb-0"
+		>
 			<slot />
 		</main>
 
 		<SiteFooter identity={identity} />
 
-		<div class="theme-switcher">
-			<button type="button" data-theme="light" aria-label="Light mode">
-				Light
-			</button>
-			<button type="button" data-theme="dark" aria-label="Dark mode">
-				Dark
-			</button>
-			<button type="button" data-theme="system" aria-label="System theme">
-				System
-			</button>
-		</div>
-
-		<script>
-			const THEME_REGEX = /theme=([^;]+)/;
-			const themeBtns =
-				document.querySelectorAll<HTMLButtonElement>("[data-theme]");
-			const root = document.documentElement;
-
-			function setTheme(theme: string) {
-				const secure = location.protocol === "https:" ? "; Secure" : "";
-				if (theme === "system") {
-					document.cookie = `theme=; path=/; max-age=0; SameSite=Lax${secure}`;
-					root.classList.remove("light", "dark");
-				} else {
-					document.cookie = `theme=${theme}; path=/; max-age=31536000; SameSite=Lax${secure}`;
-					root.classList.remove("light", "dark");
-					root.classList.add(theme);
-				}
-			}
-
-			function getStoredTheme(): string {
-				const match = document.cookie.match(THEME_REGEX);
-				return match ? match[1] : "system";
-			}
-
-			setTheme(getStoredTheme());
-
-			themeBtns.forEach((btn) => {
-				btn.addEventListener("click", () => {
-					setTheme(btn.dataset.theme || "system");
-				});
-			});
-		</script>
-
 		<EmDashBodyEnd page={pageCtx} />
-		<HubFeedback />
 	</body>
 </html>

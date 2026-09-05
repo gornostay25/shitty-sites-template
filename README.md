@@ -17,14 +17,6 @@ Design spec: [docs/superpowers/archive/2026-09-03/specs/2026-08-28-shittysites-t
 
 Spec 2 adds full demo routes, seed content, widgets, search, and the `demo-blocks` plugin. See [docs/SEED-REFERENCE.md](./docs/SEED-REFERENCE.md) when available.
 
-### Hub Feedback (`hub-feedback` plugin)
-
-Visual feedback widget for Shitty Hub — enabled in **Plugins → Hub Feedback**. Set **Hub API Key** and **Site ID** in plugin settings. Widget appears on all public pages when the plugin is active and both values are configured.
-
-- Plugin: `src/plugins/hub-feedback/`
-- API: `https://shitty-hub.gornostay25.dev/support`
-- Archived spec: [docs/superpowers/archive/2026-09-03/specs/2026-09-03-hub-feedback-plugin-design.md](./docs/superpowers/archive/2026-09-03/specs/2026-09-03-hub-feedback-plugin-design.md)
-
 ## Fork Workflow
 
 When adapting for a client:
@@ -120,7 +112,6 @@ Canonical URLs and Open Graph tags use `resolveSiteIdentity()` and `getSeoMeta()
 - **Cache:** KV (`CACHE` binding)
 - **Framework:** Astro 7 with `@astrojs/cloudflare`
 - **CSS:** Tailwind CSS 4 (`@tailwindcss/vite`) — imported, not used on demo markup
-- **Feedback widget:** `@fasterfixes/core`, `@floating-ui/react`, `modern-screenshot` (Hub Feedback plugin)
 
 ## Documentation
 

@@ -4,9 +4,23 @@
 
 **Prerequisites:** Part 2 complete (`bol-theme` registered, venue settings, `getUiStrings()`).
 
-**Delivers:** BOL collections in seed, header/footer/mobile bar wired into Base — site has navigable chrome but home PT blocks not yet rendered (Part 4).
+**Delivers:** BOL collections in seed, header/footer/mobile bar wired into Base — site has navigable chrome but home PT blocks not yet rendered (Part 4). Theme partials use `getUiStrings(Astro.currentLocale)` for en/hu/de labels; plugin admin stays English-only.
 
 **Next:** [Part 4 — Blocks](./2026-09-05-bol-theme-migration-04-blocks.md)
+
+---
+
+## Official documentation
+
+Verify against live docs ([Docs MCP](https://docs.emdashcms.com/docs-mcp/) · [llms.txt](https://docs.emdashcms.com/llms.txt)) before implementing.
+
+| Task | Read first |
+|------|------------|
+| 9 — seed | [Seed file format](https://docs.emdashcms.com/themes/seed-files/) · [Creating themes — including media](https://docs.emdashcms.com/themes/creating-themes/#including-media) · [Field types](https://docs.emdashcms.com/reference/field-types/) · [Taxonomies](https://docs.emdashcms.com/guides/taxonomies/) · [Internationalization](https://docs.emdashcms.com/guides/internationalization/) |
+| 10 — header | [Navigation menus](https://docs.emdashcms.com/guides/menus/) · [Querying content](https://docs.emdashcms.com/guides/querying-content/) · [Internationalization](https://docs.emdashcms.com/guides/internationalization/) |
+| 11–12 — chrome | [Site settings](https://docs.emdashcms.com/guides/site-settings/) (social handles) |
+
+**Project skills:** `.agents/skills/building-emdash-site/references/schema-and-seed.md` · `site-features.md`
 
 ---
 
@@ -60,7 +74,7 @@
 - Create: `src/plugins/bol-theme/astro/theme/LanguageSwitcher.astro`
 - Modify: `src/layouts/Base.astro`
 
-- [ ] **Step 1: Rewrite header** — logo, nav, lang switcher; match prototype layout without copying TSX
+- [ ] **Step 1: Rewrite header** — logo, nav, lang switcher; labels via `getUiStrings(locale)`; match prototype layout without copying TSX
 
 - [ ] **Step 2: LanguageSwitcher** — `getRelativeLocaleUrl` for `/` and `/experiences`
 
@@ -89,9 +103,9 @@
 - Create: `src/plugins/bol-theme/astro/theme/SiteFooter.astro`
 - Create: `src/plugins/bol-theme/astro/theme/MobileActionBar.astro`
 
-- [ ] **Step 1: Footer** — tagline, socials, address, phone, email — **no hours column**
+- [ ] **Step 1: Footer** — tagline, socials, `venue.address`, phone, email — **no hours column**
 
-- [ ] **Step 2: MobileActionBar** — fixed bottom `z-40`, call / #menu / maps / mailto, safe-area padding
+- [ ] **Step 2: MobileActionBar** — fixed bottom `z-40`, call / #menu / maps (`venue.public.mapsUrl` or `buildMapsUrl(lat,lng)`) / mailto, safe-area padding
 
 - [ ] **Step 3: Wire into Base.astro**
 

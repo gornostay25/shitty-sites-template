@@ -1,6 +1,7 @@
 # Bar of Legends — Theme Migration Design Spec
 
-**Status:** Approved (2026-09-05)  
+**Status:** Approved (2026-09-05) · amended during Part 2 implementation (2026-09-05)  
+**Part 2 shipped (2026-09-05):** single React `/venue` admin (no `settingsSchema`); `mapsUrl` derived from coordinates; opening hours support closed days  
 **Date:** 2026-09-05  
 **EmDash version:** 0.36.0 (+ bun patch for `byline`)  
 **Reference:** `docs/design/v1/` (Next.js visual prototype — **reference only, do not copy code**)  
@@ -31,6 +32,15 @@ The Next.js prototype in `docs/design/v1/` establishes visual direction and info
 | i18n | Astro + EmDash row-per-locale; `en` default, `hu` / `de` with fallback to `en` |
 | shadcn/ui | **No** — public site uses Astro + Tailwind only |
 | Code from prototype | **Rewrite only** — preserve look, not source |
+| Dev schema changes | **No legacy shims** — site is in active development; when KV keys or settings shapes change, update code and admin data directly — do not read renamed/removed keys for backward compatibility |
+| Venue address | **Single `address` string** in plugin settings — locale-agnostic; admin labels English-only |
+| Plugin admin UI | **English only** — `/venue` settings page; no Lingui catalog or translated admin labels |
+| Theme UI copy | **`utils/i18n/`** — en/hu/de strings for header, footer, action bar, contact block labels (`getUiStrings(locale)`); separate from plugin admin |
+| Google Maps link | **Derived at read time** from `lat` / `lng` via `buildMapsUrl()` — not stored in KV or edited in admin |
+| Phone display | **Derived at read time** via `libphonenumber-js` — single stored `phone`; `phoneDisplay` + `phoneTel` on public API |
+| Venue admin | **Single React page `/venue`** — all venue fields + opening hours; no auto-generated `settingsSchema` form |
+| Opening hours — closed days | Each Mon–Sun row may set **`closed: true`**; open/close times ignored; omitted from JSON-LD; status logic skips closed days |
+| `hub-feedback` | **Removed** — not part of BOL migration; drop plugin, deps, and `Base.astro` mount |
 
 ---
 
@@ -57,13 +67,13 @@ Production code must:
 
 ```
 astro.config.mjs
-  integrations: [emdash({ plugins: [bolThemePlugin(), hubFeedbackPlugin()] })]
+  integrations: [emdash({ plugins: [bolThemePlugin()] })]
   i18n: { defaultLocale: "en", locales: ["en", "hu", "de"], fallback: { hu: "en", de: "en" } }
 
 src/plugins/bol-theme/          ← native plugin (new)
   index.ts                      descriptor + createPlugin + hooks
-  admin.tsx                       React venue settings page (hours grid)
-  utils/                          venue loader, hours logic, JSON-LD builder, i18n UI strings
+  admin.tsx                       React venue settings page (all fields + hours)
+  utils/                          venue loader, hours logic, JSON-LD, phone, theme i18n (en/hu/de)
   astro/                          PT block renderers + theme partials
   styles/                         BOL design tokens (or contribute to site global.css)
 
@@ -105,9 +115,9 @@ CMS page (home)
 | `MobileNav` | Full-screen nav (React island or Astro + minimal script) |
 | `SiteFooter` | Tagline, socials, address, phone, email — **no opening hours** |
 | `MobileActionBar` | Call, menu anchor, maps link, book (mailto) |
-| UI string dictionaries | Nav labels, day names, open/closed templates, a11y strings (en/hu/de) |
+| UI string dictionaries | `getUiStrings(locale)` from `utils/i18n/` — nav, action bar, contact section labels, day names (en/hu/de); **not** venue address text |
 
-Theme reads **venue settings** from plugin KV for phone, email, address, social URLs, maps URL.
+Theme reads **venue settings** from plugin KV for phone, email, address, social URLs, coordinates, and opening hours. **Maps links** use `buildMapsUrl(lat, lng)` (or `mapsUrl` on the `venue/public` response) — not a stored setting.
 
 ### Portable Text blocks (plugin — editor-controlled on pages)
 
@@ -137,23 +147,62 @@ Registered in `astro.config.mjs` alongside existing plugins. Native format, sing
 
 ### Admin UI
 
-Two layers ([React admin docs](https://docs.emdashcms.com/plugins/creating-native-plugins/react-admin/)):
+Single custom React page **`/venue`** ([React admin docs](https://docs.emdashcms.com/plugins/creating-native-plugins/react-admin/)) — **no `settingsSchema`** auto-form. All venue data is edited and saved in one place.
 
-**1. Auto-generated settings (`settingsSchema`)** for scalar venue fields:
+**Page sections (Kumo + EmDash admin chrome):**
 
-- `phone`, `phoneDisplay`, `email`
-- `lat`, `lng`, `mapsUrl`
-- `addressEn`, `addressHu`, `addressDe` (or equivalent localized keys)
-- `socialInstagram`, `socialFacebook`, `socialTiktok`
-- `bookingMailtoSubject`, `eventMailtoSubject` (optional)
-- SEO extras: `schemaType` (select: `BarOrPub` / `Restaurant`), `priceRange` (optional)
+| Section | Fields |
+|---------|--------|
+| Contact | `phone`, `email` — display/`tel:` derived via `libphonenumber-js` (region from `+` prefix, else `HU`) |
+| Location | `address`, `lat`, `lng` |
+| Social | `socialInstagram`, `socialFacebook`, `socialTiktok` |
+| SEO | `schemaType` (`BarOrPub` / `Restaurant`), `priceRange` (optional) |
+| Opening hours | Seven rows (Mon–Sun): **Open** switch per day; when open, `open` / `close` time inputs (`HH:MM`) |
 
-**2. Custom React page `/venue`** for opening hours:
+**UI stack (EmDash 0.36):**
 
-- Seven rows (Mon–Sun), each with open/close time inputs (text `HH:MM` or time-native inputs)
-- Stored as JSON in KV, e.g. `settings:openingHours`
-- Uses `@emdash-cms/admin` components and `usePluginAPI()` for load/save
-- Parses to the same minute-based logic as prototype `hours.ts` (including post-midnight close)
+- Layout/actions: `EditorHeader`, `SaveButton` from `@emdash-cms/admin`
+- Form primitives: `@cloudflare/kumo` (`Input`, `InputArea`, `Select`, `Switch`, `Table`, `LayerCard`, `Banner`, `Grid`, `Loader`) — docs mention `Card`/`Input` from `@emdash-cms/admin` but those are **not exported** on 0.36
+- **English-only copy in admin** — `/venue` React page only; theme public UI uses `getUiStrings(Astro.currentLocale)`
+- Load/save: `apiFetch` + `parseApiResponse` via `components/plugin-api.ts` (not `usePluginAPI()`)
+
+**API routes:**
+
+| Route | Method | Auth | Returns |
+|-------|--------|------|---------|
+| `venue/settings` | GET / POST | Admin | Full `VenueSettings` (stored shape — no `mapsUrl`) |
+| `venue/public` | GET | **`public: true`** | `PublicVenueSettings` = settings + computed `mapsUrl` |
+
+Opening hours stored as JSON in KV at `settings:openingHours`. Each row:
+
+```typescript
+type OpeningHoursRow = {
+  closed?: boolean;  // when true, open/close ignored
+  open: string;      // "HH:MM"
+  close: string;     // "HH:MM" — may exceed midnight (e.g. 01:00, 24:00)
+};
+```
+
+**Maps URL (derived, not stored):**
+
+```typescript
+buildMapsUrl(lat, lng) =>
+  `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`
+```
+
+**EmDash 0.36 implementation notes** (verify against installed `emdash@0.36.0` + `@emdash-cms/admin@0.36.0`):
+
+| Docs / plan may say | Ship this on 0.36 |
+|---------------------|-------------------|
+| `usePluginAPI()` | **Not exported** — use `apiFetch()` + `parseApiResponse()`; helper lives in `components/plugin-api.ts` |
+| `@emdash-cms/admin` Card / Alert / Input | **Not exported** — use `@cloudflare/kumo` for plugin admin pages; `EditorHeader` + `SaveButton` **are** exported |
+| Separate scalar settings form + hours page | **Single `/venue` page** saves everything via `venue/settings` POST |
+| Stored `mapsUrl` KV key | **Removed** — derive from coordinates at read time |
+| Raw `response.json()` on plugin routes | Responses are `{ success, data }` — always unwrap via `parseApiResponse` |
+| `import type { PublicPageContext } from "emdash/page"` | Import `PublicPageContext` from **`emdash`** |
+| Public venue loader route | Route `venue/public` must set **`public: true`** or SSR/unauthenticated GET returns 401 |
+
+**No legacy migration:** when renaming settings keys (e.g. dropping `addressEn` / `addressHu` / `addressDe` for a single `address`, or removing stored `mapsUrl`), do not fall back to old KV keys — re-enter in admin or re-run `plugin:install` on a fresh DB.
 
 Venue settings use plugin KV + custom React admin — not Field Kit (which only attaches to collection `json` fields and is not installed on this site).
 
@@ -175,7 +224,7 @@ Venue settings use plugin KV + custom React admin — not Field Kit (which only 
 
 Use [`page:metadata`](https://docs.emdashcms.com/plugins/creating-native-plugins/page-fragments/#when-to-use-pagemetadata-instead), not `page:fragments`, for JSON-LD. `<EmDashHead />` in `Base.astro` already renders metadata contributions.
 
-**Reading venue on the Astro side:** expose a small public API route on the plugin (e.g. `GET venue`) or a shared loader invoked during SSR that reads the same KV keys. Exact mechanism is an implementation detail; the design requires a single `loadVenueSettings()` used by theme partials, contact block, and JSON-LD builder.
+**Reading venue on the Astro side:** `GET venue/public` ( **`public: true`** ) returns `PublicVenueSettings` including computed `mapsUrl`. Theme partials, contact block, and JSON-LD use `loadVenueSettings()` / `loadPublicVenueSettings()` from `utils/venue.ts`.
 
 ### Plugin structure (target)
 
@@ -184,11 +233,15 @@ src/plugins/bol-theme/
 ├── index.ts
 ├── admin.tsx
 ├── constants.ts
+├── components/
+│   ├── VenueSettingsPage.tsx
+│   └── plugin-api.ts              # apiFetch + parseApiResponse wrapper
 ├── utils/
 │   ├── venue.ts
 │   ├── hours.ts
 │   ├── jsonld.ts
-│   └── i18n/
+│   ├── phone.ts
+│   └── i18n/                    # theme UI copy (en/hu/de) — not used in admin
 │       ├── en.ts
 │       ├── hu.ts
 │       ├── de.ts
@@ -342,7 +395,7 @@ Implement via Tailwind 4 `@theme inline` in site or plugin CSS. Dark-only site �
 
 ### shadcn/ui — explicitly excluded
 
-Public UI uses semantic HTML + Tailwind utilities. No `components/ui/*`, no Radix dependency tree from the prototype. Plugin admin uses `@emdash-cms/admin` primitives only.
+Public UI uses semantic HTML + Tailwind utilities. No `components/ui/*`, no Radix dependency tree from the prototype. Plugin **admin pages** use `@cloudflare/kumo` primitives (via EmDash’s admin stack), not shadcn.
 
 ---
 
@@ -363,9 +416,8 @@ Public UI uses semantic HTML + Tailwind utilities. No `components/ui/*`, no Radi
 | `VenueMap.tsx` | Leaflet island — rewritten; CSS scoped under `.leaflet-container` |
 | `data/menu.ts` etc. | seed content + collections |
 | `data/hours.ts` | `utils/hours.ts` in plugin — port logic, not UI |
-| `data/i18n/*.ts` | plugin UI dictionaries + translatable CMS fields |
+| `data/i18n/*.ts` | `utils/i18n/` theme dictionaries + translatable CMS fields; venue `address` from settings |
 | shadcn `Button` | `<a class="…">` with Tailwind |
-| `FeedbackWidget.tsx` | existing `hub-feedback` plugin — unchanged |
 
 ---
 
@@ -383,7 +435,7 @@ These were identified in review; the rewrite must not regress them:
    - Override Leaflet pane/control z-index **inside that container only** so tiles, zoom buttons, and popups stay below site chrome.
    - Keep header at `z-50`; mobile nav overlay above header (`z-[60]` or higher); mobile action bar `z-40`.
    - Verify: scroll contact section — map tiles/controls must never cover the header.
-7. **Open/closed badge** — port `computeStatus()` logic; display uses localized templates from plugin i18n.
+7. **Open/closed badge** — port `computeStatus()` logic; status copy from `getUiStrings()` templates
 
 ---
 
@@ -391,7 +443,6 @@ These were identified in review; the rewrite must not regress them:
 
 | Plugin | Role |
 |--------|------|
-| `hub-feedback` | Visual feedback widget — keep as-is |
 | `field-kit` | **Remove** — uninstall `@emdash-cms/plugin-field-kit`, remove from `astro.config.mjs` and `package.json` |
 | `demo-blocks` | Remove from `astro.config.mjs` and delete when BOL blocks ship |
 
@@ -423,7 +474,7 @@ After implementation, verify at **375px** and **1440px** in **en**, **hu**, **de
 - [ ] `/experiences` filters work; CTAs match `cta_type`
 - [ ] Language switcher preserves page context
 - [ ] JSON-LD validates (Google Rich Results or schema validator)
-- [ ] Admin: venue settings save and reflect on frontend
+- [ ] Admin: venue settings save and reflect on frontend (including closed days and coordinate-derived maps link)
 - [ ] Home page blocks reorder correctly in admin preview
 - [ ] `Astro.cache.set(cacheHint)` on all content pages
 

@@ -10,6 +10,20 @@
 
 ---
 
+## Official documentation
+
+Verify against live docs ([Docs MCP](https://docs.emdashcms.com/docs-mcp/) · [llms.txt](https://docs.emdashcms.com/llms.txt)) before implementing.
+
+| Task | Read first |
+|------|------------|
+| 1 — i18n | [Internationalization](https://docs.emdashcms.com/guides/internationalization/) · [Configuration](https://docs.emdashcms.com/reference/configuration/) |
+| 2 — tokens / dark | [Dark mode](https://docs.emdashcms.com/guides/dark-mode/) |
+| 3 — Base shell | [Site settings](https://docs.emdashcms.com/guides/site-settings/) · [Page layouts](https://docs.emdashcms.com/guides/page-layouts/) |
+
+**Project skills:** `.agents/skills/building-emdash-site/` (querying, caching, configuration).
+
+---
+
 ## Tasks in this part
 
 | Task | Summary |
@@ -106,11 +120,11 @@ Reload a page; confirm `global.css` builds with no Tailwind errors.
 
 - [ ] **Step 3: Set `lang` from `Astro.currentLocale`**
 
-- [ ] **Step 4: Add skip link** (a11y string from bol-theme i18n once Part 2 Task 8 exists; temporary hardcoded English ok)
+- [ ] **Step 4: Add skip link** — copy from `getUiStrings(Astro.currentLocale).a11y.skipToContent`
 
 - [ ] **Step 5: Add `pb` on `<main>`** for mobile action bar clearance: `pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:pb-0`
 
-- [ ] **Step 6: Keep `HubFeedback` and `EmDashHead`/`EmDashBodyEnd`**
+- [ ] **Step 6: Keep `EmDashHead`/`EmDashBodyEnd`**
 
 Theme header/footer wired in Part 3 after plugin scaffold exists.
 

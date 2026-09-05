@@ -5,7 +5,6 @@ import "../globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MobileActionBar from "@/components/MobileActionBar";
-import FeedbackWidget from "@/components/FeedbackWidget";
 import { getDictionary } from "@/data/i18n";
 import { LOCALES, isValidLocale } from "@/data/i18n/config";
 
@@ -63,16 +62,14 @@ export default async function LocaleLayout({
         >
           {t.a11y.skipToContent}
         </a>
-        <FeedbackWidget>
-          <div className="flex min-h-screen flex-col">
-            <Header locale={locale} />
-            <main id="main-content" className="flex-1">
-              {children}
-            </main>
-            <Footer locale={locale} />
-            <MobileActionBar locale={locale} />
-          </div>
-        </FeedbackWidget>
+        <div className="flex min-h-screen flex-col">
+          <Header locale={locale} />
+          <main id="main-content" className="flex-1">
+            {children}
+          </main>
+          <Footer locale={locale} />
+          <MobileActionBar locale={locale} />
+        </div>
       </body>
     </html>
   );

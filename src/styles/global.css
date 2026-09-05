@@ -1,19 +1,88 @@
 @import "tailwindcss";
 
-/* Minimal tokens for theme switcher demo — not a design system */
-:root {
-	color-scheme: light dark;
-	--color-bg: light-dark(#ffffff, #0d0d0d);
-	--color-text: light-dark(#1a1a1a, #ededed);
-}
-:root.light {
-	color-scheme: light;
-}
-:root.dark {
-	color-scheme: dark;
+@theme inline {
+	--color-bg: var(--bol-bg);
+	--color-surface: var(--bol-surface);
+	--color-surface-2: var(--bol-surface-2);
+	--color-brand: var(--bol-accent);
+	--color-brand-muted: var(--bol-accent-muted);
+	--color-foreground: #f2f0eb;
+	--font-display: var(--font-display-src), "Arial Narrow", ui-sans-serif, sans-serif;
+	--font-body: var(--font-body-src), ui-sans-serif, system-ui, sans-serif;
+	--radius-card: 1rem;
+	--shadow-glow: 0 0 28px -6px rgb(242 179 61 / 0.35);
 }
 
-body {
-	background: var(--color-bg);
-	color: var(--color-text);
+:root {
+	color-scheme: dark;
+
+	--bol-bg: #0d0d0f;
+	--bol-surface: #16161a;
+	--bol-surface-2: #1e1e24;
+	--bol-accent: #f2b33d;
+	--bol-accent-muted: #45d0c8;
+
+	--color-bg: var(--bol-bg);
+	--color-surface: var(--bol-surface);
+	--color-surface-2: var(--bol-surface-2);
+	--color-accent: var(--bol-accent);
+	--color-accent-muted: var(--bol-accent-muted);
+	--radius-card: 1rem;
+	--shadow-glow: 0 0 28px -6px rgb(242 179 61 / 0.35);
+}
+
+@layer base {
+	html {
+		scroll-behavior: smooth;
+	}
+
+	body {
+		background-color: var(--color-bg);
+		color: var(--color-foreground);
+		font-family: var(--font-body);
+	}
+
+	::selection {
+		background-color: rgb(242 179 61 / 0.35);
+		color: #fff8ea;
+	}
+
+	a:focus-visible,
+	button:focus-visible,
+	[role="tab"]:focus-visible,
+	[role="button"]:focus-visible {
+		outline: 2px solid var(--color-accent);
+		outline-offset: 2px;
+	}
+}
+
+@keyframes kenburns {
+	from {
+		transform: scale(1) translateY(0);
+	}
+	to {
+		transform: scale(1.09) translateY(-1.5%);
+	}
+}
+
+.animate-kenburns {
+	animation: kenburns 22s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+
+	.animate-kenburns,
+	.motion-safe\:animate-kenburns {
+		animation: none !important;
+	}
+
+	*,
+	*::before,
+	*::after {
+		transition-duration: 0.01ms !important;
+		animation-duration: 0.01ms !important;
+	}
 }

@@ -31,7 +31,6 @@ src/components/MobileNav.tsx                    # full-screen mobile menu
 src/components/LanguageSwitcher.tsx             # en | hu | de switcher
 src/components/MobileActionBar.tsx              # thumb-zone action bar (call/map/menu/book)
 src/components/VenueMap.tsx                     # interactive dark Leaflet map (contact block)
-src/components/FeedbackWidget.tsx               # FasterFixes visual feedback widget (self-hosted hub)
 src/components/Footer.tsx                       # hours, address, email, socials, copyright
 src/components/Hero.tsx                         # block 1 — full-viewport hero
 src/components/Benefits.tsx                     # block 2 — 3 fact cards
@@ -59,7 +58,6 @@ README.md
 - **Two pages only**: landing (`/en`) and Experiences (`/en/experiences`), plus shared chrome.
 - **No backend**: no API routes, no database, no auth, no booking engine, no forms.
 - **Interactive map**: embedded Leaflet map with a dark Esri/OSM basemap (no API key); "Google Maps" remains a deep link for turn-by-turn directions.
-- **Feedback widget**: FasterFixes visual bug reporting (`@fasterfixes/react`) pointed at a self-hosted hub; credentials hardcoded in `src/components/FeedbackWidget.tsx` for the prototype.
 - **Static data** lives in `src/data/` — edit those files to change copy, prices or cards.
 - All visible strings exist in **all three locales**; the dictionaries are type-enforced (`hu: Dictionary`, `de: Dictionary`), so a missing translation fails the type check.
 - Photos in `public/placeholders/` are AI-generated stand-ins; the phone number is a placeholder.

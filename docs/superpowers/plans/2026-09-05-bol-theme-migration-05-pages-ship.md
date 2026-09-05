@@ -10,6 +10,21 @@
 
 ---
 
+## Official documentation
+
+Verify against live docs ([Docs MCP](https://docs.emdashcms.com/docs-mcp/) · [llms.txt](https://docs.emdashcms.com/llms.txt)) before implementing.
+
+| Task | Read first |
+|------|------------|
+| 18 — home | [Querying content](https://docs.emdashcms.com/guides/querying-content/) · [Portable Text components](https://docs.emdashcms.com/plugins/creating-native-plugins/portable-text-components/) · [Page layouts](https://docs.emdashcms.com/guides/page-layouts/) · [Internationalization](https://docs.emdashcms.com/guides/internationalization/) |
+| 19 — experiences | [Querying content](https://docs.emdashcms.com/guides/querying-content/) · [Taxonomies](https://docs.emdashcms.com/guides/taxonomies/) |
+| 18–19 — SEO | [Site settings](https://docs.emdashcms.com/guides/site-settings/) |
+| 20 — cleanup | [Your first native plugin](https://docs.emdashcms.com/plugins/creating-native-plugins/your-first-native-plugin/) (plugin registration) |
+
+**Project skills:** `.agents/skills/building-emdash-site/references/querying-and-rendering.md` · `site-features.md`
+
+---
+
 ## Files touched in this part
 
 | Path | Responsibility |
