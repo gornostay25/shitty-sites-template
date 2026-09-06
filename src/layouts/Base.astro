@@ -1,14 +1,17 @@
 ---
 import { Font } from "astro:assets";
-import { getSiteSettings } from "emdash";
-import { EmDashHead, EmDashBodyEnd } from "emdash/ui";
+import { EmDashHead, EmDashBodyEnd, EmDashBodyStart } from "emdash/ui";
 import { createPublicPageContext } from "emdash/page";
 import type { SeoMeta } from "emdash";
 import "../styles/global.css";
-import SiteHeader from "../components/SiteHeader.astro";
-import SiteFooter from "../components/SiteFooter.astro";
 import SeoHead from "../components/SeoHead.astro";
 import { resolveSiteIdentity } from "../utils/site-identity";
+import { getSiteSettings } from "emdash";
+import SiteHeader from "../plugins/bol-theme/astro/theme/SiteHeader.astro";
+import SiteFooter from "../plugins/bol-theme/astro/theme/SiteFooter.astro";
+import MobileActionBar from "../plugins/bol-theme/astro/theme/MobileActionBar.astro";
+import { fetchPublicVenue } from "../plugins/bol-theme/utils/fetch-venue.ts";
+import { getUiStrings } from "../plugins/bol-theme/utils/i18n/index.ts";
 
 interface Props extends SeoMeta {
 	content?: {
@@ -22,6 +25,8 @@ const { content, ...seo } = Astro.props;
 const settings = await getSiteSettings();
 const identity = resolveSiteIdentity(settings);
 const locale = Astro.currentLocale ?? "en";
+const ui = getUiStrings(locale);
+const venue = await fetchPublicVenue(Astro.url.origin);
 
 const pageCtx = createPublicPageContext({
 	Astro,
@@ -48,14 +53,15 @@ const pageCtx = createPublicPageContext({
 		<EmDashHead page={pageCtx} />
 	</head>
 	<body class="antialiased">
+		<EmDashBodyStart page={pageCtx} />
 		<a
 			href="#main-content"
 			class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:rounded-md focus:bg-brand focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-[#1c1305]"
 		>
-			Skip to content
+			{ui.a11y.skipToContent}
 		</a>
 
-		<SiteHeader identity={identity} />
+		<SiteHeader locale={locale} venue={venue} />
 
 		<main
 			id="main-content"
@@ -64,7 +70,8 @@ const pageCtx = createPublicPageContext({
 			<slot />
 		</main>
 
-		<SiteFooter identity={identity} />
+		<SiteFooter locale={locale} venue={venue} />
+		<MobileActionBar locale={locale} venue={venue} />
 
 		<EmDashBodyEnd page={pageCtx} />
 	</body>

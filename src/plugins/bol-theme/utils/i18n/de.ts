@@ -45,6 +45,12 @@ const de: UiStrings = {
 			tiktok: "Bar of Legends auf TikTok",
 		},
 	},
+	footer: {
+		tagline: "Esport-Bar & Craftbier-Haus im Herzen von Győr.",
+		contactTitle: "Kontakt",
+		followUs: "Folge uns",
+		rightsTpl: "© {year} Bar of Legends Győr. Alle Rechte vorbehalten.",
+	},
 };
 
 export default de;

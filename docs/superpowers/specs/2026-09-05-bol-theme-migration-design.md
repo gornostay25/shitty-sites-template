@@ -1,7 +1,8 @@
 # Bar of Legends — Theme Migration Design Spec
 
-**Status:** Approved (2026-09-05) · amended during Part 2 implementation (2026-09-05)  
+**Status:** Approved (2026-09-05) · amended during Part 2 (2026-09-05) and Part 3 (2026-09-06)  
 **Part 2 shipped (2026-09-05):** single React `/venue` admin (no `settingsSchema`); `mapsUrl` derived from coordinates; opening hours support closed days  
+**Part 3 shipped (2026-09-06):** theme chrome wired; `MobileNav` is Astro + native `<dialog popover>` (not React island); popover styles co-located in component  
 **Date:** 2026-09-05  
 **EmDash version:** 0.36.0 (+ bun patch for `byline`)  
 **Reference:** `docs/design/v1/` (Next.js visual prototype — **reference only, do not copy code**)  
@@ -41,6 +42,7 @@ The Next.js prototype in `docs/design/v1/` establishes visual direction and info
 | Venue admin | **Single React page `/venue`** — all venue fields + opening hours; no auto-generated `settingsSchema` form |
 | Opening hours — closed days | Each Mon–Sun row may set **`closed: true`**; open/close times ignored; omitted from JSON-LD; status logic skips closed days |
 | `hub-feedback` | **Removed** — not part of BOL migration; drop plugin, deps, and `Base.astro` mount |
+| Mobile nav | **Native `<dialog popover>`** in `MobileNav.astro` — CSS transitions (`:popover-open`, `@starting-style`); minimal JS for ARIA + close-on-link; panel below sticky header (`inset: 4rem 0 0`); styles in component `<style is:global>`, not site `global.css` |
 
 ---
 
@@ -112,7 +114,7 @@ CMS page (home)
 | Design tokens | `--bol-bg`, `--bol-accent`, `font-display`, `font-body`, `rounded-card`, `shadow-glow` |
 | `Base.astro` contributions | Skip link, main padding for mobile action bar, `class="dark"` pin |
 | `SiteHeader` | Logo, primary menu, language switcher, mobile menu trigger |
-| `MobileNav` | Full-screen nav (React island or Astro + minimal script) |
+| `MobileNav` | Full-screen nav — Astro + native `<dialog popover>`; CSS transitions; panel below header (header stays visible, logo stable) |
 | `SiteFooter` | Tagline, socials, address, phone, email — **no opening hours** |
 | `MobileActionBar` | Call, menu anchor, maps link, book (mailto) |
 | UI string dictionaries | `getUiStrings(locale)` from `utils/i18n/` — nav, action bar, contact section labels, day names (en/hu/de); **not** venue address text |
@@ -252,7 +254,8 @@ src/plugins/bol-theme/
     │   ├── SiteHeader.astro
     │   ├── SiteFooter.astro
     │   ├── MobileActionBar.astro
-    │   └── MobileNav.tsx        # client island if needed
+    │   ├── MobileNav.astro      # native popover dialog; styles co-located
+    │   └── LanguageSwitcher.astro
     └── blocks/
         ├── Hero.astro
         ├── Benefits.astro
@@ -410,7 +413,7 @@ Public UI uses semantic HTML + Tailwind utilities. No `components/ui/*`, no Radi
 | `GalleryBento.tsx` | `bol.gallery` — rewritten grid with explicit mobile spans |
 | `ContactSection.tsx` | `bol.contact` — rewritten; hours from venue settings |
 | `Footer.tsx` | `SiteFooter.astro` — no hours section |
-| `Header.tsx` / `MobileNav.tsx` | Theme partials — rewritten |
+| `Header.tsx` / `MobileNav.tsx` | `SiteHeader.astro` + `MobileNav.astro` (native popover) — rewritten |
 | `MobileActionBar.tsx` | Theme partial — rewritten |
 | `ExperienceGrid.tsx` / `ExperienceCard.tsx` | `/experiences` page — rewritten |
 | `VenueMap.tsx` | Leaflet island — rewritten; CSS scoped under `.leaflet-container` |
@@ -428,12 +431,12 @@ These were identified in review; the rewrite must not regress them:
 1. **Gallery bento** — prototype `col-span-2 row-span-2` classes may break on 2-column mobile grid; define explicit mobile vs `md:` spans.
 2. **Menu tabs** — long HU/DE labels on narrow screens; allow horizontal scroll or smaller type.
 3. **Main content padding** — bottom padding must clear fixed mobile action bar + safe area.
-4. **Mobile nav** — overlay must not be trapped inside a `backdrop-blur` containing block (prototype bugfix).
+4. **Mobile nav** — panel is a **sibling** of `<header>`, not a child; positioned below the sticky bar (`inset: 4rem 0 0`) so `backdrop-blur` does not trap the overlay and the logo does not resize on open. Native `<dialog popover>` for open/close animations (CSS-first, not React state).
 5. **Leaflet** — load client-only; scope overrides for dark popup/controls.
 6. **Map z-index vs sticky header** — Leaflet panes default to z-index 400–1000, which paints **above** the sticky header (`z-50`) when scrolling. Fix during rewrite:
    - Wrap the map in a scoped container (e.g. `.venue-map`) with `relative z-0 isolate overflow-hidden`.
    - Override Leaflet pane/control z-index **inside that container only** so tiles, zoom buttons, and popups stay below site chrome.
-   - Keep header at `z-50`; mobile nav overlay above header (`z-[60]` or higher); mobile action bar `z-40`.
+   - Keep header at `z-50`; mobile nav panel **below** header (not full-screen over it); mobile action bar `z-40`.
    - Verify: scroll contact section — map tiles/controls must never cover the header.
 7. **Open/closed badge** — port `computeStatus()` logic; status copy from `getUiStrings()` templates
 
@@ -465,7 +468,7 @@ After implementation, verify at **375px** and **1440px** in **en**, **hu**, **de
 
 - [ ] No horizontal scroll on home and experiences
 - [ ] Mobile action bar clears footer content; safe-area respected
-- [ ] Mobile menu opens/closes; focus trap reasonable
+- [ ] Mobile menu opens/closes with symmetric CSS transition; header/logo stable; scroll locked while open
 - [ ] Menu tabs switch categories; prices format as HUF
 - [ ] Gallery bento grid balanced on mobile and desktop
 - [ ] Contact block: hours table, open/closed badge, map pin, tel/mailto work

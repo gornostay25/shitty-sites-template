@@ -45,6 +45,12 @@ const hu: UiStrings = {
 			tiktok: "Bar of Legends a TikTokon",
 		},
 	},
+	footer: {
+		tagline: "Esportbár és kézműves sörház Győr szívében.",
+		contactTitle: "Kapcsolat",
+		followUs: "Közösség",
+		rightsTpl: "© {year} Bar of Legends Győr. Minden jog fenntartva.",
+	},
 };
 
 export default hu;

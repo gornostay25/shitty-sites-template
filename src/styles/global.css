@@ -7,6 +7,9 @@
 	--color-brand: var(--bol-accent);
 	--color-brand-muted: var(--bol-accent-muted);
 	--color-foreground: #f2f0eb;
+	--color-muted-foreground: #a8a4b8;
+	--color-border: rgb(255 255 255 / 0.08);
+	--color-background: var(--bol-bg);
 	--font-display: var(--font-display-src), "Arial Narrow", ui-sans-serif, sans-serif;
 	--font-body: var(--font-body-src), ui-sans-serif, system-ui, sans-serif;
 	--radius-card: 1rem;
@@ -34,6 +37,7 @@
 @layer base {
 	html {
 		scroll-behavior: smooth;
+		scrollbar-gutter: stable;
 	}
 
 	body {
@@ -67,6 +71,20 @@
 
 .animate-kenburns {
 	animation: kenburns 22s ease-in-out infinite alternate;
+}
+
+.scrollbar-slim {
+	scrollbar-width: thin;
+	scrollbar-color: #3a3a42 transparent;
+}
+
+.scrollbar-slim::-webkit-scrollbar {
+	width: 6px;
+}
+
+.scrollbar-slim::-webkit-scrollbar-thumb {
+	background: #3a3a42;
+	border-radius: 9999px;
 }
 
 @media (prefers-reduced-motion: reduce) {

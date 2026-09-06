@@ -64,7 +64,7 @@ Apply to **every part** (full detail in spec):
 |------|------|-------|----------|
 | **1** | [01-foundation.md](./2026-09-05-bol-theme-migration-01-foundation.md) | 1–3 | i18n, tokens, Base shell |
 | **2** | [02-plugin-core.md](./2026-09-05-bol-theme-migration-02-plugin-core.md) | 4–8 | `bol-theme` scaffold, venue KV, JSON-LD, `/venue` admin, theme i18n ✅ |
-| **3** | [03-seed-chrome.md](./2026-09-05-bol-theme-migration-03-seed-chrome.md) | 9–12 | CMS seed, header/footer/mobile chrome |
+| **3** | [03-seed-chrome.md](./2026-09-05-bol-theme-migration-03-seed-chrome.md) | 9–12 | CMS seed, header/footer/mobile chrome (MobileNav: native popover, not React) |
 | **4** | [04-blocks.md](./2026-09-05-bol-theme-migration-04-blocks.md) | 13–17 | PT block types + renderers (hero → contact/map) |
 | **5** | [05-pages-ship.md](./2026-09-05-bol-theme-migration-05-pages-ship.md) | 18–21 | Home/experiences routes, demo cleanup, full QA |
 

@@ -1,0 +1,52 @@
+---
+import Icon from "../icons/Icon.astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getUiStrings } from "../../utils/i18n/index.ts";
+import { bookingMailto } from "../../utils/fetch-venue.ts";
+import type { PublicVenueSettings } from "../../utils/venue.ts";
+
+interface Props {
+	locale: string;
+	venue: PublicVenueSettings;
+}
+
+const { locale, venue } = Astro.props;
+const ui = getUiStrings(locale);
+const homeHref = getRelativeLocaleUrl(locale, "/");
+
+const actions = [
+	{ id: "call", href: `tel:${venue.phoneTel}`, label: ui.actions.call, external: false, icon: "phone" as const },
+	{ id: "menu", href: `${homeHref}#menu`, label: ui.actions.menu, external: false, icon: "beer" as const },
+	{ id: "map", href: venue.mapsUrl, label: ui.actions.map, external: true, icon: "map-pin" as const },
+	{
+		id: "book",
+		href: bookingMailto(venue.email),
+		label: ui.actions.book,
+		external: false,
+		icon: "calendar-check" as const,
+	},
+];
+---
+
+<nav
+	aria-label={ui.actions.label}
+	class="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 backdrop-blur-md md:hidden"
+>
+	<div class="mx-auto grid w-full max-w-md grid-cols-4">
+		{
+			actions.map((action) => (
+				<a
+					href={action.href}
+					{...(action.external
+						? { target: "_blank", rel: "noopener noreferrer" }
+						: {})}
+					class="flex min-h-16 flex-col items-center justify-center gap-1 text-[11px] font-medium text-muted-foreground transition-colors hover:text-brand"
+				>
+					<Icon name={action.icon} class="size-5 text-brand" />
+					{action.label}
+				</a>
+			))
+		}
+	</div>
+	<div class="h-[env(safe-area-inset-bottom)] bg-background" aria-hidden="true"></div>
+</nav>

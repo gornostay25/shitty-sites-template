@@ -1,0 +1,232 @@
+---
+import Icon from "../icons/Icon.astro";
+import LanguageSwitcher from "./LanguageSwitcher.astro";
+import type { NavItem } from "../../utils/nav.ts";
+import type { PublicVenueSettings } from "../../utils/venue.ts";
+import type { UiStrings } from "../../utils/i18n/en.ts";
+
+interface Props {
+	part: "trigger" | "panel";
+	locale?: string;
+	items?: NavItem[];
+	venue?: PublicVenueSettings;
+	ui: UiStrings;
+}
+
+const { part, locale, items = [], venue, ui } = Astro.props;
+
+const SOCIALS = [
+	{ id: "instagram" as const, hrefKey: "socialInstagram" as const },
+	{ id: "facebook" as const, hrefKey: "socialFacebook" as const },
+	{ id: "tiktok" as const, hrefKey: "socialTiktok" as const },
+];
+---
+
+{
+	part === "trigger" && (
+		<button
+			type="button"
+			popovertarget="bol-mobile-nav"
+			class="bol-mobile-nav-trigger grid size-12 shrink-0 place-items-center rounded-md text-foreground transition-colors hover:bg-surface-2 md:hidden"
+			aria-expanded="false"
+			aria-haspopup="dialog"
+			aria-label={ui.nav.openMenu}
+		>
+			<span class="bol-mobile-nav-trigger__open grid place-items-center">
+				<Icon name="menu" class="size-6" />
+			</span>
+			<span class="bol-mobile-nav-trigger__close grid place-items-center">
+				<Icon name="x" class="size-6" />
+			</span>
+		</button>
+	)
+}
+
+{
+	part === "panel" && venue && locale && (
+		<dialog
+			id="bol-mobile-nav"
+			popover="auto"
+			class="bol-mobile-nav md:hidden"
+			aria-label={ui.nav.label}
+		>
+			<div class="scrollbar-slim bol-mobile-nav__inner flex h-full flex-col overflow-y-auto px-4 pt-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] sm:px-6">
+				<nav aria-label={ui.nav.label} class="flex flex-col gap-3">
+					{
+						items.map((item) => (
+							<a
+								href={item.href}
+								aria-current={item.active ? "page" : undefined}
+								class:list={[
+									"bol-mobile-nav__link flex min-h-14 items-center justify-between rounded-xl border border-border bg-surface px-4 transition-colors hover:border-brand/40",
+									item.active ? "text-brand" : "text-foreground",
+								]}
+							>
+								<span class="font-display text-3xl tracking-wide">{item.label}</span>
+								<Icon name="chevron-right" class="size-5 text-brand" />
+							</a>
+						))
+					}
+				</nav>
+
+				<div class="bol-mobile-nav__section mt-8">
+					<p class="mb-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+						{ui.nav.language}
+					</p>
+					<LanguageSwitcher locale={locale} variant="drawer" />
+				</div>
+
+				<div class="bol-mobile-nav__section mt-auto pt-10">
+					<address class="text-sm not-italic leading-relaxed text-muted-foreground">
+						{venue.address}
+					</address>
+					<div class="mt-4 flex gap-3">
+						{
+							SOCIALS.map((social) => (
+								<a
+									href={venue[social.hrefKey]}
+									aria-label={ui.contact.socials[social.id]}
+									class="grid size-12 place-items-center rounded-lg border border-border bg-surface text-muted-foreground transition-colors hover:border-brand/40 hover:text-brand"
+								>
+									<Icon name={social.id} class="size-5" />
+								</a>
+							))
+						}
+					</div>
+					<p class="mt-6 text-xs text-muted-foreground">{venue.phoneDisplay}</p>
+				</div>
+			</div>
+		</dialog>
+	)
+}
+
+{
+	part === "panel" && (
+		<>
+			<style is:global>
+				.bol-mobile-nav {
+					position: fixed;
+					inset: 4rem 0 0;
+					margin: 0;
+					padding: 0;
+					border: none;
+					width: 100%;
+					max-width: none;
+					height: calc(100dvh - 4rem);
+					max-height: none;
+					background-color: rgb(13 13 15 / 0.95);
+					backdrop-filter: blur(12px);
+					opacity: 0;
+					transform: translateY(-0.375rem);
+					transition:
+						opacity 0.25s ease,
+						transform 0.25s ease,
+						overlay 0.25s allow-discrete,
+						display 0.25s allow-discrete;
+				}
+
+				.bol-mobile-nav:popover-open {
+					opacity: 1;
+					transform: translateY(0);
+				}
+
+				@starting-style {
+					.bol-mobile-nav:popover-open {
+						opacity: 0;
+						transform: translateY(-0.375rem);
+					}
+				}
+
+				.bol-mobile-nav::backdrop {
+					background: transparent;
+				}
+
+				html:has(.bol-mobile-nav:popover-open) {
+					overflow: hidden;
+				}
+
+				.bol-mobile-nav-trigger__close {
+					display: none;
+				}
+
+				html:has(.bol-mobile-nav:popover-open) .bol-mobile-nav-trigger__open {
+					display: none;
+				}
+
+				html:has(.bol-mobile-nav:popover-open) .bol-mobile-nav-trigger__close {
+					display: grid;
+				}
+
+				.bol-mobile-nav__link,
+				.bol-mobile-nav__section {
+					opacity: 0;
+					transform: translateY(0.5rem);
+					transition:
+						opacity 0.22s ease,
+						transform 0.22s ease;
+				}
+
+				.bol-mobile-nav:popover-open .bol-mobile-nav__link,
+				.bol-mobile-nav:popover-open .bol-mobile-nav__section {
+					opacity: 1;
+					transform: translateY(0);
+				}
+
+				.bol-mobile-nav:popover-open .bol-mobile-nav__link:nth-child(1) {
+					transition-delay: 50ms;
+				}
+
+				.bol-mobile-nav:popover-open .bol-mobile-nav__link:nth-child(2) {
+					transition-delay: 90ms;
+				}
+
+				.bol-mobile-nav:popover-open .bol-mobile-nav__link:nth-child(3) {
+					transition-delay: 130ms;
+				}
+
+				.bol-mobile-nav:popover-open .bol-mobile-nav__link:nth-child(4) {
+					transition-delay: 170ms;
+				}
+
+				.bol-mobile-nav:popover-open .bol-mobile-nav__link:nth-child(5) {
+					transition-delay: 210ms;
+				}
+
+				.bol-mobile-nav:popover-open .bol-mobile-nav__section:nth-of-type(1) {
+					transition-delay: 240ms;
+				}
+
+				.bol-mobile-nav:popover-open .bol-mobile-nav__section:nth-of-type(2) {
+					transition-delay: 280ms;
+				}
+
+				@media (prefers-reduced-motion: reduce) {
+					.bol-mobile-nav,
+					.bol-mobile-nav__link,
+					.bol-mobile-nav__section {
+						transition: none !important;
+					}
+				}
+			</style>
+
+			<script define:vars={{ openLabel: ui.nav.openMenu, closeLabel: ui.nav.closeMenu }}>
+				const dialog = document.getElementById("bol-mobile-nav");
+				const trigger = document.querySelector(".bol-mobile-nav-trigger");
+
+				dialog?.addEventListener("toggle", (event) => {
+					const open = event.newState === "open";
+					trigger?.setAttribute("aria-expanded", String(open));
+					trigger?.setAttribute("aria-label", open ? closeLabel : openLabel);
+				});
+
+				dialog?.addEventListener("click", (event) => {
+					const link =
+						event.target instanceof Element ? event.target.closest("a[href]") : null;
+					if (link && dialog.contains(link)) {
+						dialog.hidePopover();
+					}
+				});
+			</script>
+		</>
+	)
+}

@@ -4,7 +4,7 @@
 
 **Prerequisites:** Part 2 complete (`bol-theme` registered, venue settings, `getUiStrings()`).
 
-**Delivers:** BOL collections in seed, header/footer/mobile bar wired into Base — site has navigable chrome but home PT blocks not yet rendered (Part 4). Theme partials use `getUiStrings(Astro.currentLocale)` for en/hu/de labels; plugin admin stays English-only.
+**Delivers:** BOL collections in seed, header/footer/mobile bar wired into Base — site has navigable chrome but home PT blocks not yet rendered (Part 4). Theme partials use `getUiStrings(Astro.currentLocale)` for en/hu/de labels; plugin admin stays English-only. Mobile nav uses native `<dialog popover>` (see Task 11).
 
 **Next:** [Part 4 — Blocks](./2026-09-05-bol-theme-migration-04-blocks.md)
 
@@ -29,9 +29,11 @@ Verify against live docs ([Docs MCP](https://docs.emdashcms.com/docs-mcp/) · [l
 | Path | Responsibility |
 |------|----------------|
 | `seed/seed.json` | BOL collections, taxonomies, menus, demo content |
+| `scripts/generate-bol-seed.ts` | Seed generator (optional regen) |
 | `.emdash/uploads/` | Local seed media (`$media.file`) |
-| `src/plugins/bol-theme/astro/theme/*.astro` | Header, footer, mobile bar |
-| `src/plugins/bol-theme/astro/islands/MobileNav.tsx` | Full-screen mobile menu |
+| `src/plugins/bol-theme/astro/theme/*.astro` | Header, footer, mobile nav, mobile bar |
+| `src/plugins/bol-theme/astro/icons/` | Icon.astro + icons.tsx |
+| `src/plugins/bol-theme/utils/nav.ts` | Primary nav builder |
 | `src/layouts/Base.astro` | Wire bol-theme chrome |
 
 ---
@@ -42,27 +44,13 @@ Verify against live docs ([Docs MCP](https://docs.emdashcms.com/docs-mcp/) · [l
 - Modify: `seed/seed.json`
 - Create: `.emdash/uploads/` — local seed media (git-track demo images)
 
-- [ ] **Step 1: Define collection schemas** per spec field tables (`menu_items`, `experiences`, `gallery_items`; taxonomies `menu_category`, `experience_category`)
+- [x] **Step 1: Define collection schemas** per spec field tables (`menu_items`, `experiences`, `gallery_items`; taxonomies `menu_category`, `experience_category`)
 
-- [ ] **Step 2: Add taxonomy terms** (en seed first; hu/de via `locale` + `translationOf`)
-
-- [ ] **Step 3: Stage seed media** — copy prototype placeholders into `.emdash/uploads/` ([Including Media](https://docs.emdashcms.com/themes/creating-themes/#including-media)). Do not reference `docs/design/v1/public/` in seed.
-
-- [ ] **Step 4: Migrate demo data** from prototype `data/*.ts`; image fields use local `$media`:
-
-```json
-"image": {
-  "$media": {
-    "file": "beer-pour.png",
-    "alt": "Craft beer poured fresh from the tap"
-  }
-}
-```
-
-- [ ] **Step 5: Create `pages` home entry** slug `home` — placeholder PT until Part 4; hero background via `$media.file` (e.g. `hero.png`)
-
-- [ ] **Step 6: Create `primary` menu** per locale
-
+- [x] **Step 2: Add taxonomy terms**
+- [x] **Step 3: Stage seed media**
+- [x] **Step 4: Migrate demo data**
+- [x] **Step 5: Create `pages` home entry**
+- [x] **Step 6: Create `primary` menu**
 - [ ] **Step 7: Apply seed** — reset local D1 if needed; reload admin. Confirm collections + Media Library entries.
 
 ---
@@ -74,26 +62,24 @@ Verify against live docs ([Docs MCP](https://docs.emdashcms.com/docs-mcp/) · [l
 - Create: `src/plugins/bol-theme/astro/theme/LanguageSwitcher.astro`
 - Modify: `src/layouts/Base.astro`
 
-- [ ] **Step 1: Rewrite header** — logo, nav, lang switcher; labels via `getUiStrings(locale)`; match prototype layout without copying TSX
-
-- [ ] **Step 2: LanguageSwitcher** — `getRelativeLocaleUrl` for `/` and `/experiences`
-
-- [ ] **Step 3: Wire into Base.astro**
-
-- [ ] **Step 4: Manual check 375px + 1440px** — nav readable, no overflow
+- [x] **Step 1: Rewrite header**
+- [x] **Step 2: LanguageSwitcher**
+- [x] **Step 3: Wire into Base.astro**
+- [ ] **Step 4: Manual check 375px + 1440px**
 
 ---
 
-## Task 11: MobileNav island
+## Task 11: MobileNav (native popover)
 
 **Files:**
-- Create: `src/plugins/bol-theme/astro/islands/MobileNav.tsx`
+- Create: `src/plugins/bol-theme/astro/theme/MobileNav.astro`
 
-- [ ] **Step 1: Implement open/close state** — plain buttons, Tailwind, no shadcn Sheet
+**Approach (shipped):** Native `<dialog popover="auto">` — not a React island. CSS handles open/close transitions (`:popover-open`, `@starting-style`, `allow-discrete` on `display`/`overlay`); a tiny inline script syncs ARIA on the trigger and closes on nav link click. Popover-specific styles live in `<style is:global>` inside `MobileNav.astro` (not `global.css`). Panel renders as a **sibling** of `<header>` (below `top-16`) so `backdrop-blur` on the header does not trap the overlay and the logo stays stable.
 
-- [ ] **Step 2: Mount from SiteHeader** with `client:load` — portal or sibling pattern (overlay **outside** sticky header, `z-[60]`)
-
-- [ ] **Step 3: Manual check** — menu covers viewport, closes on link click, header z-index correct
+- [x] **Step 1: Trigger + dialog panel** — `part="trigger"` in header (`popovertarget="bol-mobile-nav"`); `part="panel"` after header
+- [x] **Step 2: CSS transitions** — symmetric open/close; staggered link/section fade-in; `prefers-reduced-motion`
+- [x] **Step 3: Scroll lock + icon swap** — `html:has(.bol-mobile-nav:popover-open)` for overflow + menu/X toggle
+- [ ] **Step 4: Manual check 375px** — open/close symmetric; no logo jump; header stays visible
 
 ---
 
@@ -103,20 +89,17 @@ Verify against live docs ([Docs MCP](https://docs.emdashcms.com/docs-mcp/) · [l
 - Create: `src/plugins/bol-theme/astro/theme/SiteFooter.astro`
 - Create: `src/plugins/bol-theme/astro/theme/MobileActionBar.astro`
 
-- [ ] **Step 1: Footer** — tagline, socials, `venue.address`, phone, email — **no hours column**
-
-- [ ] **Step 2: MobileActionBar** — fixed bottom `z-40`, call / #menu / maps (`venue.public.mapsUrl` or `buildMapsUrl(lat,lng)`) / mailto, safe-area padding
-
-- [ ] **Step 3: Wire into Base.astro**
-
-- [ ] **Step 4: Manual check** — footer not hidden behind action bar
+- [x] **Step 1: Footer**
+- [x] **Step 2: MobileActionBar**
+- [x] **Step 3: Wire into Base.astro**
+- [ ] **Step 4: Manual check**
 
 ---
 
 ## Part 3 completion gate
 
 - [ ] Seed applied: menu_items, experiences, gallery_items, home page stub, menus
-- [ ] Header sticky `z-50`, lang switcher works
-- [ ] Mobile nav + bottom action bar functional
-- [ ] Footer shows venue contact, **no hours**
-- [ ] Ready for Part 4 PT blocks
+- [x] Header sticky `z-50`, lang switcher works
+- [x] Mobile nav: native popover, symmetric CSS open/close, header/logo stable
+- [x] Footer shows venue contact, **no hours**
+- [x] Ready for Part 4 PT blocks

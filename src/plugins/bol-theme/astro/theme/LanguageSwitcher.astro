@@ -1,0 +1,53 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getUiStrings } from "../../utils/i18n/index.ts";
+
+interface Props {
+	locale: string;
+	/** header = desktop bar; drawer = full-width mobile menu segment */
+	variant?: "header" | "drawer";
+}
+
+const { locale, variant = "header" } = Astro.props;
+const ui = getUiStrings(locale);
+const locales = ["en", "hu", "de"] as const;
+const labels = { en: "EN", hu: "HU", de: "DE" } as const;
+
+const pathname = Astro.url.pathname;
+const onExperiences = pathname.includes("/experiences");
+const targetPath = onExperiences ? "/experiences" : "/";
+
+const navClass =
+	variant === "drawer"
+		? "grid w-full grid-cols-3 gap-1 rounded-lg border border-border bg-surface/80 p-1 backdrop-blur"
+		: "hidden md:inline-flex items-center gap-1 rounded-full border border-border bg-surface/80 p-1 backdrop-blur";
+
+const linkClass =
+	variant === "drawer"
+		? "inline-flex h-9 items-center justify-center rounded-md text-xs font-semibold uppercase tracking-widest transition-colors"
+		: "inline-flex h-9 min-w-10 items-center justify-center rounded-md px-2 text-xs font-semibold uppercase tracking-widest transition-colors";
+---
+
+<nav aria-label={ui.nav.language} class={navClass}>
+	{
+		locales.map((l) => {
+			const active = l === locale;
+			const href = getRelativeLocaleUrl(l, targetPath);
+			return (
+				<a
+					href={href}
+					hreflang={l}
+					aria-current={active ? "true" : undefined}
+					class:list={[
+						linkClass,
+						active
+							? "bg-brand text-[#1c1305]"
+							: "text-muted-foreground hover:text-foreground",
+					]}
+				>
+					{labels[l]}
+				</a>
+			);
+		})
+	}
+</nav>

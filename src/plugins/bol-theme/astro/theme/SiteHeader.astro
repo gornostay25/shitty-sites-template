@@ -1,0 +1,65 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import Icon from "../icons/Icon.astro";
+import MobileNav from "./MobileNav.astro";
+import { getUiStrings } from "../../utils/i18n/index.ts";
+import { buildPrimaryNav } from "../../utils/nav.ts";
+import type { PublicVenueSettings } from "../../utils/venue.ts";
+import LanguageSwitcher from "./LanguageSwitcher.astro";
+
+interface Props {
+	locale: string;
+	venue: PublicVenueSettings;
+}
+
+const { locale, venue } = Astro.props;
+const ui = getUiStrings(locale);
+const navItems = buildPrimaryNav(locale, Astro.url.pathname, ui);
+const homeHref = getRelativeLocaleUrl(locale, "/");
+---
+
+<header class="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
+	<div class="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-2 px-4 sm:px-6">
+		<a
+			href={homeHref}
+			class="flex min-h-12 items-center gap-2 rounded-md"
+			aria-label={`Bar of Legends — ${ui.nav.home}`}
+		>
+			<span
+				class="grid size-9 shrink-0 place-items-center rounded-lg border border-brand/30 bg-brand/10 text-brand"
+			>
+				<Icon name="gamepad2" />
+			</span>
+			<span class="whitespace-nowrap font-display text-lg leading-none tracking-wider sm:text-2xl">
+				<span class="text-foreground">BAR OF </span>
+				<span class="text-brand">LEGENDS</span>
+			</span>
+		</a>
+
+		<nav aria-label={ui.nav.label} class="hidden items-center gap-1 md:flex">
+			{
+				navItems.map((item) => (
+					<a
+						href={item.href}
+						aria-current={item.active ? "page" : undefined}
+						class:list={[
+							"rounded-md px-3 py-2 text-sm font-medium transition-colors",
+							item.active
+								? "text-brand"
+								: "text-muted-foreground hover:bg-surface-2 hover:text-foreground",
+						]}
+					>
+						{item.label}
+					</a>
+				))
+			}
+		</nav>
+
+		<div class="flex shrink-0 items-center gap-1.5 sm:gap-2">
+			<LanguageSwitcher locale={locale} variant="header" />
+			<MobileNav part="trigger" ui={ui} />
+		</div>
+	</div>
+</header>
+
+<MobileNav part="panel" locale={locale} items={navItems} venue={venue} ui={ui} />

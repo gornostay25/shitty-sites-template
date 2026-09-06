@@ -2,23 +2,24 @@
 	"$schema": "https://emdashcms.com/seed.schema.json",
 	"version": "1",
 	"meta": {
-		"name": "ShittySites Template",
-		"description": "Agency base template — full EmDash reference, unstyled on purpose",
-		"author": "EmDash"
+		"name": "Bar of Legends",
+		"description": "Esports bar in Győr — menu, experiences, gallery, block-built home",
+		"author": "Bar of Legends"
 	},
 	"settings": {
-		"title": "ShittySites Demo",
-		"tagline": "Full EmDash capability reference — unstyled on purpose",
+		"title": "Bar of Legends",
+		"tagline": "Esports bar & craft beer house in the heart of Győr.",
 		"url": "http://localhost:4321",
-		"postsPerPage": 5,
+		"postsPerPage": 10,
 		"dateFormat": "MMMM d, yyyy",
-		"timezone": "UTC",
+		"timezone": "Europe/Budapest",
 		"social": {
-			"twitter": "shittysites",
-			"github": "example"
+			"instagram": "baroflegendsgyor",
+			"facebook": "baroflegendsgyor",
+			"tiktok": "baroflegendsgyor"
 		},
 		"seo": {
-			"titleSeparator": " | ",
+			"titleSeparator": " · ",
 			"robotsTxt": null,
 			"googleVerification": "",
 			"bingVerification": ""
@@ -26,46 +27,16 @@
 	},
 	"collections": [
 		{
-			"slug": "posts",
-			"label": "Posts",
-			"labelSingular": "Post",
-			"supports": ["drafts", "revisions", "preview", "scheduling", "search", "seo"],
-			"commentsEnabled": true,
-			"fields": [
-				{
-					"slug": "title",
-					"label": "Title",
-					"type": "string",
-					"required": true,
-					"searchable": true
-				},
-				{
-					"slug": "featured_image",
-					"label": "Featured Image",
-					"type": "image",
-					"options": {
-						"darkVariant": true
-					}
-				},
-				{
-					"slug": "content",
-					"label": "Content",
-					"type": "portableText",
-					"searchable": true
-				},
-				{
-					"slug": "excerpt",
-					"label": "Excerpt",
-					"type": "text"
-				}
-			]
-		},
-		{
 			"slug": "pages",
 			"label": "Pages",
 			"labelSingular": "Page",
 			"urlPattern": "/{slug}",
-			"supports": ["drafts", "revisions", "search", "seo"],
+			"supports": [
+				"drafts",
+				"revisions",
+				"search",
+				"seo"
+			],
 			"fields": [
 				{
 					"slug": "title",
@@ -78,9 +49,13 @@
 					"slug": "template",
 					"label": "Page Template",
 					"type": "select",
-					"defaultValue": "Default",
+					"defaultValue": "Full Width",
 					"validation": {
-						"options": ["Default", "Full Width", "Sidebar"]
+						"options": [
+							"Default",
+							"Full Width",
+							"Sidebar"
+						]
 					}
 				},
 				{
@@ -92,12 +67,60 @@
 			]
 		},
 		{
-			"slug": "showcase",
-			"label": "Showcase",
-			"labelSingular": "Showcase Entry",
-			"urlPattern": "/showcase/{slug}",
-			"supports": ["drafts", "revisions", "search"],
-			"hidden": true,
+			"slug": "menu_items",
+			"label": "Menu Items",
+			"labelSingular": "Menu Item",
+			"supports": [
+				"drafts",
+				"revisions",
+				"search"
+			],
+			"fields": [
+				{
+					"slug": "name",
+					"label": "Name",
+					"type": "string",
+					"required": true,
+					"searchable": true
+				},
+				{
+					"slug": "description",
+					"label": "Description",
+					"type": "text",
+					"searchable": true
+				},
+				{
+					"slug": "price",
+					"label": "Price (HUF)",
+					"type": "integer",
+					"required": true,
+					"translatable": false
+				},
+				{
+					"slug": "image",
+					"label": "Image",
+					"type": "image",
+					"translatable": false
+				},
+				{
+					"slug": "sort_order",
+					"label": "Sort Order",
+					"type": "integer",
+					"translatable": false
+				}
+			]
+		},
+		{
+			"slug": "experiences",
+			"label": "Experiences",
+			"labelSingular": "Experience",
+			"urlPattern": "/experiences/{slug}",
+			"supports": [
+				"drafts",
+				"revisions",
+				"search",
+				"seo"
+			],
 			"fields": [
 				{
 					"slug": "title",
@@ -107,191 +130,223 @@
 					"searchable": true
 				},
 				{
-					"slug": "field_string",
-					"label": "String",
+					"slug": "description",
+					"label": "Description",
+					"type": "text",
+					"searchable": true
+				},
+				{
+					"slug": "meta",
+					"label": "Meta line",
 					"type": "string"
 				},
 				{
-					"slug": "field_text",
-					"label": "Text",
-					"type": "text",
-					"options": {
-						"rows": 4
-					}
-				},
-				{
-					"slug": "field_url",
-					"label": "URL",
-					"type": "url"
-				},
-				{
-					"slug": "field_number",
-					"label": "Number",
-					"type": "number"
-				},
-				{
-					"slug": "field_integer",
-					"label": "Integer",
-					"type": "integer"
-				},
-				{
-					"slug": "field_boolean",
-					"label": "Boolean",
-					"type": "boolean"
-				},
-				{
-					"slug": "field_datetime",
-					"label": "Datetime",
-					"type": "datetime"
-				},
-				{
-					"slug": "field_select",
-					"label": "Select",
-					"type": "select",
-					"validation": {
-						"options": ["alpha", "beta", "gamma"]
-					}
-				},
-				{
-					"slug": "field_multi_select",
-					"label": "Multi Select",
-					"type": "multiSelect",
-					"validation": {
-						"options": ["red", "green", "blue"]
-					}
-				},
-				{
-					"slug": "field_portable_text",
-					"label": "Portable Text",
-					"type": "portableText"
-				},
-				{
-					"slug": "field_image",
+					"slug": "image",
 					"label": "Image",
 					"type": "image",
-					"options": {
-						"darkVariant": true
-					}
+					"translatable": false
 				},
 				{
-					"slug": "field_file",
-					"label": "File",
-					"type": "file"
-				},
-				{
-					"slug": "field_reference",
-					"label": "Reference",
-					"type": "reference",
-					"options": {
-						"collection": "pages"
-					}
-				},
-				{
-					"slug": "field_json",
-					"label": "JSON",
-					"type": "json"
-				},
-				{
-					"slug": "field_slug",
-					"label": "Slug",
-					"type": "slug"
-				},
-				{
-					"slug": "field_repeater",
-					"label": "Repeater",
-					"type": "repeater",
+					"slug": "cta_type",
+					"label": "CTA Type",
+					"type": "select",
+					"translatable": false,
 					"validation": {
-						"subFields": [
-							{
-								"slug": "label",
-								"label": "Label",
-								"type": "string"
-							},
-							{
-								"slug": "value",
-								"label": "Value",
-								"type": "string"
-							}
-						],
-						"maxItems": 6
+						"options": [
+							"tel",
+							"mailto",
+							"ask"
+						]
 					}
+				},
+				{
+					"slug": "sort_order",
+					"label": "Sort Order",
+					"type": "integer",
+					"translatable": false
+				}
+			]
+		},
+		{
+			"slug": "gallery_items",
+			"label": "Gallery Items",
+			"labelSingular": "Gallery Item",
+			"supports": [
+				"drafts",
+				"revisions",
+				"search"
+			],
+			"fields": [
+				{
+					"slug": "image",
+					"label": "Image",
+					"type": "image",
+					"required": true,
+					"translatable": false
+				},
+				{
+					"slug": "alt",
+					"label": "Alt text",
+					"type": "string",
+					"required": true
+				},
+				{
+					"slug": "grid_span",
+					"label": "Grid span",
+					"type": "select",
+					"translatable": false,
+					"validation": {
+						"options": [
+							"default",
+							"col-2",
+							"row-2",
+							"col-2-row-2"
+						]
+					}
+				},
+				{
+					"slug": "sort_order",
+					"label": "Sort Order",
+					"type": "integer",
+					"translatable": false
 				}
 			]
 		}
 	],
 	"taxonomies": [
 		{
-			"name": "category",
-			"label": "Categories",
-			"labelSingular": "Category",
-			"hierarchical": true,
-			"collections": ["posts"],
+			"id": "menu_category",
+			"name": "menu_category",
+			"label": "Menu Categories",
+			"labelSingular": "Menu Category",
+			"hierarchical": false,
+			"collections": [
+				"menu_items"
+			],
 			"terms": [
 				{
-					"slug": "emdash",
-					"label": "EmDash",
-					"description": "EmDash platform topics"
+					"id": "menu-cat-alcoholic",
+					"slug": "alcoholic",
+					"label": "Alcoholic"
 				},
 				{
-					"slug": "guides",
-					"label": "Guides",
-					"parent": "emdash",
-					"description": "How-to guides and walkthroughs"
+					"slug": "alcoholic",
+					"label": "Alkoholos",
+					"locale": "hu",
+					"translationOf": "menu-cat-alcoholic"
 				},
 				{
-					"slug": "reference",
-					"label": "Reference",
-					"parent": "emdash",
-					"description": "Capability reference material"
+					"slug": "alcoholic",
+					"label": "Alkoholisch",
+					"locale": "de",
+					"translationOf": "menu-cat-alcoholic"
+				},
+				{
+					"id": "menu-cat-nonalcoholic",
+					"slug": "nonalcoholic",
+					"label": "Non-alcoholic"
+				},
+				{
+					"slug": "nonalcoholic",
+					"label": "Alkoholmentes",
+					"locale": "hu",
+					"translationOf": "menu-cat-nonalcoholic"
+				},
+				{
+					"slug": "nonalcoholic",
+					"label": "Alkoholfrei",
+					"locale": "de",
+					"translationOf": "menu-cat-nonalcoholic"
+				},
+				{
+					"id": "menu-cat-snacks",
+					"slug": "snacks",
+					"label": "Snacks"
+				},
+				{
+					"slug": "snacks",
+					"label": "Snackek",
+					"locale": "hu",
+					"translationOf": "menu-cat-snacks"
+				},
+				{
+					"slug": "snacks",
+					"label": "Snacks",
+					"locale": "de",
+					"translationOf": "menu-cat-snacks"
 				}
 			]
 		},
 		{
-			"name": "tag",
-			"label": "Tags",
-			"labelSingular": "Tag",
+			"id": "experience_category",
+			"name": "experience_category",
+			"label": "Experience Categories",
+			"labelSingular": "Experience Category",
 			"hierarchical": false,
-			"collections": ["posts"],
+			"collections": [
+				"experiences"
+			],
 			"terms": [
-				{ "slug": "welcome", "label": "Welcome" },
-				{ "slug": "demo", "label": "Demo" },
-				{ "slug": "seo", "label": "SEO" },
-				{ "slug": "dark-mode", "label": "Dark Mode" },
-				{ "slug": "comments", "label": "Comments" }
+				{
+					"id": "exp-cat-gaming",
+					"slug": "gaming",
+					"label": "Gaming"
+				},
+				{
+					"slug": "gaming",
+					"label": "Gaming",
+					"locale": "hu",
+					"translationOf": "exp-cat-gaming"
+				},
+				{
+					"slug": "gaming",
+					"label": "Gaming",
+					"locale": "de",
+					"translationOf": "exp-cat-gaming"
+				},
+				{
+					"id": "exp-cat-social",
+					"slug": "social",
+					"label": "Social"
+				},
+				{
+					"slug": "social",
+					"label": "Közösségi",
+					"locale": "hu",
+					"translationOf": "exp-cat-social"
+				},
+				{
+					"slug": "social",
+					"label": "Social",
+					"locale": "de",
+					"translationOf": "exp-cat-social"
+				},
+				{
+					"id": "exp-cat-events",
+					"slug": "events",
+					"label": "Events"
+				},
+				{
+					"slug": "events",
+					"label": "Események",
+					"locale": "hu",
+					"translationOf": "exp-cat-events"
+				},
+				{
+					"slug": "events",
+					"label": "Events",
+					"locale": "de",
+					"translationOf": "exp-cat-events"
+				}
 			]
-		},
-		{
-			"name": "service-area",
-			"label": "Service Areas",
-			"labelSingular": "Service Area",
-			"hierarchical": false,
-			"collections": ["pages"],
-			"terms": [
-				{ "slug": "local", "label": "Local" },
-				{ "slug": "remote", "label": "Remote" },
-				{ "slug": "nationwide", "label": "Nationwide" }
-			]
-		}
-	],
-	"bylines": [
-		{
-			"id": "editorial",
-			"slug": "shittysites-editorial",
-			"displayName": "ShittySites Editorial",
-			"bio": "The ShittySites template editorial team."
-		},
-		{
-			"id": "guest-author",
-			"slug": "guest-contributor",
-			"displayName": "Guest Contributor",
-			"isGuest": true,
-			"bio": "Occasional guest author for demo multi-byline posts."
 		}
 	],
 	"menus": [
 		{
+			"id": "primary",
 			"name": "primary",
 			"label": "Primary Navigation",
+			"locale": "en",
 			"items": [
 				{
 					"type": "custom",
@@ -299,710 +354,2524 @@
 					"url": "/"
 				},
 				{
-					"type": "collection",
-					"label": "Posts",
-					"collection": "posts"
-				},
-				{
-					"type": "page",
-					"ref": "about"
-				},
-				{
-					"type": "post",
-					"ref": "welcome",
-					"label": "Welcome Post"
-				},
-				{
-					"type": "taxonomy",
-					"label": "Guides",
-					"ref": "guides",
-					"collection": "category"
+					"type": "custom",
+					"label": "Menu",
+					"url": "/#menu"
 				},
 				{
 					"type": "custom",
-					"label": "More",
-					"url": "#",
-					"children": [
-						{
-							"type": "custom",
-							"label": "Feature Guide",
-							"url": "/feature-guide"
-						},
-						{
-							"type": "custom",
-							"label": "Showcase",
-							"url": "/showcase/all-fields"
-						},
-						{
-							"type": "page",
-							"ref": "contact",
-							"label": "Contact"
-						},
-						{
-							"type": "custom",
-							"label": "Search",
-							"url": "/search"
-						}
-					]
+					"label": "Experiences",
+					"url": "/experiences"
+				},
+				{
+					"type": "custom",
+					"label": "Contact",
+					"url": "/#contact"
 				}
 			]
 		},
 		{
-			"name": "footer",
-			"label": "Footer Navigation",
+			"id": "primary-hu",
+			"name": "primary",
+			"label": "Primary Navigation",
+			"locale": "hu",
+			"translationOf": "primary",
 			"items": [
 				{
 					"type": "custom",
-					"label": "Posts",
-					"url": "/posts"
+					"label": "Főoldal",
+					"url": "/hu/"
 				},
 				{
 					"type": "custom",
-					"label": "Search",
-					"url": "/search"
+					"label": "Itallap",
+					"url": "/hu/#menu"
 				},
 				{
-					"type": "page",
-					"ref": "about"
+					"type": "custom",
+					"label": "Élmények",
+					"url": "/hu/experiences"
 				},
 				{
-					"type": "page",
-					"ref": "feature-guide",
-					"label": "Feature Guide"
-				},
-				{
-					"type": "page",
-					"ref": "contact"
-				}
-			]
-		}
-	],
-	"redirects": [
-		{
-			"source": "/old-about",
-			"destination": "/about",
-			"type": 301
-		},
-		{
-			"source": "/blog",
-			"destination": "/posts",
-			"type": 308
-		}
-	],
-	"widgetAreas": [
-		{
-			"name": "sidebar",
-			"label": "Sidebar",
-			"description": "Widget area on post detail and Sidebar page layout",
-			"widgets": [
-				{
-					"type": "component",
-					"componentId": "core:search",
-					"title": "Search",
-					"props": {
-						"placeholder": "Search posts and pages…"
-					}
-				},
-				{
-					"type": "component",
-					"componentId": "core:categories",
-					"title": "Categories",
-					"props": {
-						"showCount": true,
-						"hierarchical": true
-					}
-				},
-				{
-					"type": "component",
-					"componentId": "core:recent-posts",
-					"title": "Recent Posts",
-					"props": {
-						"count": 5,
-						"showDate": true
-					}
-				},
-				{
-					"type": "component",
-					"componentId": "core:tags",
-					"title": "Tags",
-					"props": {
-						"showCount": true,
-						"limit": 20
-					}
-				},
-				{
-					"type": "component",
-					"componentId": "core:archives",
-					"title": "Archives",
-					"props": {
-						"type": "monthly",
-						"limit": 6
-					}
-				},
-				{
-					"type": "content",
-					"title": "About this demo",
-					"content": [
-						{
-							"_type": "block",
-							"_key": "sidebar-about",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "sidebar-about-span",
-									"text": "ShittySites is an unstyled EmDash reference. Fork agents delete unused seed sections together with matching routes.",
-									"marks": []
-								}
-							]
-						}
-					]
-				},
-				{
-					"type": "menu",
-					"title": "Quick Links",
-					"menuName": "footer"
+					"type": "custom",
+					"label": "Kapcsolat",
+					"url": "/hu/#contact"
 				}
 			]
 		},
 		{
-			"name": "footer",
-			"label": "Footer",
-			"description": "Footer widget area in SiteFooter",
-			"widgets": [
+			"id": "primary-de",
+			"name": "primary",
+			"label": "Primary Navigation",
+			"locale": "de",
+			"translationOf": "primary",
+			"items": [
 				{
-					"type": "content",
-					"title": "ShittySites Demo",
-					"content": [
-						{
-							"_type": "block",
-							"_key": "footer-tagline",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "footer-tagline-span",
-									"text": "Full EmDash capability reference — unstyled on purpose. Set site URL in Settings before deploy.",
-									"marks": []
-								}
-							]
-						}
-					]
+					"type": "custom",
+					"label": "Start",
+					"url": "/de/"
 				},
 				{
-					"type": "menu",
-					"title": "Footer Menu",
-					"menuName": "footer"
-				}
-			]
-		}
-	],
-	"sections": [
-		{
-			"slug": "hero-centered",
-			"title": "Centered Hero",
-			"description": "Full-width hero with centered heading and supporting copy",
-			"keywords": ["hero", "banner", "header", "landing", "centered"],
-			"content": [
-				{
-					"_type": "block",
-					"_key": "hero-h1",
-					"style": "h1",
-					"markDefs": [],
-					"children": [
-						{
-							"_type": "span",
-							"_key": "hero-h1-span",
-							"text": "Build on EmDash",
-							"marks": []
-						}
-					]
+					"type": "custom",
+					"label": "Speisekarte",
+					"url": "/de/#menu"
 				},
 				{
-					"_type": "block",
-					"_key": "hero-lead",
-					"style": "normal",
-					"markDefs": [],
-					"children": [
-						{
-							"_type": "span",
-							"_key": "hero-lead-span",
-							"text": "Every route in this template is server-rendered. Demo markup is semantic HTML only — add Tailwind when you fork for a client.",
-							"marks": []
-						}
-					]
-				}
-			]
-		},
-		{
-			"slug": "newsletter-cta",
-			"title": "Newsletter CTA",
-			"description": "Call-to-action block for newsletter signup demos",
-			"keywords": ["newsletter", "subscribe", "email", "cta"],
-			"content": [
-				{
-					"_type": "block",
-					"_key": "newsletter-h3",
-					"style": "h3",
-					"markDefs": [],
-					"children": [
-						{
-							"_type": "span",
-							"_key": "newsletter-h3-span",
-							"text": "Stay in the loop",
-							"marks": []
-						}
-					]
+					"type": "custom",
+					"label": "Erlebnisse",
+					"url": "/de/experiences"
 				},
 				{
-					"_type": "block",
-					"_key": "newsletter-body",
-					"style": "normal",
-					"markDefs": [],
-					"children": [
-						{
-							"_type": "span",
-							"_key": "newsletter-body-span",
-							"text": "Get notified when new posts are published. Rendered via getSection(\"newsletter-cta\") on the home page.",
-							"marks": []
-						}
-					]
-				}
-			]
-		},
-		{
-			"slug": "feature-callout",
-			"title": "Feature Callout",
-			"description": "Highlight a single platform feature",
-			"keywords": ["feature", "callout", "highlight", "capability"],
-			"content": [
-				{
-					"_type": "block",
-					"_key": "feature-h3",
-					"style": "h3",
-					"markDefs": [],
-					"children": [
-						{
-							"_type": "span",
-							"_key": "feature-h3-span",
-							"text": "Portable Text + native plugins",
-							"marks": []
-						}
-					]
-				},
-				{
-					"_type": "block",
-					"_key": "feature-body",
-					"style": "normal",
-					"markDefs": [],
-					"children": [
-						{
-							"_type": "span",
-							"_key": "feature-body-span",
-							"text": "Insert this section with /section in the editor. Plugin blocks auto-merge into PortableText via componentsEntry.",
-							"marks": []
-						}
-					]
+					"type": "custom",
+					"label": "Kontakt",
+					"url": "/de/#contact"
 				}
 			]
 		}
 	],
 	"content": {
-		"posts": [
+		"menu_items": [
 			{
-				"id": "welcome",
-				"slug": "welcome",
+				"id": "vaskakas-ipa",
+				"slug": "vaskakas-ipa",
+				"locale": "en",
 				"status": "published",
-				"bylines": [
-					{ "byline": "editorial" },
-					{ "byline": "guest-author", "roleLabel": "Guest essay" }
-				],
 				"taxonomies": {
-					"category": ["guides"],
-					"tag": ["welcome", "demo", "comments"]
+					"menu_category": [
+						"alcoholic"
+					]
 				},
 				"data": {
-					"title": "Welcome to ShittySites",
-					"excerpt": "Your first demo post — bylines, taxonomies, featured image, and comments.",
-					"featured_image": {
+					"name": "Vaskakas IPA",
+					"description": "Hazy, hop-forward IPA from Győr's own Vaskakas craft brewery, poured fresh from the tap.",
+					"price": 2490,
+					"sort_order": 1,
+					"image": {
 						"$media": {
-							"url": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&h=630&fit=crop",
-							"alt": "Laptop displaying code on a desk",
-							"filename": "welcome-featured.jpg"
+							"file": "beer-pour.png",
+							"alt": "Vaskakas IPA"
 						}
-					},
-					"content": [
-						{
-							"_type": "block",
-							"_key": "welcome-p1",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "welcome-p1-span",
-									"text": "This post demonstrates multi-author bylines, hierarchical categories, flat tags, a featured image, and threaded comments. Leave a comment below to verify the comments UI.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "welcome-p2",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "welcome-p2-span",
-									"text": "Use ",
-									"marks": []
-								},
-								{
-									"_type": "span",
-									"_key": "welcome-p2-code",
-									"text": "post.data.id",
-									"marks": ["code"]
-								},
-								{
-									"_type": "span",
-									"_key": "welcome-p2-rest",
-									"text": " (ULID) for Comments and CommentForm — not post.id (slug).",
-									"marks": []
-								}
-							]
-						}
-					]
+					}
 				}
 			},
 			{
-				"id": "seo-demo",
-				"slug": "seo-demo",
+				"id": "vaskakas-ipa-hu",
+				"slug": "vaskakas-ipa",
+				"locale": "hu",
+				"translationOf": "vaskakas-ipa",
 				"status": "published",
 				"taxonomies": {
-					"category": ["reference"],
-					"tag": ["seo", "demo"]
-				},
-				"data": {
-					"title": "SEO Overrides Demo",
-					"excerpt": "Per-entry SEO title and description — set overrides in the post editor SEO panel.",
-					"content": [
-						{
-							"_type": "block",
-							"_key": "seo-p1",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "seo-p1-span",
-									"text": "Open Settings → SEO for site-wide defaults. Per-entry overrides live in the post editor SEO panel (not in seed data — SEO is stored in _emdash_seo, not collection fields).",
-									"marks": []
-								}
-							]
-						}
+					"menu_category": [
+						"alcoholic"
 					]
-				}
-			},
-			{
-				"id": "dark-scheme",
-				"slug": "dark-scheme",
-				"status": "published",
-				"taxonomies": {
-					"category": ["reference"],
-					"tag": ["dark-mode", "demo"]
 				},
 				"data": {
-					"title": "Dark Scheme Featured Image",
-					"excerpt": "Featured image with light and dark variants — swap themes to compare.",
-					"featured_image": {
+					"name": "Vaskakas IPA",
+					"description": "Komlós, gyümölcsös IPA a győri Vaskakas kézműves főzdéből, frissen csapolt.",
+					"price": 2490,
+					"sort_order": 1,
+					"image": {
 						"$media": {
-							"url": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&h=630&fit=crop",
-							"alt": "Light theme — laptop with bright workspace",
-							"filename": "dark-scheme-light.jpg"
-						},
-						"darkVariant": {
-							"$media": {
-								"url": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&h=630&fit=crop",
-								"alt": "Dark theme — code editor on dark background",
-								"filename": "dark-scheme-dark.jpg"
-							}
+							"file": "beer-pour.png",
+							"alt": "Vaskakas IPA"
 						}
-					},
-					"content": [
-						{
-							"_type": "block",
-							"_key": "dark-p1",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "dark-p1-span",
-									"text": "Toggle Light / Dark / System in the header. The Image component renders both featured_image variants and shows the one matching the active color scheme.",
-									"marks": []
-								}
-							]
-						}
-					]
+					}
 				}
 			},
 			{
-				"id": "scheduled-post",
-				"slug": "scheduled-post",
-				"status": "draft",
+				"id": "vaskakas-ipa-de",
+				"slug": "vaskakas-ipa",
+				"locale": "de",
+				"translationOf": "vaskakas-ipa",
+				"status": "published",
 				"taxonomies": {
-					"category": ["guides"],
-					"tag": ["demo"]
+					"menu_category": [
+						"alcoholic"
+					]
 				},
 				"data": {
-					"title": "Scheduled Post (Draft Placeholder)",
-					"excerpt": "Seed as draft — schedule in admin to demo publishing workflow.",
-					"content": [
-						{
-							"_type": "block",
-							"_key": "sched-p1",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "sched-p1-span",
-									"text": "This entry is seeded as a draft. Open it in admin, set a future publish date, and verify scheduling support on the posts collection.",
-									"marks": []
-								}
-							]
+					"name": "Vaskakas IPA",
+					"description": "Fruchtig-komloses IPA aus der Győrer Vaskakas-Brauerei, frisch vom Fass.",
+					"price": 2490,
+					"sort_order": 1,
+					"image": {
+						"$media": {
+							"file": "beer-pour.png",
+							"alt": "Vaskakas IPA"
 						}
+					}
+				}
+			},
+			{
+				"id": "vaskakas-lager",
+				"slug": "vaskakas-lager",
+				"locale": "en",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"alcoholic"
 					]
+				},
+				"data": {
+					"name": "Vaskakas Craft Lager",
+					"description": "Crisp golden lager — the easy house favourite for round one.",
+					"price": 1990,
+					"sort_order": 2,
+					"image": {
+						"$media": {
+							"file": "beer-two.png",
+							"alt": "Vaskakas Craft Lager"
+						}
+					}
+				}
+			},
+			{
+				"id": "vaskakas-lager-hu",
+				"slug": "vaskakas-lager",
+				"locale": "hu",
+				"translationOf": "vaskakas-lager",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"alcoholic"
+					]
+				},
+				"data": {
+					"name": "Vaskakas Lager",
+					"description": "Könnyed, aranyló lager — a ház kedvence az első körre.",
+					"price": 1990,
+					"sort_order": 2,
+					"image": {
+						"$media": {
+							"file": "beer-two.png",
+							"alt": "Vaskakas Craft Lager"
+						}
+					}
+				}
+			},
+			{
+				"id": "vaskakas-lager-de",
+				"slug": "vaskakas-lager",
+				"locale": "de",
+				"translationOf": "vaskakas-lager",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"alcoholic"
+					]
+				},
+				"data": {
+					"name": "Vaskakas Craft-Lager",
+					"description": "Knackiges, goldgelbes Lager — der leichte Hausklassiker für die erste Runde.",
+					"price": 1990,
+					"sort_order": 2,
+					"image": {
+						"$media": {
+							"file": "beer-two.png",
+							"alt": "Vaskakas Craft Lager"
+						}
+					}
+				}
+			},
+			{
+				"id": "bartenders-choice",
+				"slug": "bartenders-choice",
+				"locale": "en",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"alcoholic"
+					]
+				},
+				"data": {
+					"name": "Bartender's Choice",
+					"description": "Rotating signature mix from Hungary's Bartender of the Year — ask what's shaking tonight.",
+					"price": 3490,
+					"sort_order": 3,
+					"image": {
+						"$media": {
+							"file": "cocktail.png",
+							"alt": "Bartender's Choice"
+						}
+					}
+				}
+			},
+			{
+				"id": "bartenders-choice-hu",
+				"slug": "bartenders-choice",
+				"locale": "hu",
+				"translationOf": "bartenders-choice",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"alcoholic"
+					]
+				},
+				"data": {
+					"name": "A bárpultos választása",
+					"description": "Változó signature koktél az év bartendere mixtúrájában — kérdezd meg, mi készül ma este.",
+					"price": 3490,
+					"sort_order": 3,
+					"image": {
+						"$media": {
+							"file": "cocktail.png",
+							"alt": "Bartender's Choice"
+						}
+					}
+				}
+			},
+			{
+				"id": "bartenders-choice-de",
+				"slug": "bartenders-choice",
+				"locale": "de",
+				"translationOf": "bartenders-choice",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"alcoholic"
+					]
+				},
+				"data": {
+					"name": "Cocktail des Bartenders",
+					"description": "Wechselnde Signature-Kreation des Barkeepers des Jahres — frag nach, was heute gemixt wird.",
+					"price": 3490,
+					"sort_order": 3,
+					"image": {
+						"$media": {
+							"file": "cocktail.png",
+							"alt": "Bartender's Choice"
+						}
+					}
+				}
+			},
+			{
+				"id": "legend-sour",
+				"slug": "legend-sour",
+				"locale": "en",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"alcoholic"
+					]
+				},
+				"data": {
+					"name": "Legend Sour",
+					"description": "House sour with whisky, fresh lemon and a whisper of smoke.",
+					"price": 3290,
+					"sort_order": 4,
+					"image": {
+						"$media": {
+							"file": "cocktail-two.png",
+							"alt": "Legend Sour"
+						}
+					}
+				}
+			},
+			{
+				"id": "legend-sour-hu",
+				"slug": "legend-sour",
+				"locale": "hu",
+				"translationOf": "legend-sour",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"alcoholic"
+					]
+				},
+				"data": {
+					"name": "Legend Sour",
+					"description": "Házi sour whiskyvel, friss citrommal és egy csipet füsttel.",
+					"price": 3290,
+					"sort_order": 4,
+					"image": {
+						"$media": {
+							"file": "cocktail-two.png",
+							"alt": "Legend Sour"
+						}
+					}
+				}
+			},
+			{
+				"id": "legend-sour-de",
+				"slug": "legend-sour",
+				"locale": "de",
+				"translationOf": "legend-sour",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"alcoholic"
+					]
+				},
+				"data": {
+					"name": "Legend Sour",
+					"description": "Haus-Sour mit Whisky, frischer Zitrone und einer Prise Rauch.",
+					"price": 3290,
+					"sort_order": 4,
+					"image": {
+						"$media": {
+							"file": "cocktail-two.png",
+							"alt": "Legend Sour"
+						}
+					}
+				}
+			},
+			{
+				"id": "aperol-spritz",
+				"slug": "aperol-spritz",
+				"locale": "en",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"alcoholic"
+					]
+				},
+				"data": {
+					"name": "Aperol Spritz",
+					"description": "The aperitivo classic — prosecco, Aperol, soda and orange.",
+					"price": 2790,
+					"sort_order": 5,
+					"image": {
+						"$media": {
+							"file": "spritz.png",
+							"alt": "Aperol Spritz"
+						}
+					}
+				}
+			},
+			{
+				"id": "aperol-spritz-hu",
+				"slug": "aperol-spritz",
+				"locale": "hu",
+				"translationOf": "aperol-spritz",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"alcoholic"
+					]
+				},
+				"data": {
+					"name": "Aperol Spritz",
+					"description": "A klasszikus aperitivo — prosecco, Aperol, szóda és narancs.",
+					"price": 2790,
+					"sort_order": 5,
+					"image": {
+						"$media": {
+							"file": "spritz.png",
+							"alt": "Aperol Spritz"
+						}
+					}
+				}
+			},
+			{
+				"id": "aperol-spritz-de",
+				"slug": "aperol-spritz",
+				"locale": "de",
+				"translationOf": "aperol-spritz",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"alcoholic"
+					]
+				},
+				"data": {
+					"name": "Aperol Spritz",
+					"description": "Der Aperitivo-Klassiker — Prosecco, Aperol, Soda und Orange.",
+					"price": 2790,
+					"sort_order": 5,
+					"image": {
+						"$media": {
+							"file": "spritz.png",
+							"alt": "Aperol Spritz"
+						}
+					}
+				}
+			},
+			{
+				"id": "wine-by-the-glass",
+				"slug": "wine-by-the-glass",
+				"locale": "en",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"alcoholic"
+					]
+				},
+				"data": {
+					"name": "Hungarian Wine by the Glass",
+					"description": "Rotating pours from Hungarian wineries — ask for tonight's open bottle.",
+					"price": 1890,
+					"sort_order": 6,
+					"image": {
+						"$media": {
+							"file": "wine.png",
+							"alt": "Hungarian Wine by the Glass"
+						}
+					}
+				}
+			},
+			{
+				"id": "wine-by-the-glass-hu",
+				"slug": "wine-by-the-glass",
+				"locale": "hu",
+				"translationOf": "wine-by-the-glass",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"alcoholic"
+					]
+				},
+				"data": {
+					"name": "Magyar bor pohárban",
+					"description": "Változó kínálat magyar borászatokból — kérdezd meg a mai nyitott palackot.",
+					"price": 1890,
+					"sort_order": 6,
+					"image": {
+						"$media": {
+							"file": "wine.png",
+							"alt": "Hungarian Wine by the Glass"
+						}
+					}
+				}
+			},
+			{
+				"id": "wine-by-the-glass-de",
+				"slug": "wine-by-the-glass",
+				"locale": "de",
+				"translationOf": "wine-by-the-glass",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"alcoholic"
+					]
+				},
+				"data": {
+					"name": "Ungarischer Wein im Glas",
+					"description": "Wechselnde Ausschänke ungarischer Winzer — frag nach dem heutigen offenen Glas.",
+					"price": 1890,
+					"sort_order": 6,
+					"image": {
+						"$media": {
+							"file": "wine.png",
+							"alt": "Hungarian Wine by the Glass"
+						}
+					}
+				}
+			},
+			{
+				"id": "house-lemonade",
+				"slug": "house-lemonade",
+				"locale": "en",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"nonalcoholic"
+					]
+				},
+				"data": {
+					"name": "House Lemonade",
+					"description": "Pressed to order — raspberry, elderflower or lemon-ginger.",
+					"price": 1590,
+					"sort_order": 7,
+					"image": {
+						"$media": {
+							"file": "lemonade.png",
+							"alt": "House Lemonade"
+						}
+					}
+				}
+			},
+			{
+				"id": "house-lemonade-hu",
+				"slug": "house-lemonade",
+				"locale": "hu",
+				"translationOf": "house-lemonade",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"nonalcoholic"
+					]
+				},
+				"data": {
+					"name": "Házi limonádé",
+					"description": "Frissen facsarva — málnás, bodzás vagy citromos-gyömbéres.",
+					"price": 1590,
+					"sort_order": 7,
+					"image": {
+						"$media": {
+							"file": "lemonade.png",
+							"alt": "House Lemonade"
+						}
+					}
+				}
+			},
+			{
+				"id": "house-lemonade-de",
+				"slug": "house-lemonade",
+				"locale": "de",
+				"translationOf": "house-lemonade",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"nonalcoholic"
+					]
+				},
+				"data": {
+					"name": "Hauslimonade",
+					"description": "Frisch gepresst — Himbeere, Holunderblüte oder Zitrone-Ingwer.",
+					"price": 1590,
+					"sort_order": 7,
+					"image": {
+						"$media": {
+							"file": "lemonade.png",
+							"alt": "House Lemonade"
+						}
+					}
+				}
+			},
+			{
+				"id": "cold-brew",
+				"slug": "cold-brew",
+				"locale": "en",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"nonalcoholic"
+					]
+				},
+				"data": {
+					"name": "Cold Brew Coffee",
+					"description": "Slow-steeped iced coffee over ice with orange zest.",
+					"price": 1290,
+					"sort_order": 8,
+					"image": {
+						"$media": {
+							"file": "coffee.png",
+							"alt": "Cold Brew Coffee"
+						}
+					}
+				}
+			},
+			{
+				"id": "cold-brew-hu",
+				"slug": "cold-brew",
+				"locale": "hu",
+				"translationOf": "cold-brew",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"nonalcoholic"
+					]
+				},
+				"data": {
+					"name": "Cold brew kávé",
+					"description": "Lassan áztatott jeges kávé narancshéjjal.",
+					"price": 1290,
+					"sort_order": 8,
+					"image": {
+						"$media": {
+							"file": "coffee.png",
+							"alt": "Cold Brew Coffee"
+						}
+					}
+				}
+			},
+			{
+				"id": "cold-brew-de",
+				"slug": "cold-brew",
+				"locale": "de",
+				"translationOf": "cold-brew",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"nonalcoholic"
+					]
+				},
+				"data": {
+					"name": "Cold Brew",
+					"description": "Lang gezogener Eiskaffee mit Orangenzeste.",
+					"price": 1290,
+					"sort_order": 8,
+					"image": {
+						"$media": {
+							"file": "coffee.png",
+							"alt": "Cold Brew Coffee"
+						}
+					}
+				}
+			},
+			{
+				"id": "vaskakas-zero",
+				"slug": "vaskakas-zero",
+				"locale": "en",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"nonalcoholic"
+					]
+				},
+				"data": {
+					"name": "Vaskakas 0.0",
+					"description": "The house craft beer, minus the alcohol. Full flavour, zero regrets.",
+					"price": 1690,
+					"sort_order": 9,
+					"image": {
+						"$media": {
+							"file": "beer-two.png",
+							"alt": "Vaskakas 0.0"
+						}
+					}
+				}
+			},
+			{
+				"id": "vaskakas-zero-hu",
+				"slug": "vaskakas-zero",
+				"locale": "hu",
+				"translationOf": "vaskakas-zero",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"nonalcoholic"
+					]
+				},
+				"data": {
+					"name": "Vaskakas 0.0",
+					"description": "A házi kézműves sör alkoholmentesen — teljes íz, nulla lemondás.",
+					"price": 1690,
+					"sort_order": 9,
+					"image": {
+						"$media": {
+							"file": "beer-two.png",
+							"alt": "Vaskakas 0.0"
+						}
+					}
+				}
+			},
+			{
+				"id": "vaskakas-zero-de",
+				"slug": "vaskakas-zero",
+				"locale": "de",
+				"translationOf": "vaskakas-zero",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"nonalcoholic"
+					]
+				},
+				"data": {
+					"name": "Vaskakas 0.0",
+					"description": "Das Hausbier ohne Alkohol — voller Geschmack, null Reue.",
+					"price": 1690,
+					"sort_order": 9,
+					"image": {
+						"$media": {
+							"file": "beer-two.png",
+							"alt": "Vaskakas 0.0"
+						}
+					}
+				}
+			},
+			{
+				"id": "ginger-fizz",
+				"slug": "ginger-fizz",
+				"locale": "en",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"nonalcoholic"
+					]
+				},
+				"data": {
+					"name": "Ginger Fizz",
+					"description": "House ginger syrup, lime and soda — sharp and refreshing.",
+					"price": 1390,
+					"sort_order": 10,
+					"image": {
+						"$media": {
+							"file": "cocktail-two.png",
+							"alt": "Ginger Fizz"
+						}
+					}
+				}
+			},
+			{
+				"id": "ginger-fizz-hu",
+				"slug": "ginger-fizz",
+				"locale": "hu",
+				"translationOf": "ginger-fizz",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"nonalcoholic"
+					]
+				},
+				"data": {
+					"name": "Ginger Fizz",
+					"description": "Házi gyömbérszirup, lime és szóda — csípős és frissítő.",
+					"price": 1390,
+					"sort_order": 10,
+					"image": {
+						"$media": {
+							"file": "cocktail-two.png",
+							"alt": "Ginger Fizz"
+						}
+					}
+				}
+			},
+			{
+				"id": "ginger-fizz-de",
+				"slug": "ginger-fizz",
+				"locale": "de",
+				"translationOf": "ginger-fizz",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"nonalcoholic"
+					]
+				},
+				"data": {
+					"name": "Ginger Fizz",
+					"description": "Hausgemachter Ingwersirup mit Limette und Soda — scharf und erfrischend.",
+					"price": 1390,
+					"sort_order": 10,
+					"image": {
+						"$media": {
+							"file": "cocktail-two.png",
+							"alt": "Ginger Fizz"
+						}
+					}
+				}
+			},
+			{
+				"id": "energy-drinks",
+				"slug": "energy-drinks",
+				"locale": "en",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"nonalcoholic"
+					]
+				},
+				"data": {
+					"name": "Energy Drinks",
+					"description": "Red Bull & co. to keep the lobby running past midnight.",
+					"price": 1490,
+					"sort_order": 11,
+					"image": {
+						"$media": {
+							"file": "softdrinks.png",
+							"alt": "Energy Drinks"
+						}
+					}
+				}
+			},
+			{
+				"id": "energy-drinks-hu",
+				"slug": "energy-drinks",
+				"locale": "hu",
+				"translationOf": "energy-drinks",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"nonalcoholic"
+					]
+				},
+				"data": {
+					"name": "Energiaitalok",
+					"description": "Red Bull és társai, hogy a menet hajnaliig menjen.",
+					"price": 1490,
+					"sort_order": 11,
+					"image": {
+						"$media": {
+							"file": "softdrinks.png",
+							"alt": "Energy Drinks"
+						}
+					}
+				}
+			},
+			{
+				"id": "energy-drinks-de",
+				"slug": "energy-drinks",
+				"locale": "de",
+				"translationOf": "energy-drinks",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"nonalcoholic"
+					]
+				},
+				"data": {
+					"name": "Energydrinks",
+					"description": "Red Bull & Co., damit das Match bis nach Mitternacht läuft.",
+					"price": 1490,
+					"sort_order": 11,
+					"image": {
+						"$media": {
+							"file": "softdrinks.png",
+							"alt": "Energy Drinks"
+						}
+					}
+				}
+			},
+			{
+				"id": "sodas-juices",
+				"slug": "sodas-juices",
+				"locale": "en",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"nonalcoholic"
+					]
+				},
+				"data": {
+					"name": "Sodas & Juices",
+					"description": "The classics, ice cold — cola, sprites, orange, apple.",
+					"price": 990,
+					"sort_order": 12,
+					"image": {
+						"$media": {
+							"file": "cola.png",
+							"alt": "Sodas & Juices"
+						}
+					}
+				}
+			},
+			{
+				"id": "sodas-juices-hu",
+				"slug": "sodas-juices",
+				"locale": "hu",
+				"translationOf": "sodas-juices",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"nonalcoholic"
+					]
+				},
+				"data": {
+					"name": "Üdítők és gyümölcslevek",
+					"description": "A klasszikusok jéghidegen — kóla, fröccs, narancs, alma.",
+					"price": 990,
+					"sort_order": 12,
+					"image": {
+						"$media": {
+							"file": "cola.png",
+							"alt": "Sodas & Juices"
+						}
+					}
+				}
+			},
+			{
+				"id": "sodas-juices-de",
+				"slug": "sodas-juices",
+				"locale": "de",
+				"translationOf": "sodas-juices",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"nonalcoholic"
+					]
+				},
+				"data": {
+					"name": "Softdrinks & Säfte",
+					"description": "Die Klassiker, eiskalt — Cola, Sprudel, Orange, Apfel.",
+					"price": 990,
+					"sort_order": 12,
+					"image": {
+						"$media": {
+							"file": "cola.png",
+							"alt": "Sodas & Juices"
+						}
+					}
+				}
+			},
+			{
+				"id": "loaded-fries",
+				"slug": "loaded-fries",
+				"locale": "en",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"snacks"
+					]
+				},
+				"data": {
+					"name": "Legend Loaded Fries",
+					"description": "Double-fried fries, cheese sauce, crispy bacon, jalapeño.",
+					"price": 2490,
+					"sort_order": 13,
+					"image": {
+						"$media": {
+							"file": "fries.png",
+							"alt": "Legend Loaded Fries"
+						}
+					}
+				}
+			},
+			{
+				"id": "loaded-fries-hu",
+				"slug": "loaded-fries",
+				"locale": "hu",
+				"translationOf": "loaded-fries",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"snacks"
+					]
+				},
+				"data": {
+					"name": "Legend rakott hasábok",
+					"description": "Kétszer sütött hasábok, sajtszósz, ropogós szalonna, jalapeño.",
+					"price": 2490,
+					"sort_order": 13,
+					"image": {
+						"$media": {
+							"file": "fries.png",
+							"alt": "Legend Loaded Fries"
+						}
+					}
+				}
+			},
+			{
+				"id": "loaded-fries-de",
+				"slug": "loaded-fries",
+				"locale": "de",
+				"translationOf": "loaded-fries",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"snacks"
+					]
+				},
+				"data": {
+					"name": "Legend Loaded Fries",
+					"description": "Doppelt frittierte Pommes, Käsesauce, knuspriger Speck, Jalapeño.",
+					"price": 2490,
+					"sort_order": 13,
+					"image": {
+						"$media": {
+							"file": "fries.png",
+							"alt": "Legend Loaded Fries"
+						}
+					}
+				}
+			},
+			{
+				"id": "buffalo-wings",
+				"slug": "buffalo-wings",
+				"locale": "en",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"snacks"
+					]
+				},
+				"data": {
+					"name": "Buffalo Wings (6 pcs)",
+					"description": "Crispy wings tossed in house buffalo sauce, with blue cheese dip.",
+					"price": 2990,
+					"sort_order": 14,
+					"image": {
+						"$media": {
+							"file": "wings.png",
+							"alt": "Buffalo Wings (6 pcs)"
+						}
+					}
+				}
+			},
+			{
+				"id": "buffalo-wings-hu",
+				"slug": "buffalo-wings",
+				"locale": "hu",
+				"translationOf": "buffalo-wings",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"snacks"
+					]
+				},
+				"data": {
+					"name": "Buffalos szárnyak (6 db)",
+					"description": "Ropogós szárnyak házi buffalos szószban, kék sajtos mártogatóval.",
+					"price": 2990,
+					"sort_order": 14,
+					"image": {
+						"$media": {
+							"file": "wings.png",
+							"alt": "Buffalo Wings (6 pcs)"
+						}
+					}
+				}
+			},
+			{
+				"id": "buffalo-wings-de",
+				"slug": "buffalo-wings",
+				"locale": "de",
+				"translationOf": "buffalo-wings",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"snacks"
+					]
+				},
+				"data": {
+					"name": "Buffalo Wings (6 Stück)",
+					"description": "Knusprige Flügel in hausgemachter Buffalo-Sauce, dazu Blue-Cheese-Dip.",
+					"price": 2990,
+					"sort_order": 14,
+					"image": {
+						"$media": {
+							"file": "wings.png",
+							"alt": "Buffalo Wings (6 pcs)"
+						}
+					}
+				}
+			},
+			{
+				"id": "bar-nachos",
+				"slug": "bar-nachos",
+				"locale": "en",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"snacks"
+					]
+				},
+				"data": {
+					"name": "Bar Nachos",
+					"description": "Tortilla chips, melted cheese, salsa and sour cream — built for sharing.",
+					"price": 2790,
+					"sort_order": 15,
+					"image": {
+						"$media": {
+							"file": "platter.png",
+							"alt": "Bar Nachos"
+						}
+					}
+				}
+			},
+			{
+				"id": "bar-nachos-hu",
+				"slug": "bar-nachos",
+				"locale": "hu",
+				"translationOf": "bar-nachos",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"snacks"
+					]
+				},
+				"data": {
+					"name": "Bárnachos",
+					"description": "Tortillachips, olvadt sajt, salsa és tejföl — megosztásra tervezve.",
+					"price": 2790,
+					"sort_order": 15,
+					"image": {
+						"$media": {
+							"file": "platter.png",
+							"alt": "Bar Nachos"
+						}
+					}
+				}
+			},
+			{
+				"id": "bar-nachos-de",
+				"slug": "bar-nachos",
+				"locale": "de",
+				"translationOf": "bar-nachos",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"snacks"
+					]
+				},
+				"data": {
+					"name": "Bar-Nachos",
+					"description": "Tortillachips, geschmolzener Käse, Salsa und Sour Cream — zum Teilen.",
+					"price": 2790,
+					"sort_order": 15,
+					"image": {
+						"$media": {
+							"file": "platter.png",
+							"alt": "Bar Nachos"
+						}
+					}
+				}
+			},
+			{
+				"id": "onion-rings",
+				"slug": "onion-rings",
+				"locale": "en",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"snacks"
+					]
+				},
+				"data": {
+					"name": "Onion Rings",
+					"description": "Golden, crunchy rings with smoked paprika mayo.",
+					"price": 1690,
+					"sort_order": 16,
+					"image": {
+						"$media": {
+							"file": "fries.png",
+							"alt": "Onion Rings"
+						}
+					}
+				}
+			},
+			{
+				"id": "onion-rings-hu",
+				"slug": "onion-rings",
+				"locale": "hu",
+				"translationOf": "onion-rings",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"snacks"
+					]
+				},
+				"data": {
+					"name": "Hagymakarikák",
+					"description": "Arany, ropogós karikák füstölt paprikás majonézzel.",
+					"price": 1690,
+					"sort_order": 16,
+					"image": {
+						"$media": {
+							"file": "fries.png",
+							"alt": "Onion Rings"
+						}
+					}
+				}
+			},
+			{
+				"id": "onion-rings-de",
+				"slug": "onion-rings",
+				"locale": "de",
+				"translationOf": "onion-rings",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"snacks"
+					]
+				},
+				"data": {
+					"name": "Onion Rings",
+					"description": "Goldgelbe, knusprige Ringe mit Paprika-Mayo.",
+					"price": 1690,
+					"sort_order": 16,
+					"image": {
+						"$media": {
+							"file": "fries.png",
+							"alt": "Onion Rings"
+						}
+					}
+				}
+			},
+			{
+				"id": "pretzel-dip",
+				"slug": "pretzel-dip",
+				"locale": "en",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"snacks"
+					]
+				},
+				"data": {
+					"name": "Pretzel & Cheese Dip",
+					"description": "Bavarian-style pretzel with warm beer-cheese dip.",
+					"price": 1390,
+					"sort_order": 17,
+					"image": {
+						"$media": {
+							"file": "pretzel.png",
+							"alt": "Pretzel & Cheese Dip"
+						}
+					}
+				}
+			},
+			{
+				"id": "pretzel-dip-hu",
+				"slug": "pretzel-dip",
+				"locale": "hu",
+				"translationOf": "pretzel-dip",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"snacks"
+					]
+				},
+				"data": {
+					"name": "Stangli & sajtmártás",
+					"description": "Bajor stangli meleg sörös sajtmártással.",
+					"price": 1390,
+					"sort_order": 17,
+					"image": {
+						"$media": {
+							"file": "pretzel.png",
+							"alt": "Pretzel & Cheese Dip"
+						}
+					}
+				}
+			},
+			{
+				"id": "pretzel-dip-de",
+				"slug": "pretzel-dip",
+				"locale": "de",
+				"translationOf": "pretzel-dip",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"snacks"
+					]
+				},
+				"data": {
+					"name": "Laugenstange & Käsedip",
+					"description": "Laugenstange nach bayerischer Art mit warmem Bier-Käse-Dip.",
+					"price": 1390,
+					"sort_order": 17,
+					"image": {
+						"$media": {
+							"file": "pretzel.png",
+							"alt": "Pretzel & Cheese Dip"
+						}
+					}
+				}
+			},
+			{
+				"id": "squad-platter",
+				"slug": "squad-platter",
+				"locale": "en",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"snacks"
+					]
+				},
+				"data": {
+					"name": "The Squad Platter",
+					"description": "Wings, fries, rings and nachos on one tray — feeds 2–3 legends.",
+					"price": 4990,
+					"sort_order": 18,
+					"image": {
+						"$media": {
+							"file": "platter.png",
+							"alt": "The Squad Platter"
+						}
+					}
+				}
+			},
+			{
+				"id": "squad-platter-hu",
+				"slug": "squad-platter",
+				"locale": "hu",
+				"translationOf": "squad-platter",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"snacks"
+					]
+				},
+				"data": {
+					"name": "A csapat tála",
+					"description": "Szárnyak, hasábok, hagymakarikák és nachos egy tálon — 2–3 legendának elég.",
+					"price": 4990,
+					"sort_order": 18,
+					"image": {
+						"$media": {
+							"file": "platter.png",
+							"alt": "The Squad Platter"
+						}
+					}
+				}
+			},
+			{
+				"id": "squad-platter-de",
+				"slug": "squad-platter",
+				"locale": "de",
+				"translationOf": "squad-platter",
+				"status": "published",
+				"taxonomies": {
+					"menu_category": [
+						"snacks"
+					]
+				},
+				"data": {
+					"name": "Die Squad-Platte",
+					"description": "Wings, Pommes, Ringe und Nachos auf einem Blech — reicht für 2–3 Legenden.",
+					"price": 4990,
+					"sort_order": 18,
+					"image": {
+						"$media": {
+							"file": "platter.png",
+							"alt": "The Squad Platter"
+						}
+					}
+				}
+			}
+		],
+		"experiences": [
+			{
+				"id": "pc-ps5-stations",
+				"slug": "pc-ps5-stations",
+				"locale": "en",
+				"status": "published",
+				"taxonomies": {
+					"experience_category": [
+						"gaming"
+					]
+				},
+				"data": {
+					"title": "PC & PS5 Gaming Stations",
+					"description": "Book a battlestation: high-spec gaming PCs with 144 Hz monitors or a PS5 couch corner with a big-screen TV.",
+					"meta": "From 1 hour · 1–6 players",
+					"cta_type": "tel",
+					"sort_order": 1,
+					"image": {
+						"$media": {
+							"file": "pc-setup.png",
+							"alt": "PC & PS5 Gaming Stations"
+						}
+					}
+				}
+			},
+			{
+				"id": "pc-ps5-stations-hu",
+				"slug": "pc-ps5-stations",
+				"locale": "hu",
+				"translationOf": "pc-ps5-stations",
+				"status": "published",
+				"taxonomies": {
+					"experience_category": [
+						"gaming"
+					]
+				},
+				"data": {
+					"title": "PC és PS5 játékállomások",
+					"description": "Foglalj harcállomást: csúcskategoriás gépek 144 Hz-es monitorokkal vagy PS5-es kanapés sarok nagy tévével.",
+					"meta": "1 órától · 1–6 játékos",
+					"cta_type": "tel",
+					"sort_order": 1,
+					"image": {
+						"$media": {
+							"file": "pc-setup.png",
+							"alt": "PC & PS5 Gaming Stations"
+						}
+					}
+				}
+			},
+			{
+				"id": "pc-ps5-stations-de",
+				"slug": "pc-ps5-stations",
+				"locale": "de",
+				"translationOf": "pc-ps5-stations",
+				"status": "published",
+				"taxonomies": {
+					"experience_category": [
+						"gaming"
+					]
+				},
+				"data": {
+					"title": "PC- & PS5-Gaming-Stationen",
+					"description": "Buch deine Battlestation: High-End-Gaming-PCs mit 144-Hz-Monitoren oder eine PS5-Couch-Ecke mit großem TV.",
+					"meta": "Ab 1 Stunde · 1–6 Spieler",
+					"cta_type": "tel",
+					"sort_order": 1,
+					"image": {
+						"$media": {
+							"file": "pc-setup.png",
+							"alt": "PC & PS5 Gaming Stations"
+						}
+					}
+				}
+			},
+			{
+				"id": "board-game-library",
+				"slug": "board-game-library",
+				"locale": "en",
+				"status": "published",
+				"taxonomies": {
+					"experience_category": [
+						"social"
+					]
+				},
+				"data": {
+					"title": "Board Game Library",
+					"description": "Eighty-plus titles on the shelf — from Catan to Codenames. Free to play while you drink.",
+					"meta": "80+ titles · 2–8 players · free",
+					"cta_type": "ask",
+					"sort_order": 2,
+					"image": {
+						"$media": {
+							"file": "boardgames.png",
+							"alt": "Board Game Library"
+						}
+					}
+				}
+			},
+			{
+				"id": "board-game-library-hu",
+				"slug": "board-game-library",
+				"locale": "hu",
+				"translationOf": "board-game-library",
+				"status": "published",
+				"taxonomies": {
+					"experience_category": [
+						"social"
+					]
+				},
+				"data": {
+					"title": "Társasjáték-kínálat",
+					"description": "Nyolcvanféle játék a polcon — a Catan-tól a Codenames-ig. Fogyasztás mellett ingyen játszható.",
+					"meta": "80+ játék · 2–8 fő · ingyen",
+					"cta_type": "ask",
+					"sort_order": 2,
+					"image": {
+						"$media": {
+							"file": "boardgames.png",
+							"alt": "Board Game Library"
+						}
+					}
+				}
+			},
+			{
+				"id": "board-game-library-de",
+				"slug": "board-game-library",
+				"locale": "de",
+				"translationOf": "board-game-library",
+				"status": "published",
+				"taxonomies": {
+					"experience_category": [
+						"social"
+					]
+				},
+				"data": {
+					"title": "Brettspielsammlung",
+					"description": "Über achtzig Titel im Regal — von Catan bis Codenames. Bei einem Getränk gratis spielbar.",
+					"meta": "80+ Spiele · 2–8 Personen · gratis",
+					"cta_type": "ask",
+					"sort_order": 2,
+					"image": {
+						"$media": {
+							"file": "boardgames.png",
+							"alt": "Board Game Library"
+						}
+					}
+				}
+			},
+			{
+				"id": "weekly-pub-quiz",
+				"slug": "weekly-pub-quiz",
+				"locale": "en",
+				"status": "published",
+				"taxonomies": {
+					"experience_category": [
+						"events"
+					]
+				},
+				"data": {
+					"title": "Weekly Pub Quiz",
+					"description": "Every Thursday at 8 PM: five rounds of trivia with music and picture rounds.",
+					"meta": "Thursdays · 8:00 PM · teams of 2–6",
+					"cta_type": "tel",
+					"sort_order": 3,
+					"image": {
+						"$media": {
+							"file": "quiz.png",
+							"alt": "Weekly Pub Quiz"
+						}
+					}
+				}
+			},
+			{
+				"id": "weekly-pub-quiz-hu",
+				"slug": "weekly-pub-quiz",
+				"locale": "hu",
+				"translationOf": "weekly-pub-quiz",
+				"status": "published",
+				"taxonomies": {
+					"experience_category": [
+						"events"
+					]
+				},
+				"data": {
+					"title": "Heti pubkvíz",
+					"description": "Minden csütörtökön 20:00-kor: öt kör ismeretterjesztő kérdésekkel, zenei és képes körökkel.",
+					"meta": "Csütörtökönként · 20:00 · 2–6 fős csapatok",
+					"cta_type": "tel",
+					"sort_order": 3,
+					"image": {
+						"$media": {
+							"file": "quiz.png",
+							"alt": "Weekly Pub Quiz"
+						}
+					}
+				}
+			},
+			{
+				"id": "weekly-pub-quiz-de",
+				"slug": "weekly-pub-quiz",
+				"locale": "de",
+				"translationOf": "weekly-pub-quiz",
+				"status": "published",
+				"taxonomies": {
+					"experience_category": [
+						"events"
+					]
+				},
+				"data": {
+					"title": "Wöchentliches Pub Quiz",
+					"description": "Jeden Donnerstag um 20 Uhr: fünf Wissensrunden mit Musik- und Bildrunden.",
+					"meta": "Donnerstags · 20:00 Uhr · Teams von 2–6",
+					"cta_type": "tel",
+					"sort_order": 3,
+					"image": {
+						"$media": {
+							"file": "quiz.png",
+							"alt": "Weekly Pub Quiz"
+						}
+					}
+				}
+			},
+			{
+				"id": "foosball-darts",
+				"slug": "foosball-darts",
+				"locale": "en",
+				"status": "published",
+				"taxonomies": {
+					"experience_category": [
+						"social"
+					]
+				},
+				"data": {
+					"title": "Foosball & Darts",
+					"description": "Two foosball tables and a proper steel-tip dart corner. Winner stays on, loser buys the next round.",
+					"meta": "Free with any drink · 2–4 players",
+					"cta_type": "ask",
+					"sort_order": 4,
+					"image": {
+						"$media": {
+							"file": "foosball.png",
+							"alt": "Foosball & Darts"
+						}
+					}
+				}
+			},
+			{
+				"id": "foosball-darts-hu",
+				"slug": "foosball-darts",
+				"locale": "hu",
+				"translationOf": "foosball-darts",
+				"status": "published",
+				"taxonomies": {
+					"experience_category": [
+						"social"
+					]
+				},
+				"data": {
+					"title": "Csocsó és darts",
+					"description": "Két csocsóasztal és egy igazi acélhegyes darts sarok. A győztes marad, a vesztes fizet egy kört.",
+					"meta": "Fogyasztással ingyen · 2–4 fő",
+					"cta_type": "ask",
+					"sort_order": 4,
+					"image": {
+						"$media": {
+							"file": "foosball.png",
+							"alt": "Foosball & Darts"
+						}
+					}
+				}
+			},
+			{
+				"id": "foosball-darts-de",
+				"slug": "foosball-darts",
+				"locale": "de",
+				"translationOf": "foosball-darts",
+				"status": "published",
+				"taxonomies": {
+					"experience_category": [
+						"social"
+					]
+				},
+				"data": {
+					"title": "Tischkicker & Dart",
+					"description": "Zwei Kicker und eine echte Steeldart-Ecke. Der Sieger bleibt stehen, der Verlierer zahlt die nächste Runde.",
+					"meta": "Mit Getränk gratis · 2–4 Personen",
+					"cta_type": "ask",
+					"sort_order": 4,
+					"image": {
+						"$media": {
+							"file": "foosball.png",
+							"alt": "Foosball & Darts"
+						}
+					}
+				}
+			},
+			{
+				"id": "private-events",
+				"slug": "private-events",
+				"locale": "en",
+				"status": "published",
+				"taxonomies": {
+					"experience_category": [
+						"events"
+					]
+				},
+				"data": {
+					"title": "Private Events & Party Booking",
+					"description": "Birthdays, team nights, bachelor parties or a full-bar buyout — tell us the headcount and the vibe.",
+					"meta": "10–80 guests · book 1+ week ahead",
+					"cta_type": "mailto",
+					"sort_order": 5,
+					"image": {
+						"$media": {
+							"file": "party.png",
+							"alt": "Private Events & Party Booking"
+						}
+					}
+				}
+			},
+			{
+				"id": "private-events-hu",
+				"slug": "private-events",
+				"locale": "hu",
+				"translationOf": "private-events",
+				"status": "published",
+				"taxonomies": {
+					"experience_category": [
+						"events"
+					]
+				},
+				"data": {
+					"title": "Privát rendezvények, bulik",
+					"description": "Szülinapok, céges estek, legénybúcsúk vagy a teljes bár kibérlése: mondd meg a létszámot és a hangulatot.",
+					"meta": "10–80 fő · foglalás 1 héttel előre",
+					"cta_type": "mailto",
+					"sort_order": 5,
+					"image": {
+						"$media": {
+							"file": "party.png",
+							"alt": "Private Events & Party Booking"
+						}
+					}
+				}
+			},
+			{
+				"id": "private-events-de",
+				"slug": "private-events",
+				"locale": "de",
+				"translationOf": "private-events",
+				"status": "published",
+				"taxonomies": {
+					"experience_category": [
+						"events"
+					]
+				},
+				"data": {
+					"title": "Private Events & Partybuchung",
+					"description": "Geburtstage, Teamevents, Junggesellenabschiede oder eine komplette Bar — sag uns die Personenzahl und die Stimmung.",
+					"meta": "10–80 Gäste · Buchung 1+ Woche im Voraus",
+					"cta_type": "mailto",
+					"sort_order": 5,
+					"image": {
+						"$media": {
+							"file": "party.png",
+							"alt": "Private Events & Party Booking"
+						}
+					}
+				}
+			},
+			{
+				"id": "tournaments-watchparties",
+				"slug": "tournaments-watchparties",
+				"locale": "en",
+				"status": "published",
+				"taxonomies": {
+					"experience_category": [
+						"gaming"
+					]
+				},
+				"data": {
+					"title": "Console Tournaments & Watch Parties",
+					"description": "FIFA and Tekken brackets on the big screen, plus live watch parties for the biggest esports finals.",
+					"meta": "Monthly brackets · finals on the big screen",
+					"cta_type": "tel",
+					"sort_order": 6,
+					"image": {
+						"$media": {
+							"file": "tournament.png",
+							"alt": "Console Tournaments & Watch Parties"
+						}
+					}
+				}
+			},
+			{
+				"id": "tournaments-watchparties-hu",
+				"slug": "tournaments-watchparties",
+				"locale": "hu",
+				"translationOf": "tournaments-watchparties",
+				"status": "published",
+				"taxonomies": {
+					"experience_category": [
+						"gaming"
+					]
+				},
+				"data": {
+					"title": "Konzoltornák és nézőestek",
+					"description": "FIFA- és Tekken-küzdelmek a nagyvásznon, valamint közös nézőestek a legnagyobb esport-döntőkön.",
+					"meta": "Havi tornák · döntők a nagyvásznon",
+					"cta_type": "tel",
+					"sort_order": 6,
+					"image": {
+						"$media": {
+							"file": "tournament.png",
+							"alt": "Console Tournaments & Watch Parties"
+						}
+					}
+				}
+			},
+			{
+				"id": "tournaments-watchparties-de",
+				"slug": "tournaments-watchparties",
+				"locale": "de",
+				"translationOf": "tournaments-watchparties",
+				"status": "published",
+				"taxonomies": {
+					"experience_category": [
+						"gaming"
+					]
+				},
+				"data": {
+					"title": "Konsolen-Turniere & Watchpartys",
+					"description": "FIFA- und Tekken-Brackets auf der großen Leinwand, dazu Live-Viewings der größten Esport-Finals.",
+					"meta": "Monatliche Turniere · Finals auf der Leinwand",
+					"cta_type": "tel",
+					"sort_order": 6,
+					"image": {
+						"$media": {
+							"file": "tournament.png",
+							"alt": "Console Tournaments & Watch Parties"
+						}
+					}
+				}
+			}
+		],
+		"gallery_items": [
+			{
+				"id": "crowd",
+				"slug": "crowd",
+				"locale": "en",
+				"status": "published",
+				"data": {
+					"alt": "Friends toasting craft beer at the bar",
+					"grid_span": "col-2-row-2",
+					"sort_order": 1,
+					"image": {
+						"$media": {
+							"file": "crowd.png",
+							"alt": "Friends toasting craft beer at the bar"
+						}
+					}
+				}
+			},
+			{
+				"id": "crowd-hu",
+				"slug": "crowd",
+				"locale": "hu",
+				"translationOf": "crowd",
+				"status": "published",
+				"data": {
+					"alt": "Barátok koccintanak kézműves sörrel a bárban",
+					"grid_span": "col-2-row-2",
+					"sort_order": 1,
+					"image": {
+						"$media": {
+							"file": "crowd.png",
+							"alt": "Friends toasting craft beer at the bar"
+						}
+					}
+				}
+			},
+			{
+				"id": "crowd-de",
+				"slug": "crowd",
+				"locale": "de",
+				"translationOf": "crowd",
+				"status": "published",
+				"data": {
+					"alt": "Freunde stoßen mit Craftbier an der Bar an",
+					"grid_span": "col-2-row-2",
+					"sort_order": 1,
+					"image": {
+						"$media": {
+							"file": "crowd.png",
+							"alt": "Friends toasting craft beer at the bar"
+						}
+					}
+				}
+			},
+			{
+				"id": "beer-pour",
+				"slug": "beer-pour",
+				"locale": "en",
+				"status": "published",
+				"data": {
+					"alt": "Craft beer poured fresh from the tap",
+					"grid_span": "row-2",
+					"sort_order": 2,
+					"image": {
+						"$media": {
+							"file": "beer-pour.png",
+							"alt": "Craft beer poured fresh from the tap"
+						}
+					}
+				}
+			},
+			{
+				"id": "beer-pour-hu",
+				"slug": "beer-pour",
+				"locale": "hu",
+				"translationOf": "beer-pour",
+				"status": "published",
+				"data": {
+					"alt": "Frissen csapolt kézműves sör",
+					"grid_span": "row-2",
+					"sort_order": 2,
+					"image": {
+						"$media": {
+							"file": "beer-pour.png",
+							"alt": "Craft beer poured fresh from the tap"
+						}
+					}
+				}
+			},
+			{
+				"id": "beer-pour-de",
+				"slug": "beer-pour",
+				"locale": "de",
+				"translationOf": "beer-pour",
+				"status": "published",
+				"data": {
+					"alt": "Frisch gezapftes Craftbier",
+					"grid_span": "row-2",
+					"sort_order": 2,
+					"image": {
+						"$media": {
+							"file": "beer-pour.png",
+							"alt": "Craft beer poured fresh from the tap"
+						}
+					}
+				}
+			},
+			{
+				"id": "cocktail",
+				"slug": "cocktail",
+				"locale": "en",
+				"status": "published",
+				"data": {
+					"alt": "Signature cocktail with orange peel",
+					"grid_span": "default",
+					"sort_order": 3,
+					"image": {
+						"$media": {
+							"file": "cocktail.png",
+							"alt": "Signature cocktail with orange peel"
+						}
+					}
+				}
+			},
+			{
+				"id": "cocktail-hu",
+				"slug": "cocktail",
+				"locale": "hu",
+				"translationOf": "cocktail",
+				"status": "published",
+				"data": {
+					"alt": "Signature koktél narancshéjjal",
+					"grid_span": "default",
+					"sort_order": 3,
+					"image": {
+						"$media": {
+							"file": "cocktail.png",
+							"alt": "Signature cocktail with orange peel"
+						}
+					}
+				}
+			},
+			{
+				"id": "cocktail-de",
+				"slug": "cocktail",
+				"locale": "de",
+				"translationOf": "cocktail",
+				"status": "published",
+				"data": {
+					"alt": "Signature-Cocktail mit Orangenzeste",
+					"grid_span": "default",
+					"sort_order": 3,
+					"image": {
+						"$media": {
+							"file": "cocktail.png",
+							"alt": "Signature cocktail with orange peel"
+						}
+					}
+				}
+			},
+			{
+				"id": "quiz",
+				"slug": "quiz",
+				"locale": "en",
+				"status": "published",
+				"data": {
+					"alt": "Pub quiz teams deep in thought",
+					"grid_span": "default",
+					"sort_order": 4,
+					"image": {
+						"$media": {
+							"file": "quiz.png",
+							"alt": "Pub quiz teams deep in thought"
+						}
+					}
+				}
+			},
+			{
+				"id": "quiz-hu",
+				"slug": "quiz",
+				"locale": "hu",
+				"translationOf": "quiz",
+				"status": "published",
+				"data": {
+					"alt": "Pubkvízes csapatok gondolkodnak",
+					"grid_span": "default",
+					"sort_order": 4,
+					"image": {
+						"$media": {
+							"file": "quiz.png",
+							"alt": "Pub quiz teams deep in thought"
+						}
+					}
+				}
+			},
+			{
+				"id": "quiz-de",
+				"slug": "quiz",
+				"locale": "de",
+				"translationOf": "quiz",
+				"status": "published",
+				"data": {
+					"alt": "Pub-Quiz-Teams beim Grübeln",
+					"grid_span": "default",
+					"sort_order": 4,
+					"image": {
+						"$media": {
+							"file": "quiz.png",
+							"alt": "Pub quiz teams deep in thought"
+						}
+					}
+				}
+			},
+			{
+				"id": "pc-setup",
+				"slug": "pc-setup",
+				"locale": "en",
+				"status": "published",
+				"data": {
+					"alt": "Row of high-spec gaming PCs",
+					"grid_span": "col-2",
+					"sort_order": 5,
+					"image": {
+						"$media": {
+							"file": "pc-setup.png",
+							"alt": "Row of high-spec gaming PCs"
+						}
+					}
+				}
+			},
+			{
+				"id": "pc-setup-hu",
+				"slug": "pc-setup",
+				"locale": "hu",
+				"translationOf": "pc-setup",
+				"status": "published",
+				"data": {
+					"alt": "Csúcskategoriás játékgépek sorban",
+					"grid_span": "col-2",
+					"sort_order": 5,
+					"image": {
+						"$media": {
+							"file": "pc-setup.png",
+							"alt": "Row of high-spec gaming PCs"
+						}
+					}
+				}
+			},
+			{
+				"id": "pc-setup-de",
+				"slug": "pc-setup",
+				"locale": "de",
+				"translationOf": "pc-setup",
+				"status": "published",
+				"data": {
+					"alt": "Reihe hochwertiger Gaming-PCs",
+					"grid_span": "col-2",
+					"sort_order": 5,
+					"image": {
+						"$media": {
+							"file": "pc-setup.png",
+							"alt": "Row of high-spec gaming PCs"
+						}
+					}
+				}
+			},
+			{
+				"id": "ps5",
+				"slug": "ps5",
+				"locale": "en",
+				"status": "published",
+				"data": {
+					"alt": "Console lounge with big screen",
+					"grid_span": "default",
+					"sort_order": 6,
+					"image": {
+						"$media": {
+							"file": "ps5.png",
+							"alt": "Console lounge with big screen"
+						}
+					}
+				}
+			},
+			{
+				"id": "ps5-hu",
+				"slug": "ps5",
+				"locale": "hu",
+				"translationOf": "ps5",
+				"status": "published",
+				"data": {
+					"alt": "Konzolsarok nagy tévével",
+					"grid_span": "default",
+					"sort_order": 6,
+					"image": {
+						"$media": {
+							"file": "ps5.png",
+							"alt": "Console lounge with big screen"
+						}
+					}
+				}
+			},
+			{
+				"id": "ps5-de",
+				"slug": "ps5",
+				"locale": "de",
+				"translationOf": "ps5",
+				"status": "published",
+				"data": {
+					"alt": "Konsolen-Lounge mit großem TV",
+					"grid_span": "default",
+					"sort_order": 6,
+					"image": {
+						"$media": {
+							"file": "ps5.png",
+							"alt": "Console lounge with big screen"
+						}
+					}
+				}
+			},
+			{
+				"id": "foosball",
+				"slug": "foosball",
+				"locale": "en",
+				"status": "published",
+				"data": {
+					"alt": "Foosball table under amber light",
+					"grid_span": "default",
+					"sort_order": 7,
+					"image": {
+						"$media": {
+							"file": "foosball.png",
+							"alt": "Foosball table under amber light"
+						}
+					}
+				}
+			},
+			{
+				"id": "foosball-hu",
+				"slug": "foosball",
+				"locale": "hu",
+				"translationOf": "foosball",
+				"status": "published",
+				"data": {
+					"alt": "Csocsóasztal borostyán fényben",
+					"grid_span": "default",
+					"sort_order": 7,
+					"image": {
+						"$media": {
+							"file": "foosball.png",
+							"alt": "Foosball table under amber light"
+						}
+					}
+				}
+			},
+			{
+				"id": "foosball-de",
+				"slug": "foosball",
+				"locale": "de",
+				"translationOf": "foosball",
+				"status": "published",
+				"data": {
+					"alt": "Tischkicker im Bernsteinlicht",
+					"grid_span": "default",
+					"sort_order": 7,
+					"image": {
+						"$media": {
+							"file": "foosball.png",
+							"alt": "Foosball table under amber light"
+						}
+					}
+				}
+			},
+			{
+				"id": "party",
+				"slug": "party",
+				"locale": "en",
+				"status": "published",
+				"data": {
+					"alt": "Birthday sparkler at a private table",
+					"grid_span": "col-2",
+					"sort_order": 8,
+					"image": {
+						"$media": {
+							"file": "party.png",
+							"alt": "Birthday sparkler at a private table"
+						}
+					}
+				}
+			},
+			{
+				"id": "party-hu",
+				"slug": "party",
+				"locale": "hu",
+				"translationOf": "party",
+				"status": "published",
+				"data": {
+					"alt": "Szülinapi szikragyújtás egy privát asztalnál",
+					"grid_span": "col-2",
+					"sort_order": 8,
+					"image": {
+						"$media": {
+							"file": "party.png",
+							"alt": "Birthday sparkler at a private table"
+						}
+					}
+				}
+			},
+			{
+				"id": "party-de",
+				"slug": "party",
+				"locale": "de",
+				"translationOf": "party",
+				"status": "published",
+				"data": {
+					"alt": "Geburtstagswunderkerze am privaten Tisch",
+					"grid_span": "col-2",
+					"sort_order": 8,
+					"image": {
+						"$media": {
+							"file": "party.png",
+							"alt": "Birthday sparkler at a private table"
+						}
+					}
+				}
+			},
+			{
+				"id": "boardgames",
+				"slug": "boardgames",
+				"locale": "en",
+				"status": "published",
+				"data": {
+					"alt": "Board game night with beers",
+					"grid_span": "default",
+					"sort_order": 9,
+					"image": {
+						"$media": {
+							"file": "boardgames.png",
+							"alt": "Board game night with beers"
+						}
+					}
+				}
+			},
+			{
+				"id": "boardgames-hu",
+				"slug": "boardgames",
+				"locale": "hu",
+				"translationOf": "boardgames",
+				"status": "published",
+				"data": {
+					"alt": "Társasjáték-est sörökkel",
+					"grid_span": "default",
+					"sort_order": 9,
+					"image": {
+						"$media": {
+							"file": "boardgames.png",
+							"alt": "Board game night with beers"
+						}
+					}
+				}
+			},
+			{
+				"id": "boardgames-de",
+				"slug": "boardgames",
+				"locale": "de",
+				"translationOf": "boardgames",
+				"status": "published",
+				"data": {
+					"alt": "Brettspielabend mit Bier",
+					"grid_span": "default",
+					"sort_order": 9,
+					"image": {
+						"$media": {
+							"file": "boardgames.png",
+							"alt": "Board game night with beers"
+						}
+					}
+				}
+			},
+			{
+				"id": "darts",
+				"slug": "darts",
+				"locale": "en",
+				"status": "published",
+				"data": {
+					"alt": "Dartboard corner",
+					"grid_span": "default",
+					"sort_order": 10,
+					"image": {
+						"$media": {
+							"file": "darts.png",
+							"alt": "Dartboard corner"
+						}
+					}
+				}
+			},
+			{
+				"id": "darts-hu",
+				"slug": "darts",
+				"locale": "hu",
+				"translationOf": "darts",
+				"status": "published",
+				"data": {
+					"alt": "Darts sarok",
+					"grid_span": "default",
+					"sort_order": 10,
+					"image": {
+						"$media": {
+							"file": "darts.png",
+							"alt": "Dartboard corner"
+						}
+					}
+				}
+			},
+			{
+				"id": "darts-de",
+				"slug": "darts",
+				"locale": "de",
+				"translationOf": "darts",
+				"status": "published",
+				"data": {
+					"alt": "Dart-Ecke",
+					"grid_span": "default",
+					"sort_order": 10,
+					"image": {
+						"$media": {
+							"file": "darts.png",
+							"alt": "Dartboard corner"
+						}
+					}
+				}
+			},
+			{
+				"id": "tournament",
+				"slug": "tournament",
+				"locale": "en",
+				"status": "published",
+				"data": {
+					"alt": "Esports final on the big screen",
+					"grid_span": "col-2",
+					"sort_order": 11,
+					"image": {
+						"$media": {
+							"file": "tournament.png",
+							"alt": "Esports final on the big screen"
+						}
+					}
+				}
+			},
+			{
+				"id": "tournament-hu",
+				"slug": "tournament",
+				"locale": "hu",
+				"translationOf": "tournament",
+				"status": "published",
+				"data": {
+					"alt": "Esport-döntő a nagyvásznon",
+					"grid_span": "col-2",
+					"sort_order": 11,
+					"image": {
+						"$media": {
+							"file": "tournament.png",
+							"alt": "Esports final on the big screen"
+						}
+					}
+				}
+			},
+			{
+				"id": "tournament-de",
+				"slug": "tournament",
+				"locale": "de",
+				"translationOf": "tournament",
+				"status": "published",
+				"data": {
+					"alt": "Esport-Finale auf der großen Leinwand",
+					"grid_span": "col-2",
+					"sort_order": 11,
+					"image": {
+						"$media": {
+							"file": "tournament.png",
+							"alt": "Esports final on the big screen"
+						}
+					}
+				}
+			},
+			{
+				"id": "cocktail-two",
+				"slug": "cocktail-two",
+				"locale": "en",
+				"status": "published",
+				"data": {
+					"alt": "House sour cocktail in coupe glass",
+					"grid_span": "col-2",
+					"sort_order": 12,
+					"image": {
+						"$media": {
+							"file": "cocktail-two.png",
+							"alt": "House sour cocktail in coupe glass"
+						}
+					}
+				}
+			},
+			{
+				"id": "cocktail-two-hu",
+				"slug": "cocktail-two",
+				"locale": "hu",
+				"translationOf": "cocktail-two",
+				"status": "published",
+				"data": {
+					"alt": "Házi sour koktél pohárban",
+					"grid_span": "col-2",
+					"sort_order": 12,
+					"image": {
+						"$media": {
+							"file": "cocktail-two.png",
+							"alt": "House sour cocktail in coupe glass"
+						}
+					}
+				}
+			},
+			{
+				"id": "cocktail-two-de",
+				"slug": "cocktail-two",
+				"locale": "de",
+				"translationOf": "cocktail-two",
+				"status": "published",
+				"data": {
+					"alt": "Haus-Sour im Coupé-Glas",
+					"grid_span": "col-2",
+					"sort_order": 12,
+					"image": {
+						"$media": {
+							"file": "cocktail-two.png",
+							"alt": "House sour cocktail in coupe glass"
+						}
+					}
 				}
 			}
 		],
 		"pages": [
 			{
-				"id": "about",
-				"slug": "about",
+				"id": "home",
+				"slug": "home",
+				"locale": "en",
 				"status": "published",
 				"data": {
-					"title": "About",
-					"template": "Default",
-					"content": [
-						{
-							"_type": "block",
-							"_key": "about-h1",
-							"style": "h1",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "about-h1-span",
-									"text": "About ShittySites",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "about-lead",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "about-lead-span",
-									"text": "Agency base template for rebuilding client sites on EmDash + Cloudflare. Every route is server-rendered; demo markup is unstyled on purpose.",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "about-body",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "about-body-span",
-									"text": "Content mirrors the hero-centered section — insert /section in admin to embed reusable blocks. See /feature-guide for the full capability index.",
-									"marks": []
-								}
-							]
-						}
-					]
-				}
-			},
-			{
-				"id": "feature-guide",
-				"slug": "feature-guide",
-				"status": "published",
-				"data": {
-					"title": "Feature Guide",
+					"title": "Home",
 					"template": "Full Width",
 					"content": [
 						{
 							"_type": "block",
-							"_key": "fg-h1",
-							"style": "h1",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "fg-h1-span",
-									"text": "EmDash Capability Index",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "fg-intro",
+							"_key": "home-stub",
 							"style": "normal",
 							"markDefs": [],
 							"children": [
 								{
 									"_type": "span",
-									"_key": "fg-intro-span",
-									"text": "Master index of demo routes, admin paths, and native plugin blocks. Uses the Full Width page layout.",
+									"_key": "home-stub-span",
+									"text": "Home page blocks land in Part 4 — bol.hero, bol.benefits, bol.menu, bol.gallery, bol.contact.",
 									"marks": []
 								}
-							]
-						},
-						{
-							"_type": "demo.callout",
-							"_key": "fg-callout",
-							"title": "Native plugin blocks",
-							"body": "Callout, CTA strip, and Stats row come from the demo-blocks native plugin. Renderers live in src/plugins/demo-blocks/astro/.",
-							"variant": "info"
-						},
-						{
-							"_type": "demo.cta",
-							"_key": "fg-cta",
-							"headline": "Explore every demo route",
-							"buttonLabel": "Browse posts",
-							"buttonUrl": "/posts"
-						},
-						{
-							"_type": "demo.stats",
-							"_key": "fg-stats",
-							"items": [
-								{ "label": "Collections", "value": "3" },
-								{ "label": "Taxonomies", "value": "3" },
-								{ "label": "Demo blocks", "value": "3" }
 							]
 						}
 					]
 				}
 			},
 			{
-				"id": "contact",
-				"slug": "contact",
+				"id": "home-hu",
+				"slug": "home",
+				"locale": "hu",
+				"translationOf": "home",
 				"status": "published",
-				"taxonomies": {
-					"service-area": ["local", "remote"]
-				},
 				"data": {
-					"title": "Contact",
-					"template": "Sidebar",
+					"title": "Főoldal",
+					"template": "Full Width",
 					"content": [
 						{
 							"_type": "block",
-							"_key": "contact-h1",
-							"style": "h1",
-							"markDefs": [],
-							"children": [
-								{
-									"_type": "span",
-									"_key": "contact-h1-span",
-									"text": "Contact",
-									"marks": []
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"_key": "contact-body",
+							"_key": "home-stub-hu",
 							"style": "normal",
 							"markDefs": [],
 							"children": [
 								{
 									"_type": "span",
-									"_key": "contact-body-span",
-									"text": "Sidebar layout page with WidgetArea in the aside. Service-area taxonomy is attached to this page for demo purposes.",
+									"_key": "home-stub-hu-span",
+									"text": "A főoldal blokkjai a 4. részben érkeznek — bol.hero, bol.benefits, bol.menu, bol.gallery, bol.contact.",
 									"marks": []
 								}
 							]
 						}
 					]
 				}
-			}
-		],
-		"showcase": [
+			},
 			{
-				"id": "all-fields",
-				"slug": "all-fields",
+				"id": "home-de",
+				"slug": "home",
+				"locale": "de",
+				"translationOf": "home",
 				"status": "published",
 				"data": {
-					"title": "All Field Types",
-					"field_string": "Sample short text",
-					"field_text": "Multi-line text sample.\nSecond line for textarea demo.",
-					"field_url": "https://docs.emdashcms.com/",
-					"field_number": 42.5,
-					"field_integer": 7,
-					"field_boolean": true,
-					"field_datetime": "2026-09-02T12:00:00.000Z",
-					"field_select": "beta",
-					"field_multi_select": ["red", "blue"],
-					"field_portable_text": [
+					"title": "Startseite",
+					"template": "Full Width",
+					"content": [
 						{
 							"_type": "block",
-							"_key": "showcase-pt",
+							"_key": "home-stub-de",
 							"style": "normal",
 							"markDefs": [],
 							"children": [
 								{
 									"_type": "span",
-									"_key": "showcase-pt-span",
-									"text": "Portable Text field sample with valid block structure.",
+									"_key": "home-stub-de-span",
+									"text": "Startseiten-Blöcke kommen in Teil 4 — bol.hero, bol.benefits, bol.menu, bol.gallery, bol.contact.",
 									"marks": []
 								}
 							]
 						}
-					],
-					"field_image": {
-						"$media": {
-							"url": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=800&fit=crop",
-							"alt": "Analytics dashboard on a laptop",
-							"filename": "showcase-light.jpg"
-						},
-						"darkVariant": {
-							"$media": {
-								"url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop",
-								"alt": "Dark analytics dashboard",
-								"filename": "showcase-dark.jpg"
-							}
-						}
-					},
-					"field_file": {
-						"$media": {
-							"url": "https://www.w3.org/WAI/WCAG21/Techniques/pdf/img/table-word.pdf",
-							"alt": "Sample PDF document",
-							"filename": "sample-document.pdf"
-						}
-					},
-					"field_reference": "$ref:about",
-					"field_json": {
-						"status": "demo",
-						"count": 16,
-						"nested": {
-							"fieldTypes": true
-						}
-					},
-					"field_slug": "all-fields",
-					"field_repeater": [
-						{ "label": "First row", "value": "Alpha" },
-						{ "label": "Second row", "value": "Beta" }
 					]
 				}
 			}
