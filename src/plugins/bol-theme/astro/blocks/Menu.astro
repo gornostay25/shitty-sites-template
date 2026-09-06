@@ -1,0 +1,88 @@
+---
+import { getEmDashCollection, getTaxonomyTerms } from "emdash";
+import MenuTabs from "../islands/MenuTabs.tsx";
+
+interface Props {
+	eyebrow?: string;
+	title?: string;
+	subtitle?: string;
+	footnote?: string;
+}
+
+const { eyebrow, title, subtitle, footnote } = Astro.props;
+const locale = Astro.currentLocale ?? "en";
+
+const MENU_CATEGORIES = ["alcoholic", "nonalcoholic", "snacks"] as const;
+
+const [terms, ...categoryResults] = await Promise.all([
+	getTaxonomyTerms("menu_category"),
+	...MENU_CATEGORIES.map((category) =>
+		getEmDashCollection("menu_items", {
+			locale,
+			where: { menu_category: category },
+			orderBy: { sort_order: "asc" },
+		}),
+	),
+]);
+
+for (const result of categoryResults) {
+	if (Astro.cache?.enabled && result.cacheHint) {
+		Astro.cache.set(result.cacheHint);
+	}
+}
+
+const tabLabels = Object.fromEntries(
+	MENU_CATEGORIES.map((slug) => {
+		const term = terms.find((entry) => entry.slug === slug);
+		return [slug, term?.label ?? slug];
+	}),
+);
+
+const itemsByCategory = Object.fromEntries(
+	MENU_CATEGORIES.map((category, index) => [
+		category,
+		categoryResults[index]?.entries.map((entry) => ({
+			id: entry.id,
+			name: entry.data.name,
+			description: entry.data.description,
+			price: entry.data.price,
+			image: entry.data.image,
+		})) ?? [],
+	]),
+);
+---
+
+<section
+	id="menu"
+	aria-labelledby="menu-title"
+	class="scroll-mt-20 mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 md:py-24"
+>
+	{eyebrow && (
+		<p class="text-xs font-semibold uppercase tracking-[0.25em] text-brand">{eyebrow}</p>
+	)}
+	{
+		title && (
+			<h2 id="menu-title" class="mt-3 font-display text-4xl tracking-wide sm:text-5xl">
+				{title}
+			</h2>
+		)
+	}
+	{
+		subtitle && (
+			<p class="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+				{subtitle}
+			</p>
+		)
+	}
+
+	<div class="mt-10">
+		<MenuTabs
+			client:visible
+			locale={locale}
+			title={title ?? "Menu"}
+			tabLabels={tabLabels}
+			items={itemsByCategory}
+			footnote={footnote}
+		/>
+	</div>
+</section>

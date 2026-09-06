@@ -32,8 +32,6 @@
 			"labelSingular": "Page",
 			"urlPattern": "/{slug}",
 			"supports": [
-				"drafts",
-				"revisions",
 				"search",
 				"seo"
 			],
@@ -44,19 +42,6 @@
 					"type": "string",
 					"required": true,
 					"searchable": true
-				},
-				{
-					"slug": "template",
-					"label": "Page Template",
-					"type": "select",
-					"defaultValue": "Full Width",
-					"validation": {
-						"options": [
-							"Default",
-							"Full Width",
-							"Sidebar"
-						]
-					}
 				},
 				{
 					"slug": "content",
@@ -71,8 +56,6 @@
 			"label": "Menu Items",
 			"labelSingular": "Menu Item",
 			"supports": [
-				"drafts",
-				"revisions",
 				"search"
 			],
 			"fields": [
@@ -116,8 +99,6 @@
 			"labelSingular": "Experience",
 			"urlPattern": "/experiences/{slug}",
 			"supports": [
-				"drafts",
-				"revisions",
 				"search",
 				"seo"
 			],
@@ -172,8 +153,6 @@
 			"label": "Gallery Items",
 			"labelSingular": "Gallery Item",
 			"supports": [
-				"drafts",
-				"revisions",
 				"search"
 			],
 			"fields": [
@@ -448,7 +427,7 @@
 					"sort_order": 1,
 					"image": {
 						"$media": {
-							"file": "beer-pour.png",
+							"file": "beer-pour.webp",
 							"alt": "Vaskakas IPA"
 						}
 					}
@@ -472,7 +451,7 @@
 					"sort_order": 1,
 					"image": {
 						"$media": {
-							"file": "beer-pour.png",
+							"file": "beer-pour.webp",
 							"alt": "Vaskakas IPA"
 						}
 					}
@@ -496,7 +475,7 @@
 					"sort_order": 1,
 					"image": {
 						"$media": {
-							"file": "beer-pour.png",
+							"file": "beer-pour.webp",
 							"alt": "Vaskakas IPA"
 						}
 					}
@@ -519,7 +498,7 @@
 					"sort_order": 2,
 					"image": {
 						"$media": {
-							"file": "beer-two.png",
+							"file": "beer-two.webp",
 							"alt": "Vaskakas Craft Lager"
 						}
 					}
@@ -543,7 +522,7 @@
 					"sort_order": 2,
 					"image": {
 						"$media": {
-							"file": "beer-two.png",
+							"file": "beer-two.webp",
 							"alt": "Vaskakas Craft Lager"
 						}
 					}
@@ -567,7 +546,7 @@
 					"sort_order": 2,
 					"image": {
 						"$media": {
-							"file": "beer-two.png",
+							"file": "beer-two.webp",
 							"alt": "Vaskakas Craft Lager"
 						}
 					}
@@ -590,7 +569,7 @@
 					"sort_order": 3,
 					"image": {
 						"$media": {
-							"file": "cocktail.png",
+							"file": "cocktail.webp",
 							"alt": "Bartender's Choice"
 						}
 					}
@@ -614,7 +593,7 @@
 					"sort_order": 3,
 					"image": {
 						"$media": {
-							"file": "cocktail.png",
+							"file": "cocktail.webp",
 							"alt": "Bartender's Choice"
 						}
 					}
@@ -638,7 +617,7 @@
 					"sort_order": 3,
 					"image": {
 						"$media": {
-							"file": "cocktail.png",
+							"file": "cocktail.webp",
 							"alt": "Bartender's Choice"
 						}
 					}
@@ -661,7 +640,7 @@
 					"sort_order": 4,
 					"image": {
 						"$media": {
-							"file": "cocktail-two.png",
+							"file": "cocktail-two.webp",
 							"alt": "Legend Sour"
 						}
 					}
@@ -685,7 +664,7 @@
 					"sort_order": 4,
 					"image": {
 						"$media": {
-							"file": "cocktail-two.png",
+							"file": "cocktail-two.webp",
 							"alt": "Legend Sour"
 						}
 					}
@@ -709,7 +688,7 @@
 					"sort_order": 4,
 					"image": {
 						"$media": {
-							"file": "cocktail-two.png",
+							"file": "cocktail-two.webp",
 							"alt": "Legend Sour"
 						}
 					}
@@ -732,7 +711,7 @@
 					"sort_order": 5,
 					"image": {
 						"$media": {
-							"file": "spritz.png",
+							"file": "spritz.webp",
 							"alt": "Aperol Spritz"
 						}
 					}
@@ -756,7 +735,7 @@
 					"sort_order": 5,
 					"image": {
 						"$media": {
-							"file": "spritz.png",
+							"file": "spritz.webp",
 							"alt": "Aperol Spritz"
 						}
 					}
@@ -780,7 +759,7 @@
 					"sort_order": 5,
 					"image": {
 						"$media": {
-							"file": "spritz.png",
+							"file": "spritz.webp",
 							"alt": "Aperol Spritz"
 						}
 					}
@@ -803,7 +782,7 @@
 					"sort_order": 6,
 					"image": {
 						"$media": {
-							"file": "wine.png",
+							"file": "wine.webp",
 							"alt": "Hungarian Wine by the Glass"
 						}
 					}
@@ -827,7 +806,7 @@
 					"sort_order": 6,
 					"image": {
 						"$media": {
-							"file": "wine.png",
+							"file": "wine.webp",
 							"alt": "Hungarian Wine by the Glass"
 						}
 					}
@@ -851,7 +830,7 @@
 					"sort_order": 6,
 					"image": {
 						"$media": {
-							"file": "wine.png",
+							"file": "wine.webp",
 							"alt": "Hungarian Wine by the Glass"
 						}
 					}
@@ -874,7 +853,7 @@
 					"sort_order": 7,
 					"image": {
 						"$media": {
-							"file": "lemonade.png",
+							"file": "lemonade.webp",
 							"alt": "House Lemonade"
 						}
 					}
@@ -898,7 +877,7 @@
 					"sort_order": 7,
 					"image": {
 						"$media": {
-							"file": "lemonade.png",
+							"file": "lemonade.webp",
 							"alt": "House Lemonade"
 						}
 					}
@@ -922,7 +901,7 @@
 					"sort_order": 7,
 					"image": {
 						"$media": {
-							"file": "lemonade.png",
+							"file": "lemonade.webp",
 							"alt": "House Lemonade"
 						}
 					}
@@ -945,7 +924,7 @@
 					"sort_order": 8,
 					"image": {
 						"$media": {
-							"file": "coffee.png",
+							"file": "coffee.webp",
 							"alt": "Cold Brew Coffee"
 						}
 					}
@@ -969,7 +948,7 @@
 					"sort_order": 8,
 					"image": {
 						"$media": {
-							"file": "coffee.png",
+							"file": "coffee.webp",
 							"alt": "Cold Brew Coffee"
 						}
 					}
@@ -993,7 +972,7 @@
 					"sort_order": 8,
 					"image": {
 						"$media": {
-							"file": "coffee.png",
+							"file": "coffee.webp",
 							"alt": "Cold Brew Coffee"
 						}
 					}
@@ -1016,7 +995,7 @@
 					"sort_order": 9,
 					"image": {
 						"$media": {
-							"file": "beer-two.png",
+							"file": "beer-two.webp",
 							"alt": "Vaskakas 0.0"
 						}
 					}
@@ -1040,7 +1019,7 @@
 					"sort_order": 9,
 					"image": {
 						"$media": {
-							"file": "beer-two.png",
+							"file": "beer-two.webp",
 							"alt": "Vaskakas 0.0"
 						}
 					}
@@ -1064,7 +1043,7 @@
 					"sort_order": 9,
 					"image": {
 						"$media": {
-							"file": "beer-two.png",
+							"file": "beer-two.webp",
 							"alt": "Vaskakas 0.0"
 						}
 					}
@@ -1087,7 +1066,7 @@
 					"sort_order": 10,
 					"image": {
 						"$media": {
-							"file": "cocktail-two.png",
+							"file": "cocktail-two.webp",
 							"alt": "Ginger Fizz"
 						}
 					}
@@ -1111,7 +1090,7 @@
 					"sort_order": 10,
 					"image": {
 						"$media": {
-							"file": "cocktail-two.png",
+							"file": "cocktail-two.webp",
 							"alt": "Ginger Fizz"
 						}
 					}
@@ -1135,7 +1114,7 @@
 					"sort_order": 10,
 					"image": {
 						"$media": {
-							"file": "cocktail-two.png",
+							"file": "cocktail-two.webp",
 							"alt": "Ginger Fizz"
 						}
 					}
@@ -1158,7 +1137,7 @@
 					"sort_order": 11,
 					"image": {
 						"$media": {
-							"file": "softdrinks.png",
+							"file": "softdrinks.webp",
 							"alt": "Energy Drinks"
 						}
 					}
@@ -1182,7 +1161,7 @@
 					"sort_order": 11,
 					"image": {
 						"$media": {
-							"file": "softdrinks.png",
+							"file": "softdrinks.webp",
 							"alt": "Energy Drinks"
 						}
 					}
@@ -1206,7 +1185,7 @@
 					"sort_order": 11,
 					"image": {
 						"$media": {
-							"file": "softdrinks.png",
+							"file": "softdrinks.webp",
 							"alt": "Energy Drinks"
 						}
 					}
@@ -1229,7 +1208,7 @@
 					"sort_order": 12,
 					"image": {
 						"$media": {
-							"file": "cola.png",
+							"file": "cola.webp",
 							"alt": "Sodas & Juices"
 						}
 					}
@@ -1253,7 +1232,7 @@
 					"sort_order": 12,
 					"image": {
 						"$media": {
-							"file": "cola.png",
+							"file": "cola.webp",
 							"alt": "Sodas & Juices"
 						}
 					}
@@ -1277,7 +1256,7 @@
 					"sort_order": 12,
 					"image": {
 						"$media": {
-							"file": "cola.png",
+							"file": "cola.webp",
 							"alt": "Sodas & Juices"
 						}
 					}
@@ -1300,7 +1279,7 @@
 					"sort_order": 13,
 					"image": {
 						"$media": {
-							"file": "fries.png",
+							"file": "fries.webp",
 							"alt": "Legend Loaded Fries"
 						}
 					}
@@ -1324,7 +1303,7 @@
 					"sort_order": 13,
 					"image": {
 						"$media": {
-							"file": "fries.png",
+							"file": "fries.webp",
 							"alt": "Legend Loaded Fries"
 						}
 					}
@@ -1348,7 +1327,7 @@
 					"sort_order": 13,
 					"image": {
 						"$media": {
-							"file": "fries.png",
+							"file": "fries.webp",
 							"alt": "Legend Loaded Fries"
 						}
 					}
@@ -1371,7 +1350,7 @@
 					"sort_order": 14,
 					"image": {
 						"$media": {
-							"file": "wings.png",
+							"file": "wings.webp",
 							"alt": "Buffalo Wings (6 pcs)"
 						}
 					}
@@ -1395,7 +1374,7 @@
 					"sort_order": 14,
 					"image": {
 						"$media": {
-							"file": "wings.png",
+							"file": "wings.webp",
 							"alt": "Buffalo Wings (6 pcs)"
 						}
 					}
@@ -1419,7 +1398,7 @@
 					"sort_order": 14,
 					"image": {
 						"$media": {
-							"file": "wings.png",
+							"file": "wings.webp",
 							"alt": "Buffalo Wings (6 pcs)"
 						}
 					}
@@ -1442,7 +1421,7 @@
 					"sort_order": 15,
 					"image": {
 						"$media": {
-							"file": "platter.png",
+							"file": "platter.webp",
 							"alt": "Bar Nachos"
 						}
 					}
@@ -1466,7 +1445,7 @@
 					"sort_order": 15,
 					"image": {
 						"$media": {
-							"file": "platter.png",
+							"file": "platter.webp",
 							"alt": "Bar Nachos"
 						}
 					}
@@ -1490,7 +1469,7 @@
 					"sort_order": 15,
 					"image": {
 						"$media": {
-							"file": "platter.png",
+							"file": "platter.webp",
 							"alt": "Bar Nachos"
 						}
 					}
@@ -1513,7 +1492,7 @@
 					"sort_order": 16,
 					"image": {
 						"$media": {
-							"file": "fries.png",
+							"file": "fries.webp",
 							"alt": "Onion Rings"
 						}
 					}
@@ -1537,7 +1516,7 @@
 					"sort_order": 16,
 					"image": {
 						"$media": {
-							"file": "fries.png",
+							"file": "fries.webp",
 							"alt": "Onion Rings"
 						}
 					}
@@ -1561,7 +1540,7 @@
 					"sort_order": 16,
 					"image": {
 						"$media": {
-							"file": "fries.png",
+							"file": "fries.webp",
 							"alt": "Onion Rings"
 						}
 					}
@@ -1584,7 +1563,7 @@
 					"sort_order": 17,
 					"image": {
 						"$media": {
-							"file": "pretzel.png",
+							"file": "pretzel.webp",
 							"alt": "Pretzel & Cheese Dip"
 						}
 					}
@@ -1608,7 +1587,7 @@
 					"sort_order": 17,
 					"image": {
 						"$media": {
-							"file": "pretzel.png",
+							"file": "pretzel.webp",
 							"alt": "Pretzel & Cheese Dip"
 						}
 					}
@@ -1632,7 +1611,7 @@
 					"sort_order": 17,
 					"image": {
 						"$media": {
-							"file": "pretzel.png",
+							"file": "pretzel.webp",
 							"alt": "Pretzel & Cheese Dip"
 						}
 					}
@@ -1655,7 +1634,7 @@
 					"sort_order": 18,
 					"image": {
 						"$media": {
-							"file": "platter.png",
+							"file": "platter.webp",
 							"alt": "The Squad Platter"
 						}
 					}
@@ -1679,7 +1658,7 @@
 					"sort_order": 18,
 					"image": {
 						"$media": {
-							"file": "platter.png",
+							"file": "platter.webp",
 							"alt": "The Squad Platter"
 						}
 					}
@@ -1703,7 +1682,7 @@
 					"sort_order": 18,
 					"image": {
 						"$media": {
-							"file": "platter.png",
+							"file": "platter.webp",
 							"alt": "The Squad Platter"
 						}
 					}
@@ -1729,7 +1708,7 @@
 					"sort_order": 1,
 					"image": {
 						"$media": {
-							"file": "pc-setup.png",
+							"file": "pc-setup.webp",
 							"alt": "PC & PS5 Gaming Stations"
 						}
 					}
@@ -1754,7 +1733,7 @@
 					"sort_order": 1,
 					"image": {
 						"$media": {
-							"file": "pc-setup.png",
+							"file": "pc-setup.webp",
 							"alt": "PC & PS5 Gaming Stations"
 						}
 					}
@@ -1779,7 +1758,7 @@
 					"sort_order": 1,
 					"image": {
 						"$media": {
-							"file": "pc-setup.png",
+							"file": "pc-setup.webp",
 							"alt": "PC & PS5 Gaming Stations"
 						}
 					}
@@ -1803,7 +1782,7 @@
 					"sort_order": 2,
 					"image": {
 						"$media": {
-							"file": "boardgames.png",
+							"file": "boardgames.webp",
 							"alt": "Board Game Library"
 						}
 					}
@@ -1828,7 +1807,7 @@
 					"sort_order": 2,
 					"image": {
 						"$media": {
-							"file": "boardgames.png",
+							"file": "boardgames.webp",
 							"alt": "Board Game Library"
 						}
 					}
@@ -1853,7 +1832,7 @@
 					"sort_order": 2,
 					"image": {
 						"$media": {
-							"file": "boardgames.png",
+							"file": "boardgames.webp",
 							"alt": "Board Game Library"
 						}
 					}
@@ -1877,7 +1856,7 @@
 					"sort_order": 3,
 					"image": {
 						"$media": {
-							"file": "quiz.png",
+							"file": "quiz.webp",
 							"alt": "Weekly Pub Quiz"
 						}
 					}
@@ -1902,7 +1881,7 @@
 					"sort_order": 3,
 					"image": {
 						"$media": {
-							"file": "quiz.png",
+							"file": "quiz.webp",
 							"alt": "Weekly Pub Quiz"
 						}
 					}
@@ -1927,7 +1906,7 @@
 					"sort_order": 3,
 					"image": {
 						"$media": {
-							"file": "quiz.png",
+							"file": "quiz.webp",
 							"alt": "Weekly Pub Quiz"
 						}
 					}
@@ -1951,7 +1930,7 @@
 					"sort_order": 4,
 					"image": {
 						"$media": {
-							"file": "foosball.png",
+							"file": "foosball.webp",
 							"alt": "Foosball & Darts"
 						}
 					}
@@ -1976,7 +1955,7 @@
 					"sort_order": 4,
 					"image": {
 						"$media": {
-							"file": "foosball.png",
+							"file": "foosball.webp",
 							"alt": "Foosball & Darts"
 						}
 					}
@@ -2001,7 +1980,7 @@
 					"sort_order": 4,
 					"image": {
 						"$media": {
-							"file": "foosball.png",
+							"file": "foosball.webp",
 							"alt": "Foosball & Darts"
 						}
 					}
@@ -2025,7 +2004,7 @@
 					"sort_order": 5,
 					"image": {
 						"$media": {
-							"file": "party.png",
+							"file": "party.webp",
 							"alt": "Private Events & Party Booking"
 						}
 					}
@@ -2050,7 +2029,7 @@
 					"sort_order": 5,
 					"image": {
 						"$media": {
-							"file": "party.png",
+							"file": "party.webp",
 							"alt": "Private Events & Party Booking"
 						}
 					}
@@ -2075,7 +2054,7 @@
 					"sort_order": 5,
 					"image": {
 						"$media": {
-							"file": "party.png",
+							"file": "party.webp",
 							"alt": "Private Events & Party Booking"
 						}
 					}
@@ -2099,7 +2078,7 @@
 					"sort_order": 6,
 					"image": {
 						"$media": {
-							"file": "tournament.png",
+							"file": "tournament.webp",
 							"alt": "Console Tournaments & Watch Parties"
 						}
 					}
@@ -2124,7 +2103,7 @@
 					"sort_order": 6,
 					"image": {
 						"$media": {
-							"file": "tournament.png",
+							"file": "tournament.webp",
 							"alt": "Console Tournaments & Watch Parties"
 						}
 					}
@@ -2149,7 +2128,7 @@
 					"sort_order": 6,
 					"image": {
 						"$media": {
-							"file": "tournament.png",
+							"file": "tournament.webp",
 							"alt": "Console Tournaments & Watch Parties"
 						}
 					}
@@ -2168,7 +2147,7 @@
 					"sort_order": 1,
 					"image": {
 						"$media": {
-							"file": "crowd.png",
+							"file": "crowd.webp",
 							"alt": "Friends toasting craft beer at the bar"
 						}
 					}
@@ -2186,7 +2165,7 @@
 					"sort_order": 1,
 					"image": {
 						"$media": {
-							"file": "crowd.png",
+							"file": "crowd.webp",
 							"alt": "Friends toasting craft beer at the bar"
 						}
 					}
@@ -2204,7 +2183,7 @@
 					"sort_order": 1,
 					"image": {
 						"$media": {
-							"file": "crowd.png",
+							"file": "crowd.webp",
 							"alt": "Friends toasting craft beer at the bar"
 						}
 					}
@@ -2221,7 +2200,7 @@
 					"sort_order": 2,
 					"image": {
 						"$media": {
-							"file": "beer-pour.png",
+							"file": "beer-pour.webp",
 							"alt": "Craft beer poured fresh from the tap"
 						}
 					}
@@ -2239,7 +2218,7 @@
 					"sort_order": 2,
 					"image": {
 						"$media": {
-							"file": "beer-pour.png",
+							"file": "beer-pour.webp",
 							"alt": "Craft beer poured fresh from the tap"
 						}
 					}
@@ -2257,7 +2236,7 @@
 					"sort_order": 2,
 					"image": {
 						"$media": {
-							"file": "beer-pour.png",
+							"file": "beer-pour.webp",
 							"alt": "Craft beer poured fresh from the tap"
 						}
 					}
@@ -2274,7 +2253,7 @@
 					"sort_order": 3,
 					"image": {
 						"$media": {
-							"file": "cocktail.png",
+							"file": "cocktail.webp",
 							"alt": "Signature cocktail with orange peel"
 						}
 					}
@@ -2292,7 +2271,7 @@
 					"sort_order": 3,
 					"image": {
 						"$media": {
-							"file": "cocktail.png",
+							"file": "cocktail.webp",
 							"alt": "Signature cocktail with orange peel"
 						}
 					}
@@ -2310,7 +2289,7 @@
 					"sort_order": 3,
 					"image": {
 						"$media": {
-							"file": "cocktail.png",
+							"file": "cocktail.webp",
 							"alt": "Signature cocktail with orange peel"
 						}
 					}
@@ -2327,7 +2306,7 @@
 					"sort_order": 4,
 					"image": {
 						"$media": {
-							"file": "quiz.png",
+							"file": "quiz.webp",
 							"alt": "Pub quiz teams deep in thought"
 						}
 					}
@@ -2345,7 +2324,7 @@
 					"sort_order": 4,
 					"image": {
 						"$media": {
-							"file": "quiz.png",
+							"file": "quiz.webp",
 							"alt": "Pub quiz teams deep in thought"
 						}
 					}
@@ -2363,7 +2342,7 @@
 					"sort_order": 4,
 					"image": {
 						"$media": {
-							"file": "quiz.png",
+							"file": "quiz.webp",
 							"alt": "Pub quiz teams deep in thought"
 						}
 					}
@@ -2380,7 +2359,7 @@
 					"sort_order": 5,
 					"image": {
 						"$media": {
-							"file": "pc-setup.png",
+							"file": "pc-setup.webp",
 							"alt": "Row of high-spec gaming PCs"
 						}
 					}
@@ -2398,7 +2377,7 @@
 					"sort_order": 5,
 					"image": {
 						"$media": {
-							"file": "pc-setup.png",
+							"file": "pc-setup.webp",
 							"alt": "Row of high-spec gaming PCs"
 						}
 					}
@@ -2416,7 +2395,7 @@
 					"sort_order": 5,
 					"image": {
 						"$media": {
-							"file": "pc-setup.png",
+							"file": "pc-setup.webp",
 							"alt": "Row of high-spec gaming PCs"
 						}
 					}
@@ -2433,7 +2412,7 @@
 					"sort_order": 6,
 					"image": {
 						"$media": {
-							"file": "ps5.png",
+							"file": "ps5.webp",
 							"alt": "Console lounge with big screen"
 						}
 					}
@@ -2451,7 +2430,7 @@
 					"sort_order": 6,
 					"image": {
 						"$media": {
-							"file": "ps5.png",
+							"file": "ps5.webp",
 							"alt": "Console lounge with big screen"
 						}
 					}
@@ -2469,7 +2448,7 @@
 					"sort_order": 6,
 					"image": {
 						"$media": {
-							"file": "ps5.png",
+							"file": "ps5.webp",
 							"alt": "Console lounge with big screen"
 						}
 					}
@@ -2486,7 +2465,7 @@
 					"sort_order": 7,
 					"image": {
 						"$media": {
-							"file": "foosball.png",
+							"file": "foosball.webp",
 							"alt": "Foosball table under amber light"
 						}
 					}
@@ -2504,7 +2483,7 @@
 					"sort_order": 7,
 					"image": {
 						"$media": {
-							"file": "foosball.png",
+							"file": "foosball.webp",
 							"alt": "Foosball table under amber light"
 						}
 					}
@@ -2522,7 +2501,7 @@
 					"sort_order": 7,
 					"image": {
 						"$media": {
-							"file": "foosball.png",
+							"file": "foosball.webp",
 							"alt": "Foosball table under amber light"
 						}
 					}
@@ -2539,7 +2518,7 @@
 					"sort_order": 8,
 					"image": {
 						"$media": {
-							"file": "party.png",
+							"file": "party.webp",
 							"alt": "Birthday sparkler at a private table"
 						}
 					}
@@ -2557,7 +2536,7 @@
 					"sort_order": 8,
 					"image": {
 						"$media": {
-							"file": "party.png",
+							"file": "party.webp",
 							"alt": "Birthday sparkler at a private table"
 						}
 					}
@@ -2575,7 +2554,7 @@
 					"sort_order": 8,
 					"image": {
 						"$media": {
-							"file": "party.png",
+							"file": "party.webp",
 							"alt": "Birthday sparkler at a private table"
 						}
 					}
@@ -2592,7 +2571,7 @@
 					"sort_order": 9,
 					"image": {
 						"$media": {
-							"file": "boardgames.png",
+							"file": "boardgames.webp",
 							"alt": "Board game night with beers"
 						}
 					}
@@ -2610,7 +2589,7 @@
 					"sort_order": 9,
 					"image": {
 						"$media": {
-							"file": "boardgames.png",
+							"file": "boardgames.webp",
 							"alt": "Board game night with beers"
 						}
 					}
@@ -2628,7 +2607,7 @@
 					"sort_order": 9,
 					"image": {
 						"$media": {
-							"file": "boardgames.png",
+							"file": "boardgames.webp",
 							"alt": "Board game night with beers"
 						}
 					}
@@ -2645,7 +2624,7 @@
 					"sort_order": 10,
 					"image": {
 						"$media": {
-							"file": "darts.png",
+							"file": "darts.webp",
 							"alt": "Dartboard corner"
 						}
 					}
@@ -2663,7 +2642,7 @@
 					"sort_order": 10,
 					"image": {
 						"$media": {
-							"file": "darts.png",
+							"file": "darts.webp",
 							"alt": "Dartboard corner"
 						}
 					}
@@ -2681,7 +2660,7 @@
 					"sort_order": 10,
 					"image": {
 						"$media": {
-							"file": "darts.png",
+							"file": "darts.webp",
 							"alt": "Dartboard corner"
 						}
 					}
@@ -2698,7 +2677,7 @@
 					"sort_order": 11,
 					"image": {
 						"$media": {
-							"file": "tournament.png",
+							"file": "tournament.webp",
 							"alt": "Esports final on the big screen"
 						}
 					}
@@ -2716,7 +2695,7 @@
 					"sort_order": 11,
 					"image": {
 						"$media": {
-							"file": "tournament.png",
+							"file": "tournament.webp",
 							"alt": "Esports final on the big screen"
 						}
 					}
@@ -2734,7 +2713,7 @@
 					"sort_order": 11,
 					"image": {
 						"$media": {
-							"file": "tournament.png",
+							"file": "tournament.webp",
 							"alt": "Esports final on the big screen"
 						}
 					}
@@ -2751,7 +2730,7 @@
 					"sort_order": 12,
 					"image": {
 						"$media": {
-							"file": "cocktail-two.png",
+							"file": "cocktail-two.webp",
 							"alt": "House sour cocktail in coupe glass"
 						}
 					}
@@ -2769,7 +2748,7 @@
 					"sort_order": 12,
 					"image": {
 						"$media": {
-							"file": "cocktail-two.png",
+							"file": "cocktail-two.webp",
 							"alt": "House sour cocktail in coupe glass"
 						}
 					}
@@ -2787,7 +2766,7 @@
 					"sort_order": 12,
 					"image": {
 						"$media": {
-							"file": "cocktail-two.png",
+							"file": "cocktail-two.webp",
 							"alt": "House sour cocktail in coupe glass"
 						}
 					}
@@ -2802,21 +2781,66 @@
 				"status": "published",
 				"data": {
 					"title": "Home",
-					"template": "Full Width",
 					"content": [
 						{
-							"_type": "block",
-							"_key": "home-stub",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
+							"_type": "bol.hero",
+							"_key": "home-hero-en",
+							"kicker": "Győr · Szabadsajtó utca 2",
+							"titleTop": "Esports, craft beer & cocktails",
+							"titleAccent": "in the heart of Győr",
+							"subtitle": "High-spec gaming rigs, Hungarian Vaskakas craft beer on tap and cocktails shaken by award-winning bartenders — one room, seven days a week.",
+							"ctaMenu": "View menu",
+							"ctaBook": "Book a table",
+							"scrollHint": "Scroll"
+						},
+						{
+							"_type": "bol.benefits",
+							"_key": "home-benefits-en",
+							"eyebrow": "Why Bar of Legends",
+							"title": "Three reasons to pull up a chair",
+							"items": [
 								{
-									"_type": "span",
-									"_key": "home-stub-span",
-									"text": "Home page blocks land in Part 4 — bol.hero, bol.benefits, bol.menu, bol.gallery, bol.contact.",
-									"marks": []
+									"icon": "beer",
+									"title": "Vaskakas on tap, legends at the bar",
+									"body": "Hungarian craft beer from Győr's own Vaskakas brewery, plus cocktails mixed by Hungary's Bartender of the Year. We take the drinks as seriously as the games."
+								},
+								{
+									"icon": "gamepad",
+									"title": "Gear that never lags",
+									"body": "High-spec gaming PCs, PS5 stations, a shelf of board games and a weekly pub quiz. Roll in solo or bring the whole squad — there's a seat for every playstyle."
+								},
+								{
+									"icon": "users",
+									"title": "A local haunt, not a tourist trap",
+									"body": "Students, regulars and travelling gamers have made this their second living room. Sit down alone and you won't stay alone for long."
 								}
 							]
+						},
+						{
+							"_type": "bol.menu",
+							"_key": "home-menu-en",
+							"eyebrow": "The menu",
+							"title": "The next-gen menu",
+							"subtitle": "Real prices, real pours — no PDF hunting. Pick your lane.",
+							"footnote": "Prices in HUF. Ask at the bar for today's taps and seasonal specials."
+						},
+						{
+							"_type": "bol.gallery",
+							"_key": "home-gallery-en",
+							"eyebrow": "Gallery",
+							"title": "Nights at the bar",
+							"subtitle": "Atmosphere check before you head over."
+						},
+						{
+							"_type": "bol.contact",
+							"_key": "home-contact-en",
+							"eyebrow": "Contact",
+							"title": "Find us & plan your night",
+							"subtitle": "Two minutes from Győr city centre — everything you need in one place.",
+							"showHours": true,
+							"showMap": true,
+							"showPhone": true,
+							"showSocials": true
 						}
 					]
 				}
@@ -2829,21 +2853,66 @@
 				"status": "published",
 				"data": {
 					"title": "Főoldal",
-					"template": "Full Width",
 					"content": [
 						{
-							"_type": "block",
-							"_key": "home-stub-hu",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
+							"_type": "bol.hero",
+							"_key": "home-hero-hu",
+							"kicker": "Győr · Szabadsajtó utca 2",
+							"titleTop": "Esport, kézműves sör és koktélok",
+							"titleAccent": "Győr szívében",
+							"subtitle": "Csúcskategoriás játékgépek, hazai Vaskakas kézműves sör csapon és az év bartendere mixtúrájában készülő koktélok — egy helyen, a hét hét napján.",
+							"ctaMenu": "Itallap megtekintése",
+							"ctaBook": "Asztalfoglalás",
+							"scrollHint": "Görgess"
+						},
+						{
+							"_type": "bol.benefits",
+							"_key": "home-benefits-hu",
+							"eyebrow": "Miért a Bar of Legends",
+							"title": "Három ok, amiért érdemes betérni",
+							"items": [
 								{
-									"_type": "span",
-									"_key": "home-stub-hu-span",
-									"text": "A főoldal blokkjai a 4. részben érkeznek — bol.hero, bol.benefits, bol.menu, bol.gallery, bol.contact.",
-									"marks": []
+									"icon": "beer",
+									"title": "Vaskakas a csapon, legendák a pultnál",
+									"body": "Hazai kézműves sörök a győri Vaskakas főzdéből, melléjük az év bartendere mixtúrájában koktélok. Az italokat ugyanolyan komolyan vesszük, mint a játékokat."
+								},
+								{
+									"icon": "gamepad",
+									"title": "Gép, ami sosem akad el",
+									"body": "Csúcskategoriás játékgépek, PS5-ös állomások, társasjáték-polc és heti pubkvíz. Jöjj egyedül vagy a teljes csapattal — minden játékstílushoz van hely."
+								},
+								{
+									"icon": "users",
+									"title": "Helyi törzshely, nem turistacsapda",
+									"body": "Hallgatók, törzsvendégek és vándorló gamerek tették második nappalijukká. Aki egyedül ül be, nem marad sokáig egyedül."
 								}
 							]
+						},
+						{
+							"_type": "bol.menu",
+							"_key": "home-menu-hu",
+							"eyebrow": "Itallap",
+							"title": "Következő generációs itallap",
+							"subtitle": "Valós árak, valódi csapok — PDF-keresés nélkül. Válassz kategóriát.",
+							"footnote": "Az árak forintban értendők. A napi csapokat és a szezonális különlegességeket a pultnál érdemes megkérdezni."
+						},
+						{
+							"_type": "bol.gallery",
+							"_key": "home-gallery-hu",
+							"eyebrow": "Galéria",
+							"title": "Esték a bárban",
+							"subtitle": "Hangulatellenőrzés, mielőtt elindulsz."
+						},
+						{
+							"_type": "bol.contact",
+							"_key": "home-contact-hu",
+							"eyebrow": "Kapcsolat",
+							"title": "Találj minket & tervezd meg az estédet",
+							"subtitle": "Két percre a győri belvárostól — minden info egy helyen.",
+							"showHours": true,
+							"showMap": true,
+							"showPhone": true,
+							"showSocials": true
 						}
 					]
 				}
@@ -2856,21 +2925,66 @@
 				"status": "published",
 				"data": {
 					"title": "Startseite",
-					"template": "Full Width",
 					"content": [
 						{
-							"_type": "block",
-							"_key": "home-stub-de",
-							"style": "normal",
-							"markDefs": [],
-							"children": [
+							"_type": "bol.hero",
+							"_key": "home-hero-de",
+							"kicker": "Győr · Szabadsajtó utca 2",
+							"titleTop": "Esport, Craftbier & Cocktails",
+							"titleAccent": "im Herzen von Győr",
+							"subtitle": "High-End-Gaming-PCs, ungarisches Vaskakas-Craftbier vom Fass und Cocktails vom Barkeeper des Jahres — alles unter einem Dach, sieben Tage die Woche.",
+							"ctaMenu": "Karte ansehen",
+							"ctaBook": "Tisch reservieren",
+							"scrollHint": "Scrollen"
+						},
+						{
+							"_type": "bol.benefits",
+							"_key": "home-benefits-de",
+							"eyebrow": "Warum die Bar of Legends",
+							"title": "Drei Gründe zum Vorbeikommen",
+							"items": [
 								{
-									"_type": "span",
-									"_key": "home-stub-de-span",
-									"text": "Startseiten-Blöcke kommen in Teil 4 — bol.hero, bol.benefits, bol.menu, bol.gallery, bol.contact.",
-									"marks": []
+									"icon": "beer",
+									"title": "Vaskakas vom Fass, Legenden am Tresen",
+									"body": "Ungarisches Craftbier aus der Győrer Brauerei Vaskakas, dazu Cocktails vom Barkeeper des Jahres. Wir nehmen Getränke genauso ernst wie Games."
+								},
+								{
+									"icon": "gamepad",
+									"title": "Hardware, die nie ruckelt",
+									"body": "High-End-Gaming-PCs, PS5-Stationen, ein Brettspielregal und ein wöchentliches Pub Quiz. Komm allein oder mit dem ganzen Squad — für jeden Spielstil gibt es einen Platz."
+								},
+								{
+									"icon": "users",
+									"title": "Stammlokal, keine Touristenfalle",
+									"body": "Studierende, Stammgäste und reisende Gamer haben hier ihr zweites Wohnzimmer. Wer allein kommt, sitzt nicht lange allein."
 								}
 							]
+						},
+						{
+							"_type": "bol.menu",
+							"_key": "home-menu-de",
+							"eyebrow": "Die Karte",
+							"title": "Die Next-Gen-Karte",
+							"subtitle": "Echte Preise, echte Fässer — keine PDF-Suche. Wähl deine Kategorie.",
+							"footnote": "Alle Preise in HUF. Tagesfässer und Saisonales gibt es an der Bar."
+						},
+						{
+							"_type": "bol.gallery",
+							"_key": "home-gallery-de",
+							"eyebrow": "Galerie",
+							"title": "Abende an der Bar",
+							"subtitle": "Stimmungscheck, bevor du kommst."
+						},
+						{
+							"_type": "bol.contact",
+							"_key": "home-contact-de",
+							"eyebrow": "Kontakt",
+							"title": "Finde uns & plan deinen Abend",
+							"subtitle": "Zwei Minuten von der Győrer Innenstadt — hier ist alles Wichtige.",
+							"showHours": true,
+							"showMap": true,
+							"showPhone": true,
+							"showSocials": true
 						}
 					]
 				}

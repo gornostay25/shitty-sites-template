@@ -61,7 +61,6 @@ export interface Page {
   slug: string | null;
   status: string;
   title: string;
-  template?: "Default" | "Full Width" | "Sidebar";
   content?: PortableTextBlock[];
   createdAt: Date;
   updatedAt: Date;

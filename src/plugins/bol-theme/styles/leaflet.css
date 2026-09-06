@@ -1,0 +1,105 @@
+.venue-map {
+	position: relative;
+	z-index: 0;
+	isolation: isolate;
+	overflow: hidden;
+}
+
+.venue-map .leaflet-pane,
+.venue-map .leaflet-top,
+.venue-map .leaflet-bottom {
+	z-index: 1 !important;
+}
+
+.venue-map .leaflet-popup {
+	z-index: 2 !important;
+}
+
+.venue-map .leaflet-container {
+	background: #0f0f12;
+	font-family: var(--font-body);
+}
+
+.venue-map .leaflet-container .leaflet-popup-content-wrapper,
+.venue-map .leaflet-container .leaflet-popup-tip {
+	background: var(--bol-surface-2);
+	color: #f2f0eb;
+	box-shadow: 0 10px 26px rgb(0 0 0 / 0.55);
+}
+
+.venue-map .leaflet-container .leaflet-popup-content-wrapper {
+	border: 1px solid rgb(255 255 255 / 0.1);
+	border-radius: 0.75rem;
+}
+
+.venue-map .leaflet-container .leaflet-popup-content {
+	margin: 12px 16px;
+	font-size: 13px;
+	line-height: 1.55;
+}
+
+.venue-map .leaflet-container .leaflet-popup-content strong {
+	color: var(--bol-accent);
+	font-weight: 700;
+}
+
+.venue-map .leaflet-container .leaflet-popup a.leaflet-popup-close-button {
+	color: #a5a099;
+}
+
+.venue-map .leaflet-container .leaflet-popup a.leaflet-popup-close-button:hover {
+	color: var(--bol-accent);
+}
+
+.venue-map .leaflet-container .leaflet-bar {
+	border: 1px solid rgb(255 255 255 / 0.12);
+	box-shadow: 0 6px 18px rgb(0 0 0 / 0.45);
+}
+
+.venue-map .leaflet-container .leaflet-bar a {
+	background: var(--bol-surface-2);
+	color: #f2f0eb;
+	border-bottom: 1px solid rgb(255 255 255 / 0.12);
+}
+
+.venue-map .leaflet-container .leaflet-bar a:hover {
+	background: #26262d;
+	color: var(--bol-accent);
+}
+
+.venue-map .leaflet-container .leaflet-control-attribution {
+	background: rgb(13 13 15 / 0.72);
+	color: #8a857c;
+	font-size: 10px;
+	padding: 1px 6px;
+}
+
+.venue-map .leaflet-container .leaflet-control-attribution a {
+	color: var(--bol-accent-muted);
+}
+
+.venue-pin-anchor {
+	background: none;
+	border: none;
+}
+
+.venue-pin {
+	position: relative;
+	display: block;
+	width: 30px;
+	height: 30px;
+	background: linear-gradient(160deg, #ffd27a, var(--bol-accent) 55%, #d9832b);
+	border-radius: 50% 50% 50% 0;
+	transform: rotate(-45deg);
+	box-shadow:
+		0 0 18px rgb(242 179 61 / 0.55),
+		0 6px 12px rgb(0 0 0 / 0.5);
+}
+
+.venue-pin::after {
+	content: "";
+	position: absolute;
+	inset: 9px;
+	border-radius: 999px;
+	background: #17120a;
+}

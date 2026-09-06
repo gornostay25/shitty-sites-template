@@ -1,0 +1,74 @@
+---
+import { getEmDashCollection } from "emdash";
+import { Image } from "emdash/ui";
+
+interface Props {
+	eyebrow?: string;
+	title?: string;
+	subtitle?: string;
+}
+
+const { eyebrow, title, subtitle } = Astro.props;
+const locale = Astro.currentLocale ?? "en";
+
+const { entries: items, cacheHint } = await getEmDashCollection("gallery_items", {
+	locale,
+	orderBy: { sort_order: "asc" },
+});
+
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+
+const SPAN_CLASSES: Record<string, string> = {
+	default: "",
+	"col-2": "col-span-2",
+	"row-2": "row-span-2",
+	"col-2-row-2": "col-span-2 row-span-2",
+};
+---
+
+<section aria-labelledby="gallery-title" class="border-y border-border bg-surface/30">
+	<div class="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 md:py-24">
+		{eyebrow && (
+			<p class="text-xs font-semibold uppercase tracking-[0.25em] text-brand">{eyebrow}</p>
+		)}
+		{
+			title && (
+				<h2 id="gallery-title" class="mt-3 font-display text-4xl tracking-wide sm:text-5xl">
+					{title}
+				</h2>
+			)
+		}
+		{
+			subtitle && (
+				<p class="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+					{subtitle}
+				</p>
+			)
+		}
+
+		<div
+			class="mt-10 grid auto-rows-[150px] grid-cols-2 gap-3 sm:auto-rows-[170px] md:grid-flow-dense md:grid-cols-4 md:gap-4"
+		>
+			{
+				items.map((item) => {
+					const span = item.data.grid_span ?? "default";
+					const spanClass = SPAN_CLASSES[span] ?? "";
+					return (
+						<figure
+							class:list={[
+								"group relative overflow-hidden rounded-card border border-border",
+								spanClass,
+							]}
+						>
+							<Image
+								image={item.data.image}
+								alt={item.data.alt}
+								class="absolute inset-0 size-full object-cover transition duration-500 group-hover:scale-105 group-hover:brightness-110"
+							/>
+						</figure>
+					);
+				})
+			}
+		</div>
+	</div>
+</section>

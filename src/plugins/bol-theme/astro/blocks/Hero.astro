@@ -1,0 +1,137 @@
+---
+import { Image } from "astro:assets";
+import heroFallback from "../../../../assets/hero.webp";
+import Icon from "../icons/Icon.astro";
+import { fetchPublicVenue } from "../../utils/fetch-venue.ts";
+
+interface Props {
+	kicker?: string;
+	titleTop?: string;
+	titleAccent?: string;
+	subtitle?: string;
+	ctaMenu?: string;
+	ctaBook?: string;
+	scrollHint?: string;
+	backgroundImageUrl?: string;
+}
+
+const {
+	kicker,
+	titleTop,
+	titleAccent,
+	subtitle,
+	ctaMenu,
+	ctaBook,
+	scrollHint,
+	backgroundImageUrl,
+} = Astro.props;
+
+const venue = await fetchPublicVenue(Astro.url.origin);
+---
+
+<section class="relative flex min-h-svh flex-col justify-end overflow-hidden bg-bg">
+	<div class="absolute inset-0" aria-hidden="true">
+		{
+			backgroundImageUrl ? (
+				<img
+					src={backgroundImageUrl}
+					alt=""
+					class="size-full object-cover motion-safe:animate-kenburns"
+				/>
+			) : (
+				<Image
+					src={heroFallback}
+					alt=""
+					widths={[640, 1024, 1536, 1920]}
+					sizes="100vw"
+					class="size-full object-cover motion-safe:animate-kenburns"
+				/>
+			)
+		}
+		<div class="absolute inset-0 bg-linear-to-b from-bg/70 via-bg/30 to-bg"></div>
+		<div class="absolute inset-0 bg-linear-to-r from-bg/60 via-transparent to-bg/20"></div>
+	</div>
+
+	<div class="relative mx-auto w-full max-w-6xl px-4 pb-24 pt-32 sm:px-6 md:pb-36">
+		{
+			kicker && (
+				<p class="inline-flex items-center gap-2 rounded-full border border-brand/30 bg-brand/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand backdrop-blur">
+					<Icon name="map-pin" class="size-3.5" />
+					{kicker}
+				</p>
+			)
+		}
+		<h1 class="mt-5 max-w-3xl font-display text-5xl leading-[1.03] sm:text-6xl md:text-7xl lg:text-8xl">
+			{titleTop && <span class="text-foreground">{titleTop}</span>}
+			{titleAccent && (
+				<>
+					{" "}
+					<span class="text-brand">{titleAccent}</span>
+				</>
+			)}
+		</h1>
+		{subtitle && (
+			<p class="mt-5 max-w-xl text-base leading-relaxed text-foreground/80 sm:text-lg">
+				{subtitle}
+			</p>
+		)}
+		<div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+			{
+				ctaMenu && (
+					<a
+						href="#menu"
+						class="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-brand px-7 text-base font-semibold text-[#1c1305] shadow-glow transition-colors hover:bg-brand/90"
+					>
+						{ctaMenu}
+						<svg
+							viewBox="0 0 24 24"
+							class="size-4"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							aria-hidden="true"
+						>
+							<path d="M12 5v14" />
+							<path d="m19 12-7 7-7-7" />
+						</svg>
+					</a>
+				)
+			}
+			{
+				ctaBook && (
+					<a
+						href={`tel:${venue.phoneTel}`}
+						class="inline-flex h-12 items-center justify-center rounded-md border border-brand/40 bg-brand/10 px-7 text-base font-semibold text-brand transition-colors hover:bg-brand/20"
+					>
+						{ctaBook}
+					</a>
+				)
+			}
+		</div>
+	</div>
+
+	{
+		scrollHint && (
+			<div
+				class="pointer-events-none absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-1 text-muted-foreground md:flex"
+				aria-hidden="true"
+			>
+				<span class="text-[11px] font-medium uppercase tracking-widest">{scrollHint}</span>
+				<svg
+					viewBox="0 0 24 24"
+					class="size-4 motion-safe:animate-bounce"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<path d="M12 5v14" />
+					<path d="m19 12-7 7-7-7" />
+				</svg>
+			</div>
+		)
+	}
+</section>

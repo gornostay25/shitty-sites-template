@@ -6,7 +6,7 @@ Design documents for in-progress or not-yet-archived work.
 
 | Spec | Status |
 |------|--------|
-| [2026-09-05-bol-theme-migration-design.md](./2026-09-05-bol-theme-migration-design.md) | Approved — plan at [../plans/2026-09-05-bol-theme-migration.md](../plans/2026-09-05-bol-theme-migration.md) |
+| [2026-09-05-bol-theme-migration-design.md](./2026-09-05-bol-theme-migration-design.md) | Approved — Parts 1–4 shipped; Part 5 (experiences + cleanup) remaining · [plan index](../plans/2026-09-05-bol-theme-migration.md) |
 
 ## Archived
 

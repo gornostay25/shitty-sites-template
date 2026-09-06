@@ -64,9 +64,9 @@ Apply to **every part** (full detail in spec):
 |------|------|-------|----------|
 | **1** | [01-foundation.md](./2026-09-05-bol-theme-migration-01-foundation.md) | 1–3 | i18n, tokens, Base shell |
 | **2** | [02-plugin-core.md](./2026-09-05-bol-theme-migration-02-plugin-core.md) | 4–8 | `bol-theme` scaffold, venue KV, JSON-LD, `/venue` admin, theme i18n ✅ |
-| **3** | [03-seed-chrome.md](./2026-09-05-bol-theme-migration-03-seed-chrome.md) | 9–12 | CMS seed, header/footer/mobile chrome (MobileNav: native popover, not React) |
-| **4** | [04-blocks.md](./2026-09-05-bol-theme-migration-04-blocks.md) | 13–17 | PT block types + renderers (hero → contact/map) |
-| **5** | [05-pages-ship.md](./2026-09-05-bol-theme-migration-05-pages-ship.md) | 18–21 | Home/experiences routes, demo cleanup, full QA |
+| **3** | [03-seed-chrome.md](./2026-09-05-bol-theme-migration-03-seed-chrome.md) | 9–12 | CMS seed, header/footer/mobile chrome ✅ |
+| **4** | [04-blocks.md](./2026-09-05-bol-theme-migration-04-blocks.md) | 13–17 | PT block types + renderers (hero → contact/map) ✅ |
+| **5** | [05-pages-ship.md](./2026-09-05-bol-theme-migration-05-pages-ship.md) | 18–21 | Experiences route, demo cleanup, full QA (home route wired in Part 4) |
 
 **Rule:** Finish and verify one part before opening the next. Mark checkboxes in the part file as you go.
 
@@ -81,9 +81,11 @@ Apply to **every part** (full detail in spec):
 | `src/styles/global.css` | 1 |
 | `src/layouts/Base.astro` | 1, 3 |
 | `src/plugins/bol-theme/**` | 2–5 |
-| `seed/seed.json`, `.emdash/uploads/` | 3 |
-| `src/pages/index.astro`, `experiences.astro` | 5 |
-| Delete `demo-blocks`, demo routes | 5 |
+| `seed/seed.json`, `.emdash/uploads/` (WebP), `scripts/generate-bol-seed.ts` | 3 |
+| `src/assets/hero.webp` | 4 |
+| `src/pages/index.astro` | 4 (home), 5 |
+| `src/pages/experiences.astro` | 5 |
+| Delete `demo-blocks`, demo routes, `PageDefault`/`PageFullWidth`/`PageSidebar` | 5 |
 
 ---
 
@@ -97,7 +99,8 @@ Apply to **every part** (full detail in spec):
 | Venue settings + JSON-LD | 2 ✅ |
 | Collections seed | 3 |
 | Theme chrome | 3 |
-| PT blocks | 4 |
+| PT blocks | 4 ✅ |
+| Home route (`index.astro`) | 4 ✅ |
 | Pages + cleanup | 5 |
 | Map z-index fix | 4 (Task 17) |
 | Manual checklist | 5 (Task 21) |

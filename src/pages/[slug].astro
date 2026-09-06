@@ -1,21 +1,14 @@
 ---
 /**
- * Route: /{slug} (e.g. /about, /feature-guide, /contact)
- * Features: page layout map, PortableText (+ auto plugin blocks), preview, visual editing
- * Admin: Content → Pages
- * Docs: https://docs.emdashcms.com/guides/querying-content/
- * Fork: delete unused templates and trim pages collection in seed
+ * Route: /{slug}
+ * CMS pages — single full-width layout, Portable Text (+ plugin blocks).
  */
 import { getEmDashEntry, getSiteSettings } from "emdash";
 import { PortableText } from "emdash/ui";
 import Base from "../layouts/Base.astro";
-import PageDefault from "../layouts/PageDefault.astro";
-import PageFullWidth from "../layouts/PageFullWidth.astro";
-import PageSidebar from "../layouts/PageSidebar.astro";
 import HtmlBlock from "../components/HtmlBlock.astro";
 import { resolveSiteIdentity } from "../utils/site-identity";
 import { buildContentSeo } from "../utils/seo";
-import type { PageTemplate } from "../types/content";
 
 const { slug } = Astro.params;
 if (!slug) return Astro.redirect("/404");
@@ -32,15 +25,6 @@ const seo = buildContentSeo({
 	path: `/${slug}`,
 	identity,
 });
-
-const layouts = {
-	Default: PageDefault,
-	"Full Width": PageFullWidth,
-	Sidebar: PageSidebar,
-} satisfies Record<PageTemplate, typeof PageDefault>;
-
-const template = page.data.template;
-const Layout = template ? layouts[template] : PageDefault;
 ---
 
 <Base
@@ -48,10 +32,12 @@ const Layout = template ? layouts[template] : PageDefault;
 	content={{ collection: "pages", id: page.data.id, slug: page.id }}
 >
 	{isPreview && (
-		<p role="status">Preview mode — unpublished changes may be visible.</p>
+		<p role="status" class="mx-auto max-w-6xl px-4 pt-4 text-sm text-brand">
+			Preview mode — unpublished changes may be visible.
+		</p>
 	)}
 
-	<Layout>
+	<article>
 		<h1 {...page.edit.title}>{page.data.title}</h1>
 		{
 			page.data.content && (
@@ -63,5 +49,5 @@ const Layout = template ? layouts[template] : PageDefault;
 				</div>
 			)
 		}
-	</Layout>
+	</article>
 </Base>

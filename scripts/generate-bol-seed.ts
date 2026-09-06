@@ -8,24 +8,24 @@ import { join } from "node:path";
 type Locale = "en" | "hu" | "de";
 
 const MENU_IMAGE: Record<string, string> = {
-	"vaskakas-ipa": "beer-pour.png",
-	"vaskakas-lager": "beer-two.png",
-	"bartenders-choice": "cocktail.png",
-	"legend-sour": "cocktail-two.png",
-	"aperol-spritz": "spritz.png",
-	"wine-by-the-glass": "wine.png",
-	"house-lemonade": "lemonade.png",
-	"cold-brew": "coffee.png",
-	"vaskakas-zero": "beer-two.png",
-	"ginger-fizz": "cocktail-two.png",
-	"energy-drinks": "softdrinks.png",
-	"sodas-juices": "cola.png",
-	"loaded-fries": "fries.png",
-	"buffalo-wings": "wings.png",
-	"bar-nachos": "platter.png",
-	"onion-rings": "fries.png",
-	"pretzel-dip": "pretzel.png",
-	"squad-platter": "platter.png",
+	"vaskakas-ipa": "beer-pour.webp",
+	"vaskakas-lager": "beer-two.webp",
+	"bartenders-choice": "cocktail.webp",
+	"legend-sour": "cocktail-two.webp",
+	"aperol-spritz": "spritz.webp",
+	"wine-by-the-glass": "wine.webp",
+	"house-lemonade": "lemonade.webp",
+	"cold-brew": "coffee.webp",
+	"vaskakas-zero": "beer-two.webp",
+	"ginger-fizz": "cocktail-two.webp",
+	"energy-drinks": "softdrinks.webp",
+	"sodas-juices": "cola.webp",
+	"loaded-fries": "fries.webp",
+	"buffalo-wings": "wings.webp",
+	"bar-nachos": "platter.webp",
+	"onion-rings": "fries.webp",
+	"pretzel-dip": "pretzel.webp",
+	"squad-platter": "platter.webp",
 };
 
 const MENU_ITEMS: Array<{
@@ -301,7 +301,7 @@ const EXPERIENCES: Array<{
 		category: "gaming",
 		cta_type: "tel",
 		sort_order: 1,
-		image: "pc-setup.png",
+		image: "pc-setup.webp",
 		title: {
 			en: "PC & PS5 Gaming Stations",
 			hu: "PC és PS5 játékállomások",
@@ -323,7 +323,7 @@ const EXPERIENCES: Array<{
 		category: "social",
 		cta_type: "ask",
 		sort_order: 2,
-		image: "boardgames.png",
+		image: "boardgames.webp",
 		title: {
 			en: "Board Game Library",
 			hu: "Társasjáték-kínálat",
@@ -345,7 +345,7 @@ const EXPERIENCES: Array<{
 		category: "events",
 		cta_type: "tel",
 		sort_order: 3,
-		image: "quiz.png",
+		image: "quiz.webp",
 		title: {
 			en: "Weekly Pub Quiz",
 			hu: "Heti pubkvíz",
@@ -367,7 +367,7 @@ const EXPERIENCES: Array<{
 		category: "social",
 		cta_type: "ask",
 		sort_order: 4,
-		image: "foosball.png",
+		image: "foosball.webp",
 		title: {
 			en: "Foosball & Darts",
 			hu: "Csocsó és darts",
@@ -389,7 +389,7 @@ const EXPERIENCES: Array<{
 		category: "events",
 		cta_type: "mailto",
 		sort_order: 5,
-		image: "party.png",
+		image: "party.webp",
 		title: {
 			en: "Private Events & Party Booking",
 			hu: "Privát rendezvények, bulik",
@@ -411,7 +411,7 @@ const EXPERIENCES: Array<{
 		category: "gaming",
 		cta_type: "tel",
 		sort_order: 6,
-		image: "tournament.png",
+		image: "tournament.webp",
 		title: {
 			en: "Console Tournaments & Watch Parties",
 			hu: "Konzoltornák és nézőestek",
@@ -439,7 +439,7 @@ const GALLERY: Array<{
 }> = [
 	{
 		id: "crowd",
-		file: "crowd.png",
+		file: "crowd.webp",
 		grid_span: "col-2-row-2",
 		sort_order: 1,
 		alt: {
@@ -450,7 +450,7 @@ const GALLERY: Array<{
 	},
 	{
 		id: "beer-pour",
-		file: "beer-pour.png",
+		file: "beer-pour.webp",
 		grid_span: "row-2",
 		sort_order: 2,
 		alt: {
@@ -461,7 +461,7 @@ const GALLERY: Array<{
 	},
 	{
 		id: "cocktail",
-		file: "cocktail.png",
+		file: "cocktail.webp",
 		grid_span: "default",
 		sort_order: 3,
 		alt: {
@@ -472,7 +472,7 @@ const GALLERY: Array<{
 	},
 	{
 		id: "quiz",
-		file: "quiz.png",
+		file: "quiz.webp",
 		grid_span: "default",
 		sort_order: 4,
 		alt: {
@@ -483,7 +483,7 @@ const GALLERY: Array<{
 	},
 	{
 		id: "pc-setup",
-		file: "pc-setup.png",
+		file: "pc-setup.webp",
 		grid_span: "col-2",
 		sort_order: 5,
 		alt: {
@@ -494,7 +494,7 @@ const GALLERY: Array<{
 	},
 	{
 		id: "ps5",
-		file: "ps5.png",
+		file: "ps5.webp",
 		grid_span: "default",
 		sort_order: 6,
 		alt: {
@@ -505,7 +505,7 @@ const GALLERY: Array<{
 	},
 	{
 		id: "foosball",
-		file: "foosball.png",
+		file: "foosball.webp",
 		grid_span: "default",
 		sort_order: 7,
 		alt: {
@@ -516,7 +516,7 @@ const GALLERY: Array<{
 	},
 	{
 		id: "party",
-		file: "party.png",
+		file: "party.webp",
 		grid_span: "col-2",
 		sort_order: 8,
 		alt: {
@@ -527,7 +527,7 @@ const GALLERY: Array<{
 	},
 	{
 		id: "boardgames",
-		file: "boardgames.png",
+		file: "boardgames.webp",
 		grid_span: "default",
 		sort_order: 9,
 		alt: {
@@ -538,7 +538,7 @@ const GALLERY: Array<{
 	},
 	{
 		id: "darts",
-		file: "darts.png",
+		file: "darts.webp",
 		grid_span: "default",
 		sort_order: 10,
 		alt: {
@@ -549,7 +549,7 @@ const GALLERY: Array<{
 	},
 	{
 		id: "tournament",
-		file: "tournament.png",
+		file: "tournament.webp",
 		grid_span: "col-2",
 		sort_order: 11,
 		alt: {
@@ -560,7 +560,7 @@ const GALLERY: Array<{
 	},
 	{
 		id: "cocktail-two",
-		file: "cocktail-two.png",
+		file: "cocktail-two.webp",
 		grid_span: "col-2",
 		sort_order: 12,
 		alt: {
@@ -612,6 +612,230 @@ const NAV_LABELS: Record<
 		contact: "Kontakt",
 	},
 };
+
+const HOME_COPY: Record<
+	Locale,
+	{
+		title: string;
+		hero: {
+			kicker: string;
+			titleTop: string;
+			titleAccent: string;
+			subtitle: string;
+			ctaMenu: string;
+			ctaBook: string;
+			scrollHint: string;
+		};
+		benefits: {
+			eyebrow: string;
+			title: string;
+			items: Array<{ icon: string; title: string; body: string }>;
+		};
+		menu: {
+			eyebrow: string;
+			title: string;
+			subtitle: string;
+			footnote: string;
+		};
+		gallery: { eyebrow: string; title: string; subtitle: string };
+		contact: {
+			eyebrow: string;
+			title: string;
+			subtitle: string;
+		};
+	}
+> = {
+	en: {
+		title: "Home",
+		hero: {
+			kicker: "Győr · Szabadsajtó utca 2",
+			titleTop: "Esports, craft beer & cocktails",
+			titleAccent: "in the heart of Győr",
+			subtitle:
+				"High-spec gaming rigs, Hungarian Vaskakas craft beer on tap and cocktails shaken by award-winning bartenders — one room, seven days a week.",
+			ctaMenu: "View menu",
+			ctaBook: "Book a table",
+			scrollHint: "Scroll",
+		},
+		benefits: {
+			eyebrow: "Why Bar of Legends",
+			title: "Three reasons to pull up a chair",
+			items: [
+				{
+					icon: "beer",
+					title: "Vaskakas on tap, legends at the bar",
+					body: "Hungarian craft beer from Győr's own Vaskakas brewery, plus cocktails mixed by Hungary's Bartender of the Year. We take the drinks as seriously as the games.",
+				},
+				{
+					icon: "gamepad",
+					title: "Gear that never lags",
+					body: "High-spec gaming PCs, PS5 stations, a shelf of board games and a weekly pub quiz. Roll in solo or bring the whole squad — there's a seat for every playstyle.",
+				},
+				{
+					icon: "users",
+					title: "A local haunt, not a tourist trap",
+					body: "Students, regulars and travelling gamers have made this their second living room. Sit down alone and you won't stay alone for long.",
+				},
+			],
+		},
+		menu: {
+			eyebrow: "The menu",
+			title: "The next-gen menu",
+			subtitle: "Real prices, real pours — no PDF hunting. Pick your lane.",
+			footnote:
+				"Prices in HUF. Ask at the bar for today's taps and seasonal specials.",
+		},
+		gallery: {
+			eyebrow: "Gallery",
+			title: "Nights at the bar",
+			subtitle: "Atmosphere check before you head over.",
+		},
+		contact: {
+			eyebrow: "Contact",
+			title: "Find us & plan your night",
+			subtitle:
+				"Two minutes from Győr city centre — everything you need in one place.",
+		},
+	},
+	hu: {
+		title: "Főoldal",
+		hero: {
+			kicker: "Győr · Szabadsajtó utca 2",
+			titleTop: "Esport, kézműves sör és koktélok",
+			titleAccent: "Győr szívében",
+			subtitle:
+				"Csúcskategoriás játékgépek, hazai Vaskakas kézműves sör csapon és az év bartendere mixtúrájában készülő koktélok — egy helyen, a hét hét napján.",
+			ctaMenu: "Itallap megtekintése",
+			ctaBook: "Asztalfoglalás",
+			scrollHint: "Görgess",
+		},
+		benefits: {
+			eyebrow: "Miért a Bar of Legends",
+			title: "Három ok, amiért érdemes betérni",
+			items: [
+				{
+					icon: "beer",
+					title: "Vaskakas a csapon, legendák a pultnál",
+					body: "Hazai kézműves sörök a győri Vaskakas főzdéből, melléjük az év bartendere mixtúrájában koktélok. Az italokat ugyanolyan komolyan vesszük, mint a játékokat.",
+				},
+				{
+					icon: "gamepad",
+					title: "Gép, ami sosem akad el",
+					body: "Csúcskategoriás játékgépek, PS5-ös állomások, társasjáték-polc és heti pubkvíz. Jöjj egyedül vagy a teljes csapattal — minden játékstílushoz van hely.",
+				},
+				{
+					icon: "users",
+					title: "Helyi törzshely, nem turistacsapda",
+					body: "Hallgatók, törzsvendégek és vándorló gamerek tették második nappalijukká. Aki egyedül ül be, nem marad sokáig egyedül.",
+				},
+			],
+		},
+		menu: {
+			eyebrow: "Itallap",
+			title: "Következő generációs itallap",
+			subtitle: "Valós árak, valódi csapok — PDF-keresés nélkül. Válassz kategóriát.",
+			footnote:
+				"Az árak forintban értendők. A napi csapokat és a szezonális különlegességeket a pultnál érdemes megkérdezni.",
+		},
+		gallery: {
+			eyebrow: "Galéria",
+			title: "Esték a bárban",
+			subtitle: "Hangulatellenőrzés, mielőtt elindulsz.",
+		},
+		contact: {
+			eyebrow: "Kapcsolat",
+			title: "Találj minket & tervezd meg az estédet",
+			subtitle: "Két percre a győri belvárostól — minden info egy helyen.",
+		},
+	},
+	de: {
+		title: "Startseite",
+		hero: {
+			kicker: "Győr · Szabadsajtó utca 2",
+			titleTop: "Esport, Craftbier & Cocktails",
+			titleAccent: "im Herzen von Győr",
+			subtitle:
+				"High-End-Gaming-PCs, ungarisches Vaskakas-Craftbier vom Fass und Cocktails vom Barkeeper des Jahres — alles unter einem Dach, sieben Tage die Woche.",
+			ctaMenu: "Karte ansehen",
+			ctaBook: "Tisch reservieren",
+			scrollHint: "Scrollen",
+		},
+		benefits: {
+			eyebrow: "Warum die Bar of Legends",
+			title: "Drei Gründe zum Vorbeikommen",
+			items: [
+				{
+					icon: "beer",
+					title: "Vaskakas vom Fass, Legenden am Tresen",
+					body: "Ungarisches Craftbier aus der Győrer Brauerei Vaskakas, dazu Cocktails vom Barkeeper des Jahres. Wir nehmen Getränke genauso ernst wie Games.",
+				},
+				{
+					icon: "gamepad",
+					title: "Hardware, die nie ruckelt",
+					body: "High-End-Gaming-PCs, PS5-Stationen, ein Brettspielregal und ein wöchentliches Pub Quiz. Komm allein oder mit dem ganzen Squad — für jeden Spielstil gibt es einen Platz.",
+				},
+				{
+					icon: "users",
+					title: "Stammlokal, keine Touristenfalle",
+					body: "Studierende, Stammgäste und reisende Gamer haben hier ihr zweites Wohnzimmer. Wer allein kommt, sitzt nicht lange allein.",
+				},
+			],
+		},
+		menu: {
+			eyebrow: "Die Karte",
+			title: "Die Next-Gen-Karte",
+			subtitle: "Echte Preise, echte Fässer — keine PDF-Suche. Wähl deine Kategorie.",
+			footnote: "Alle Preise in HUF. Tagesfässer und Saisonales gibt es an der Bar.",
+		},
+		gallery: {
+			eyebrow: "Galerie",
+			title: "Abende an der Bar",
+			subtitle: "Stimmungscheck, bevor du kommst.",
+		},
+		contact: {
+			eyebrow: "Kontakt",
+			title: "Finde uns & plan deinen Abend",
+			subtitle: "Zwei Minuten von der Győrer Innenstadt — hier ist alles Wichtige.",
+		},
+	},
+};
+
+function homePageContent(locale: Locale) {
+	const copy = HOME_COPY[locale];
+	return [
+		{
+			_type: "bol.hero",
+			_key: `home-hero-${locale}`,
+			...copy.hero,
+		},
+		{
+			_type: "bol.benefits",
+			_key: `home-benefits-${locale}`,
+			eyebrow: copy.benefits.eyebrow,
+			title: copy.benefits.title,
+			items: copy.benefits.items,
+		},
+		{
+			_type: "bol.menu",
+			_key: `home-menu-${locale}`,
+			...copy.menu,
+		},
+		{
+			_type: "bol.gallery",
+			_key: `home-gallery-${locale}`,
+			...copy.gallery,
+		},
+		{
+			_type: "bol.contact",
+			_key: `home-contact-${locale}`,
+			...copy.contact,
+			showHours: true,
+			showMap: true,
+			showPhone: true,
+			showSocials: true,
+		},
+	];
+}
 
 function media(file: string, alt: string) {
 	return {
@@ -717,7 +941,7 @@ const seed = {
 			label: "Pages",
 			labelSingular: "Page",
 			urlPattern: "/{slug}",
-			supports: ["drafts", "revisions", "search", "seo"],
+			supports: ["search", "seo"],
 			fields: [
 				{
 					slug: "title",
@@ -725,15 +949,6 @@ const seed = {
 					type: "string",
 					required: true,
 					searchable: true,
-				},
-				{
-					slug: "template",
-					label: "Page Template",
-					type: "select",
-					defaultValue: "Full Width",
-					validation: {
-						options: ["Default", "Full Width", "Sidebar"],
-					},
 				},
 				{
 					slug: "content",
@@ -747,7 +962,7 @@ const seed = {
 			slug: "menu_items",
 			label: "Menu Items",
 			labelSingular: "Menu Item",
-			supports: ["drafts", "revisions", "search"],
+			supports: ["search"],
 			fields: [
 				{
 					slug: "name",
@@ -788,7 +1003,7 @@ const seed = {
 			label: "Experiences",
 			labelSingular: "Experience",
 			urlPattern: "/experiences/{slug}",
-			supports: ["drafts", "revisions", "search", "seo"],
+			supports: ["search", "seo"],
 			fields: [
 				{
 					slug: "title",
@@ -835,7 +1050,7 @@ const seed = {
 			slug: "gallery_items",
 			label: "Gallery Items",
 			labelSingular: "Gallery Item",
-			supports: ["drafts", "revisions", "search"],
+			supports: ["search"],
 			fields: [
 				{
 					slug: "image",
@@ -926,7 +1141,7 @@ const seed = {
 				price: item.price,
 				sort_order: item.sort_order,
 				image: media(
-					MENU_IMAGE[item.id] ?? "beer-pour.png",
+					MENU_IMAGE[item.id] ?? "beer-pour.webp",
 					item.name.en,
 				),
 			}),
@@ -957,24 +1172,8 @@ const seed = {
 				locale: "en",
 				status: "published",
 				data: {
-					title: "Home",
-					template: "Full Width",
-					content: [
-						{
-							_type: "block",
-							_key: "home-stub",
-							style: "normal",
-							markDefs: [],
-							children: [
-								{
-									_type: "span",
-									_key: "home-stub-span",
-									text: "Home page blocks land in Part 4 — bol.hero, bol.benefits, bol.menu, bol.gallery, bol.contact.",
-									marks: [],
-								},
-							],
-						},
-					],
+					title: HOME_COPY.en.title,
+					content: homePageContent("en"),
 				},
 			},
 			{
@@ -984,24 +1183,8 @@ const seed = {
 				translationOf: "home",
 				status: "published",
 				data: {
-					title: "Főoldal",
-					template: "Full Width",
-					content: [
-						{
-							_type: "block",
-							_key: "home-stub-hu",
-							style: "normal",
-							markDefs: [],
-							children: [
-								{
-									_type: "span",
-									_key: "home-stub-hu-span",
-									text: "A főoldal blokkjai a 4. részben érkeznek — bol.hero, bol.benefits, bol.menu, bol.gallery, bol.contact.",
-									marks: [],
-								},
-							],
-						},
-					],
+					title: HOME_COPY.hu.title,
+					content: homePageContent("hu"),
 				},
 			},
 			{
@@ -1011,24 +1194,8 @@ const seed = {
 				translationOf: "home",
 				status: "published",
 				data: {
-					title: "Startseite",
-					template: "Full Width",
-					content: [
-						{
-							_type: "block",
-							_key: "home-stub-de",
-							style: "normal",
-							markDefs: [],
-							children: [
-								{
-									_type: "span",
-									_key: "home-stub-de-span",
-									text: "Startseiten-Blöcke kommen in Teil 4 — bol.hero, bol.benefits, bol.menu, bol.gallery, bol.contact.",
-									marks: [],
-								},
-							],
-						},
-					],
+					title: HOME_COPY.de.title,
+					content: homePageContent("de"),
 				},
 			},
 		],

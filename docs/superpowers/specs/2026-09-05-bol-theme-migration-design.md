@@ -1,8 +1,9 @@
 # Bar of Legends — Theme Migration Design Spec
 
-**Status:** Approved (2026-09-05) · amended during Part 2 (2026-09-05) and Part 3 (2026-09-06)  
+**Status:** Approved (2026-09-05) · amended during Parts 2–4 (2026-09-05 – 2026-09-06)  
 **Part 2 shipped (2026-09-05):** single React `/venue` admin (no `settingsSchema`); `mapsUrl` derived from coordinates; opening hours support closed days  
 **Part 3 shipped (2026-09-06):** theme chrome wired; `MobileNav` is Astro + native `<dialog popover>` (not React island); popover styles co-located in component  
+**Part 4 shipped (2026-09-06):** five PT blocks registered + rendered; home seed PT stack (en/hu/de); `index.astro` queries `pages/home`; Leaflet contact map with scoped z-index; hero fallback `src/assets/hero.webp`  
 **Date:** 2026-09-05  
 **EmDash version:** 0.36.0 (+ bun patch for `byline`)  
 **Reference:** `docs/design/v1/` (Next.js visual prototype — **reference only, do not copy code**)  
@@ -43,6 +44,10 @@ The Next.js prototype in `docs/design/v1/` establishes visual direction and info
 | Opening hours — closed days | Each Mon–Sun row may set **`closed: true`**; open/close times ignored; omitted from JSON-LD; status logic skips closed days |
 | `hub-feedback` | **Removed** — not part of BOL migration; drop plugin, deps, and `Base.astro` mount |
 | Mobile nav | **Native `<dialog popover>`** in `MobileNav.astro` — CSS transitions (`:popover-open`, `@starting-style`); minimal JS for ARIA + close-on-link; panel below sticky header (`inset: 4rem 0 0`); styles in component `<style is:global>`, not site `global.css` |
+| Collection features | **No drafts / revisions** — BOL collections use `search` (+ `seo` on `pages` and `experiences` only); edits publish directly |
+| Page layout | **No template field** — `pages` has `title` + `content` only; single full-width `<article>` in routes (no Default / Full Width / Sidebar select) |
+| Seed / CMS media | **WebP** in `.emdash/uploads/` (`img2webp -lossy -q 82`); `$media.file` references `.webp` filenames |
+| Hero background (static) | **`src/assets/hero.webp`** — imported in `bol.hero` block; optional block field `backgroundImageUrl` overrides |
 
 ---
 
@@ -81,8 +86,9 @@ src/plugins/bol-theme/          ← native plugin (new)
 
 seed/seed.json                  BOL collections, menus, home page demo content
 src/pages/
-  index.astro                     home → CMS page entry
-  experiences.astro               experiences catalog
+  index.astro                     home → CMS `pages/home` entry + PT (wired Part 4)
+  [slug].astro                    other CMS pages — single `<article>` layout
+  experiences.astro               experiences catalog (Part 5)
 src/layouts/Base.astro            shell; EmDashHead for metadata + JSON-LD
 ```
 
@@ -125,7 +131,7 @@ Theme reads **venue settings** from plugin KV for phone, email, address, social 
 
 | Block type | Block fields (marketing) | External data |
 |------------|--------------------------|---------------|
-| `bol.hero` | kicker, title lines, subtitle, CTA labels, background image | optional tel/mailto from venue settings |
+| `bol.hero` | kicker, title lines, subtitle, CTA labels, optional `backgroundImageUrl` | fallback `src/assets/hero.webp`; tel from venue settings |
 | `bol.benefits` | eyebrow, title, repeater: icon key, title, body (max 3) | — |
 | `bol.menu` | eyebrow, title, subtitle, footnote | queries `menu_items` + `menu_category` taxonomy |
 | `bol.gallery` | eyebrow, title, subtitle | queries `gallery_items` ordered by sort field |
@@ -243,13 +249,17 @@ src/plugins/bol-theme/
 │   ├── hours.ts
 │   ├── jsonld.ts
 │   ├── phone.ts
+│   ├── format.ts                # formatHUF, applyTemplate
 │   └── i18n/                    # theme UI copy (en/hu/de) — not used in admin
 │       ├── en.ts
 │       ├── hu.ts
 │       ├── de.ts
 │       └── index.ts
+├── styles/
+│   └── leaflet.css              # scoped map overrides + z-index caps
 └── astro/
     ├── index.ts                 # export blockComponents
+    ├── islands/                 # MenuTabs, OpenNowBadge, VenueMap, …
     ├── theme/
     │   ├── SiteHeader.astro
     │   ├── SiteFooter.astro
@@ -276,6 +286,15 @@ Interactive subcomponents (small React islands, **no shadcn**):
 ## Seed schema (collections)
 
 Replace ShittySites demo collections used on the public site. Remove or hide `posts`, `showcase` if unused.
+
+### Collection features (`supports`)
+
+| Collection | Supports | Notes |
+|------------|----------|-------|
+| `pages` | `search`, `seo` | No drafts, revisions, or template field |
+| `menu_items` | `search` | |
+| `experiences` | `search`, `seo` | |
+| `gallery_items` | `search` | |
 
 ### `menu_items`
 
@@ -313,9 +332,14 @@ Taxonomy **`experience_category`**: `gaming`, `social`, `events`.
 
 ### `pages`
 
-Keep existing `pages` collection. Home entry slug `home` (or dedicated route wiring) with `content` portable text composed of `bol.*` blocks.
+| Field | Type | Notes |
+|-------|------|-------|
+| `title` | string | |
+| `content` | portableText | Home composed of `bol.*` blocks |
 
-Remove template field requirement for home if unused, or use **Full Width** template.
+**Supports:** `search`, `seo` — no `drafts`, `revisions`, or `template` select.
+
+Home entry slug `home` (en/hu/de translations). Route wiring: `src/pages/index.astro` queries `getEmDashEntry("pages", "home", { locale })`. Other pages use `src/pages/[slug].astro` with a single inline `<article>` — no layout map (`PageDefault` / `PageFullWidth` / `PageSidebar` removed).
 
 ### Menus
 
@@ -333,27 +357,31 @@ Per [Creating Themes — Including Media](https://docs.emdashcms.com/themes/crea
 
 ```plaintext
 .emdash/
-  uploads/          ← binary files referenced by seed (menu, gallery, hero, experiences)
+  uploads/          ← WebP files referenced by seed (menu, gallery, experiences)
+src/assets/         ← theme-static assets (e.g. hero.webp for bol.hero fallback)
 seed/seed.json      ← $media references by filename (this repo’s seed path)
 ```
 
 **Workflow:**
 
-1. Copy needed images from `docs/design/v1/public/placeholders/` into `.emdash/uploads/` (keep descriptive filenames, e.g. `beer-pour.png`, `hero.png`).
-2. Reference in `seed/seed.json` with `$media.file`, not `url`:
+1. Copy needed images from `docs/design/v1/public/placeholders/` into `.emdash/uploads/`.
+2. Convert to WebP (lossy, ~q82): `img2webp -lossy -q 82 -m 4 input.png -o output.webp` — then remove source PNGs from `uploads/`.
+3. Reference in `seed/seed.json` (via `scripts/generate-bol-seed.ts`) with `$media.file`, not `url`:
 
 ```json
 {
   "image": {
     "$media": {
-      "file": "beer-pour.png",
+      "file": "beer-pour.webp",
       "alt": "Craft beer poured fresh from the tap"
     }
   }
 }
 ```
 
-3. On first seed apply, EmDash reads `.emdash/uploads/` and uploads files to R2 — editors then manage them in the Media Library.
+4. On seed apply, EmDash reads `.emdash/uploads/` and uploads files to R2 — editors then manage them in the Media Library.
+
+**Hero block background** is not seed media — use `src/assets/hero.webp` (Astro-optimized import) unless the block’s optional `backgroundImageUrl` field is set.
 
 **Do not:**
 
@@ -485,4 +513,4 @@ After implementation, verify at **375px** and **1440px** in **en**, **hu**, **de
 
 ## Next step
 
-After this spec is approved, invoke the **writing-plans** skill to produce a phased implementation plan (`docs/superpowers/plans/2026-09-05-bol-theme-migration.md`).
+Part 5 — [experiences route + demo cleanup](../plans/2026-09-05-bol-theme-migration-05-pages-ship.md). Full manual QA: checklist above + Part 5 Task 21.

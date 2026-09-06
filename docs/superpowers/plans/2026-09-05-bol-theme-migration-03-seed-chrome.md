@@ -4,7 +4,9 @@
 
 **Prerequisites:** Part 2 complete (`bol-theme` registered, venue settings, `getUiStrings()`).
 
-**Delivers:** BOL collections in seed, header/footer/mobile bar wired into Base — site has navigable chrome but home PT blocks not yet rendered (Part 4). Theme partials use `getUiStrings(Astro.currentLocale)` for en/hu/de labels; plugin admin stays English-only. Mobile nav uses native `<dialog popover>` (see Task 11).
+**Delivers:** BOL collections in seed, header/footer/mobile bar wired into Base. Theme partials use `getUiStrings(Astro.currentLocale)` for en/hu/de labels; plugin admin stays English-only. Mobile nav uses native `<dialog popover>` (see Task 11).
+
+**Status:** Shipped (2026-09-06). Seed schema later amended: no `drafts`/`revisions`, WebP uploads, no page `template` field — see spec.
 
 **Next:** [Part 4 — Blocks](./2026-09-05-bol-theme-migration-04-blocks.md)
 
@@ -29,8 +31,8 @@ Verify against live docs ([Docs MCP](https://docs.emdashcms.com/docs-mcp/) · [l
 | Path | Responsibility |
 |------|----------------|
 | `seed/seed.json` | BOL collections, taxonomies, menus, demo content |
-| `scripts/generate-bol-seed.ts` | Seed generator (optional regen) |
-| `.emdash/uploads/` | Local seed media (`$media.file`) |
+| `scripts/generate-bol-seed.ts` | Seed generator (regen after schema/copy changes) |
+| `.emdash/uploads/` | Local seed media (`$media.file`, WebP) |
 | `src/plugins/bol-theme/astro/theme/*.astro` | Header, footer, mobile nav, mobile bar |
 | `src/plugins/bol-theme/astro/icons/` | Icon.astro + icons.tsx |
 | `src/plugins/bol-theme/utils/nav.ts` | Primary nav builder |
@@ -47,11 +49,12 @@ Verify against live docs ([Docs MCP](https://docs.emdashcms.com/docs-mcp/) · [l
 - [x] **Step 1: Define collection schemas** per spec field tables (`menu_items`, `experiences`, `gallery_items`; taxonomies `menu_category`, `experience_category`)
 
 - [x] **Step 2: Add taxonomy terms**
-- [x] **Step 3: Stage seed media**
+- [x] **Step 3: Stage seed media** — WebP in `.emdash/uploads/` (`img2webp -lossy -q 82`); `$media.file` uses `.webp` names
 - [x] **Step 4: Migrate demo data**
-- [x] **Step 5: Create `pages` home entry**
+- [x] **Step 5: Create `pages` home entry** — PT stack filled in Part 4
 - [x] **Step 6: Create `primary` menu**
-- [ ] **Step 7: Apply seed** — reset local D1 if needed; reload admin. Confirm collections + Media Library entries.
+- [x] **Step 7: Collection features** — removed `drafts` / `revisions`; `pages` has no `template` field
+- [ ] **Step 8: Apply seed** — `bunx emdash seed`; confirm collections + Media Library entries
 
 ---
 
@@ -98,8 +101,10 @@ Verify against live docs ([Docs MCP](https://docs.emdashcms.com/docs-mcp/) · [l
 
 ## Part 3 completion gate
 
-- [ ] Seed applied: menu_items, experiences, gallery_items, home page stub, menus
+- [x] Seed schema: menu_items, experiences, gallery_items, pages (no template), menus
+- [x] Seed media: WebP uploads; generator in `scripts/generate-bol-seed.ts`
 - [x] Header sticky `z-50`, lang switcher works
 - [x] Mobile nav: native popover, symmetric CSS open/close, header/logo stable
 - [x] Footer shows venue contact, **no hours**
 - [x] Ready for Part 4 PT blocks
+- [ ] Seed applied on target DB + manual chrome QA at 375px / 1440px

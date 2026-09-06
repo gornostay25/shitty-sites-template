@@ -1,0 +1,66 @@
+---
+import Icon from "../icons/Icon.astro";
+
+type BenefitIcon = "beer" | "gamepad" | "users";
+
+interface BenefitItem {
+	icon?: BenefitIcon;
+	title?: string;
+	body?: string;
+}
+
+interface Props {
+	eyebrow?: string;
+	title?: string;
+	items?: BenefitItem[];
+}
+
+const { eyebrow, title, items = [] } = Astro.props;
+
+const iconNames: Record<BenefitIcon, "beer" | "gamepad2" | "users"> = {
+	beer: "beer",
+	gamepad: "gamepad2",
+	users: "users",
+};
+---
+
+<section
+	aria-labelledby="benefits-title"
+	class="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 md:py-24"
+>
+	{eyebrow && (
+		<p class="text-xs font-semibold uppercase tracking-[0.25em] text-brand">{eyebrow}</p>
+	)}
+	{
+		title && (
+			<h2 id="benefits-title" class="mt-3 font-display text-4xl tracking-wide sm:text-5xl">
+				{title}
+			</h2>
+		)
+	}
+
+	<div class="mt-10 grid gap-4 md:grid-cols-3 md:gap-6">
+		{
+			items.map((item) => {
+				const icon = item.icon ? iconNames[item.icon] : undefined;
+				return (
+					<article class="group rounded-card border border-border bg-surface p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand/40 hover:shadow-glow">
+						{
+							icon && (
+								<span class="grid size-12 place-items-center rounded-xl border border-brand/20 bg-brand/10 text-brand">
+									<Icon name={icon} class="size-6" />
+								</span>
+							)
+						}
+						{item.title && (
+							<h3 class="mt-5 font-display text-2xl tracking-wide">{item.title}</h3>
+						)}
+						{item.body && (
+							<p class="mt-3 text-sm leading-relaxed text-muted-foreground">{item.body}</p>
+						)}
+					</article>
+				);
+			})
+		}
+	</div>
+</section>

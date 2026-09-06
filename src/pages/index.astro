@@ -1,65 +1,49 @@
 ---
 /**
  * Route: /
- * Features: recent posts, feature-guide link, programmatic section render
- * Admin: Settings → General (site identity)
- * Docs: https://docs.emdashcms.com/guides/querying-content/
- * Fork: replace home layout when client needs custom homepage
+ * Home page — CMS page entry with bol.* Portable Text blocks.
  */
-import { getEmDashCollection, getSection, getSiteSettings } from "emdash";
+import { getEmDashEntry, getSiteSettings } from "emdash";
 import { PortableText } from "emdash/ui";
 import Base from "../layouts/Base.astro";
 import { resolveSiteIdentity } from "../utils/site-identity";
-import { buildStaticPageSeo } from "../utils/seo";
+import { buildContentSeo } from "../utils/seo";
+
+const locale = Astro.currentLocale ?? "en";
+const { entry: page, isPreview, cacheHint } = await getEmDashEntry("pages", "home", {
+	locale,
+});
+
+if (!page) {
+	return Astro.redirect("/404");
+}
+
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 
 const settings = await getSiteSettings();
 const identity = resolveSiteIdentity(settings);
-const seo = buildStaticPageSeo({ path: "/", identity });
-
-const [{ entries: posts, cacheHint: postsCache }, newsletterSection] =
-	await Promise.all([
-		getEmDashCollection("posts", {
-			limit: identity.postsPerPage,
-			orderBy: { published_at: "desc" },
-		}),
-		getSection("newsletter-cta"),
-	]);
-
-if (Astro.cache?.enabled) Astro.cache.set(postsCache);
+const seo = buildContentSeo({
+	entry: page,
+	path: "/",
+	identity,
+});
 ---
 
-<Base {...seo}>
-	<article>
-		<h1>{identity.siteTitle}</h1>
-		<p>{identity.siteTagline}</p>
-		<p><a href="/feature-guide">Feature guide</a> — full EmDash capability index.</p>
+<Base
+	{...seo}
+	content={{ collection: "pages", id: page.data.id, slug: page.id }}
+>
+	{isPreview && (
+		<p role="status" class="mx-auto max-w-6xl px-4 pt-4 text-sm text-brand">
+			Preview mode — unpublished changes may be visible.
+		</p>
+	)}
 
-		<section>
-			<h2>Recent posts</h2>
-			{
-				posts.length === 0 ? (
-					<p>No posts yet.</p>
-				) : (
-					<ul>
-						{posts.map((post) => (
-							<li>
-								<a href={`/posts/${post.id}`}>{post.data.title}</a>
-								{post.data.excerpt && <p>{post.data.excerpt}</p>}
-							</li>
-						))}
-					</ul>
-				)
-			}
-			<p><a href="/posts">All posts</a></p>
-		</section>
-
-		{
-			newsletterSection && (
-				<section>
-					<h2>{newsletterSection.title}</h2>
-					<PortableText value={newsletterSection.content} />
-				</section>
-			)
-		}
-	</article>
+	{
+		page.data.content && (
+			<div {...page.edit.content}>
+				<PortableText value={page.data.content} />
+			</div>
+		)
+	}
 </Base>
