@@ -1,13 +1,26 @@
 # Bar of Legends — Theme Migration Design Spec
 
-**Status:** Approved (2026-09-05) · amended during Parts 2–4 (2026-09-05 – 2026-09-06)  
+**Status:** Approved (2026-09-05) · amended during Parts 2–5 (2026-09-05 – 2026-09-07)  
 **Part 2 shipped (2026-09-05):** single React `/venue` admin (no `settingsSchema`); `mapsUrl` derived from coordinates; opening hours support closed days  
 **Part 3 shipped (2026-09-06):** theme chrome wired; `MobileNav` is Astro + native `<dialog popover>` (not React island); popover styles co-located in component  
 **Part 4 shipped (2026-09-06):** five PT blocks registered + rendered; home seed PT stack (en/hu/de); `index.astro` queries `pages/home`; Leaflet contact map with scoped z-index; hero fallback `src/assets/hero.webp`  
+**Part 5 shipped (2026-09-07):** `/experiences` + locale routes; demo-blocks and ShittySites demo routes removed; `ExperienceFilter` page-level island  
+**PT fix shipped (2026-09-07):** blocks read `Astro.props.node` via `getPtNode()`; PT interactivity is CSS/vanilla scripts (no React in blocks) — [fix spec](../archive/2026-09-07/specs/2026-09-07-bol-pt-blocks-islands-fix-design.md)  
+**Menu tab layout fix (2026-09-07):** `radiogroup` pattern + CMS-driven tabs — see [PT fix spec — post-ship follow-up](../archive/2026-09-07/specs/2026-09-07-bol-pt-blocks-islands-fix-design.md#post-ship-follow-up-2026-09-07)  
+**Final refactor shipped (2026-09-07):** CMS-first taxonomies, social dedupe, `loadExperiencesPageData()` — [refactor spec](../archive/2026-09-07/specs/2026-09-07-bol-final-refactor-design.md)  
+**Lucide icons shipped (2026-09-07):** `@lucide/astro` via `Icon.astro` wrapper — [icons spec](../archive/2026-09-07/specs/2026-09-07-bol-lucide-icons-design.md)  
 **Date:** 2026-09-05  
 **EmDash version:** 0.36.0 (+ bun patch for `byline`)  
 **Reference:** `docs/design/v1/` (Next.js visual prototype — **reference only, do not copy code**)  
 **Scope:** Migrate Bar of Legends from the design prototype to a production EmDash + Astro site with a native theme plugin, CMS collections, block-builder landing, and JSON-LD SEO
+
+### Amendment log
+
+| Date       | Note |
+| ---------- | ---- |
+| 2026-09-07 | **Superseded (partial):** PT block `node` props, no React islands in PT blocks. See [`../archive/2026-09-07/specs/2026-09-07-bol-pt-blocks-islands-fix-design.md`](../archive/2026-09-07/specs/2026-09-07-bol-pt-blocks-islands-fix-design.md). |
+| 2026-09-07 | **Superseded (partial):** CMS-first taxonomies, shared utils, no unsafe slug casts. See [`../archive/2026-09-07/specs/2026-09-07-bol-final-refactor-design.md`](../archive/2026-09-07/specs/2026-09-07-bol-final-refactor-design.md). |
+| 2026-09-07 | **Icons:** bol-theme uses `@lucide/astro`. See [`../archive/2026-09-07/specs/2026-09-07-bol-lucide-icons-design.md`](../archive/2026-09-07/specs/2026-09-07-bol-lucide-icons-design.md). |
 
 ---
 
@@ -48,6 +61,9 @@ The Next.js prototype in `docs/design/v1/` establishes visual direction and info
 | Page layout | **No template field** — `pages` has `title` + `content` only; single full-width `<article>` in routes (no Default / Full Width / Sidebar select) |
 | Seed / CMS media | **WebP** in `.emdash/uploads/` (`img2webp -lossy -q 82`); `$media.file` references `.webp` filenames |
 | Hero background (static) | **`src/assets/hero.webp`** — imported in `bol.hero` block; optional block field `backgroundImageUrl` overrides |
+| PT block props | Read CMS fields from **`Astro.props.node`** via `getPtNode()` — not flat `Astro.props` ([EmDash Embed pattern](https://docs.emdashcms.com/plugins/creating-native-plugins/portable-text-components/)) |
+| React islands in PT blocks | **Forbidden** — Astro ignores `client:*` inside Portable Text `components` map; use CSS or co-located `<script>` in block `.astro` files |
+| Page-level React islands | **`ExperienceFilter` only** — `client:load` on `experiences.astro` / `hu/` / `de/` page files, passed into `ExperiencesRoute` via slot |
 
 ---
 
@@ -86,9 +102,11 @@ src/plugins/bol-theme/          ← native plugin (new)
 
 seed/seed.json                  BOL collections, menus, home page demo content
 src/pages/
-  index.astro                     home → CMS `pages/home` entry + PT (wired Part 4)
-  [slug].astro                    other CMS pages — single `<article>` layout
+  index.astro                     home EN → CMS `pages/home` + PortableText (inlined)
+  hu/index.astro, de/index.astro  locale home routes
+  [slug].astro                    other CMS pages — single `<article>`; redirects `/hu` → `/hu/` (locale slug guard)
   experiences.astro               experiences catalog (Part 5)
+  hu/experiences.astro, de/experiences.astro
 src/layouts/Base.astro            shell; EmDashHead for metadata + JSON-LD
 ```
 
@@ -250,16 +268,25 @@ src/plugins/bol-theme/
 │   ├── jsonld.ts
 │   ├── phone.ts
 │   ├── format.ts                # formatHUF, applyTemplate
+│   ├── pt-node.ts               # getPtNode<T>() for PT block props
 │   └── i18n/                    # theme UI copy (en/hu/de) — not used in admin
 │       ├── en.ts
 │       ├── hu.ts
 │       ├── de.ts
 │       └── index.ts
+├── types/
+│   └── pt-blocks.ts             # BolHeroNode, BolMenuNode, …
 ├── styles/
 │   └── leaflet.css              # scoped map overrides + z-index caps
 └── astro/
     ├── index.ts                 # export blockComponents
-    ├── islands/                 # MenuTabs, OpenNowBadge, VenueMap, …
+    ├── islands/
+    │   └── ExperienceFilter.tsx # page-level only — NOT inside PT blocks
+    ├── routes/
+    │   ├── ExperiencesRoute.astro
+    │   └── experiences-filter-props.ts
+    ├── components/
+    │   └── ExperienceCard.astro
     ├── theme/
     │   ├── SiteHeader.astro
     │   ├── SiteFooter.astro
@@ -269,17 +296,19 @@ src/plugins/bol-theme/
     └── blocks/
         ├── Hero.astro
         ├── Benefits.astro
-        ├── Menu.astro
+        ├── Menu.astro           # CSS :has() radio tabs + minimal aria sync script
         ├── Gallery.astro
-        └── Contact.astro
+        ├── Contact.astro        # open-now + Leaflet via co-located scripts
+        └── contact-open-now.ts  # client init for open/closed badge
 ```
 
-Interactive subcomponents (small React islands, **no shadcn**):
+**Interactivity (production):**
 
-- `MenuTabs.tsx` — tab state, plain buttons + Tailwind
-- `OpenNowBadge.tsx` — client local time via `hours.ts` logic
-- `VenueMap.tsx` — Leaflet, dynamic import, SSR-safe
-- `ExperienceFilter.tsx` — filter chips on `/experiences`
+- **`Menu.astro`** — CSS radio tabs (`:has()`); tiny script syncs `aria-selected` / `hidden`
+- **`Contact.astro`** — `contact-open-now.ts` + dynamic Leaflet import in `<script>`; no React
+- **`ExperienceFilter.tsx`** — React island on `/experiences` page files only (`client:load` + slot)
+
+**Removed after PT fix (2026-09-07):** `MenuTabs.tsx`, `OpenNowBadge.tsx`, `VenueMap.tsx`, `HomeRoute.astro`
 
 ---
 
@@ -398,9 +427,10 @@ seed/seed.json      ← $media references by filename (this repo’s seed path)
 | URL | Source |
 |-----|--------|
 | `/` | Home page CMS entry; default locale unprefixed |
-| `/hu/`, `/de/` | Same home via Astro i18n ([i18n guide](https://docs.emdashcms.com/guides/internationalization/)) |
+| `/hu/`, `/de/` | Locale home via `hu/index.astro`, `de/index.astro` |
+| `/hu`, `/de` (no trailing slash) | `[slug].astro` redirects to `/hu/`, `/de/` — avoids treating locale codes as CMS slugs |
 | `/experiences` | Dedicated Astro page querying `experiences` collection |
-| `/hu/experiences`, etc. | Locale-prefixed variants |
+| `/hu/experiences`, `/de/experiences` | Locale-prefixed variants |
 
 **Do not** enable `prefixDefaultLocale` — breaks `/_emdash/admin`.
 
@@ -437,14 +467,14 @@ Public UI uses semantic HTML + Tailwind utilities. No `components/ui/*`, no Radi
 | `globals.css` | BOL tokens in `global.css` / plugin CSS — re-authored |
 | `Hero.tsx` | `bol.hero` Astro block |
 | `Benefits.tsx` | `bol.benefits` Astro block |
-| `MenuTabs.tsx` | `MenuTabs.tsx` island inside `bol.menu` — rewritten |
+| `MenuTabs.tsx` | `Menu.astro` — CSS radio tabs; radios outside `tablist`, labels in `inline-flex` pill row |
 | `GalleryBento.tsx` | `bol.gallery` — rewritten grid with explicit mobile spans |
-| `ContactSection.tsx` | `bol.contact` — rewritten; hours from venue settings |
+| `ContactSection.tsx` | `bol.contact` — hours/map/open-now via vanilla scripts |
 | `Footer.tsx` | `SiteFooter.astro` — no hours section |
 | `Header.tsx` / `MobileNav.tsx` | `SiteHeader.astro` + `MobileNav.astro` (native popover) — rewritten |
 | `MobileActionBar.tsx` | Theme partial — rewritten |
-| `ExperienceGrid.tsx` / `ExperienceCard.tsx` | `/experiences` page — rewritten |
-| `VenueMap.tsx` | Leaflet island — rewritten; CSS scoped under `.leaflet-container` |
+| `ExperienceGrid.tsx` / `ExperienceCard.tsx` | `/experiences` page — `ExperiencesRoute` + `ExperienceCard.astro` |
+| `VenueMap.tsx` | Leaflet init in `Contact.astro` `<script>`; CSS scoped under `.leaflet-container` |
 | `data/menu.ts` etc. | seed content + collections |
 | `data/hours.ts` | `utils/hours.ts` in plugin — port logic, not UI |
 | `data/i18n/*.ts` | `utils/i18n/` theme dictionaries + translatable CMS fields; venue `address` from settings |
@@ -457,7 +487,7 @@ Public UI uses semantic HTML + Tailwind utilities. No `components/ui/*`, no Radi
 These were identified in review; the rewrite must not regress them:
 
 1. **Gallery bento** — prototype `col-span-2 row-span-2` classes may break on 2-column mobile grid; define explicit mobile vs `md:` spans.
-2. **Menu tabs** — long HU/DE labels on narrow screens; allow horizontal scroll or smaller type.
+2. **Menu tabs** — long HU/DE labels on narrow screens; allow horizontal scroll or smaller type. **Fixed (2026-09-07):** radios outside flex tablist so active pill aligns correctly inside `p-1` track.
 3. **Main content padding** — bottom padding must clear fixed mobile action bar + safe area.
 4. **Mobile nav** — panel is a **sibling** of `<header>`, not a child; positioned below the sticky bar (`inset: 4rem 0 0`) so `backdrop-blur` does not trap the overlay and the logo does not resize on open. Native `<dialog popover>` for open/close animations (CSS-first, not React state).
 5. **Leaflet** — load client-only; scope overrides for dark popup/controls.
@@ -497,7 +527,7 @@ After implementation, verify at **375px** and **1440px** in **en**, **hu**, **de
 - [ ] No horizontal scroll on home and experiences
 - [ ] Mobile action bar clears footer content; safe-area respected
 - [ ] Mobile menu opens/closes with symmetric CSS transition; header/logo stable; scroll locked while open
-- [ ] Menu tabs switch categories; prices format as HUF
+- [x] Menu tabs switch categories; prices format as HUF (375px verified 2026-09-07; hu/de labels pending full pass)
 - [ ] Gallery bento grid balanced on mobile and desktop
 - [ ] Contact block: hours table, open/closed badge, map pin, tel/mailto work
 - [ ] Scroll page with map visible — sticky header stays **above** map tiles and Leaflet controls (no z-index bleed)
@@ -513,4 +543,10 @@ After implementation, verify at **375px** and **1440px** in **en**, **hu**, **de
 
 ## Next step
 
-Part 5 — [experiences route + demo cleanup](../plans/2026-09-05-bol-theme-migration-05-pages-ship.md). Full manual QA: checklist above + Part 5 Task 21.
+Migration **shipped** (2026-09-07). Post-ship fixes (archived):
+
+- [PT blocks + islands fix](../archive/2026-09-07/specs/2026-09-07-bol-pt-blocks-islands-fix-design.md) — shipped 2026-09-07
+- [Final refactor](../archive/2026-09-07/specs/2026-09-07-bol-final-refactor-design.md) — shipped 2026-09-07: CMS-first taxonomies, social dedupe, `loadExperiencesPageData()` loader, no unsafe category casts
+- [Lucide icons](../archive/2026-09-07/specs/2026-09-07-bol-lucide-icons-design.md) — shipped 2026-09-07: `@lucide/astro` wrapper in bol-theme
+
+Remaining: full manual QA checklist above (375px + 1440px, en/hu/de).

@@ -4,9 +4,11 @@
 
 **Prerequisites:** Part 4 complete (all PT blocks render on home).
 
-**Delivers:** `/experiences` route, demo template removed, full manual QA pass. Home route (`/`, `/hu/`, `/de/`) already wired in Part 4.
+**Delivers:** `/experiences` route, demo template removed, full manual QA pass. Home route (`/`, `/hu/`, `/de/`) wired in Part 4; inlined in PT fix (2026-09-07).
 
-**Next:** None — migration complete after Task 21.
+**Status:** Shipped (2026-09-07). PT block props + island hydration fixed in [PT fix plan](../archive/2026-09-07/plans/2026-09-07-bol-pt-blocks-islands-fix.md).
+
+**Next:** Manual QA checklist in main spec (375px + 1440px, en/hu/de).
 
 ---
 
@@ -29,22 +31,25 @@ Verify against live docs ([Docs MCP](https://docs.emdashcms.com/docs-mcp/) · [l
 
 | Path | Responsibility |
 |------|----------------|
-| `src/pages/index.astro` | Home — done Part 4 ✅ |
-| `src/pages/[slug].astro` | CMS pages — single `<article>` layout (no template map) ✅ |
-| `src/pages/experiences.astro` | Experiences catalog |
-| `src/plugins/bol-theme/astro/islands/ExperienceFilter.tsx` | Filter chips |
-| `src/plugins/bol-theme/astro/components/ExperienceCard.astro` | Card layout |
-| `astro.config.mjs` | Remove `demoBlocksPlugin()` |
-| Delete | `src/plugins/demo-blocks/`, demo routes, old ShittySites components |
+| `src/pages/index.astro`, `hu/index.astro`, `de/index.astro` | Home — inlined (PT fix) ✅ |
+| `src/pages/[slug].astro` | CMS pages + locale slug redirect (`/hu` → `/hu/`) ✅ |
+| `src/pages/experiences.astro`, `hu/`, `de/` | Experiences catalog ✅ |
+| `src/plugins/bol-theme/astro/routes/ExperiencesRoute.astro` | Shared experiences layout ✅ |
+| `src/plugins/bol-theme/astro/islands/ExperienceFilter.tsx` | Filter chips (page-level `client:load`) ✅ |
+| `src/plugins/bol-theme/astro/components/ExperienceCard.astro` | Card layout ✅ |
+| `astro.config.mjs` | Removed `demoBlocksPlugin()` ✅ |
+| Delete | `src/plugins/demo-blocks/`, demo routes, old ShittySites components ✅ |
 
 **Already removed (Part 4 / schema cleanup):** `PageDefault.astro`, `PageFullWidth.astro`, `PageSidebar.astro`, `src/types/content.ts` (`PageTemplate`).
+
+**Removed in PT fix:** `HomeRoute.astro`, `MenuTabs.tsx`, `OpenNowBadge.tsx`, `VenueMap.tsx`.
 
 ---
 
 ## Task 18: Home page route
 
 **Files:**
-- Modify: `src/pages/index.astro` — **shipped Part 4**
+- Modify: `src/pages/index.astro`, `hu/index.astro`, `de/index.astro`
 
 - [x] **Step 1: Query home page entry** — `getEmDashEntry("pages", "home", { locale })`, set cacheHint
 
@@ -52,24 +57,25 @@ Verify against live docs ([Docs MCP](https://docs.emdashcms.com/docs-mcp/) · [l
 
 - [x] **Step 3: SEO** via `buildContentSeo` + Base / SeoHead
 
-- [ ] **Step 4: Manual check** — `/`, `/hu/`, `/de/` show translated home when seeded
+- [x] **Step 4: Manual check** — `/`, `/hu/`, `/de/` show translated home when seeded (verified after PT fix)
 
 ---
 
 ## Task 19: Experiences page
 
 **Files:**
-- Create: `src/pages/experiences.astro`
+- Create: `src/pages/experiences.astro`, `hu/experiences.astro`, `de/experiences.astro`
 - Create: `src/plugins/bol-theme/astro/islands/ExperienceFilter.tsx`
 - Create: `src/plugins/bol-theme/astro/components/ExperienceCard.astro`
+- Create: `src/plugins/bol-theme/astro/routes/ExperiencesRoute.astro`
 
-- [ ] **Step 1: Query experiences collection** with locale + cacheHint
+- [x] **Step 1: Query experiences collection** with locale + cacheHint
 
-- [ ] **Step 2: Rewrite filter chips + card grid** — no shadcn
+- [x] **Step 2: Rewrite filter chips + card grid** — no shadcn
 
-- [ ] **Step 3: CTAs by `cta_type`**: tel, mailto, ask-at-bar copy
+- [x] **Step 3: CTAs by `cta_type`**: tel, mailto, ask-at-bar copy
 
-- [ ] **Step 4: Manual check** — filters work, 6 cards, responsive grid
+- [x] **Step 4: Manual check** — filters work, 6 cards, responsive grid
 
 ---
 
@@ -77,21 +83,15 @@ Verify against live docs ([Docs MCP](https://docs.emdashcms.com/docs-mcp/) · [l
 
 **Files:**
 - Delete: `src/plugins/demo-blocks/`
-- Delete or redirect: `src/pages/posts/`, `src/pages/showcase/`, `src/pages/category/`, `src/pages/tag/`, demo `src/pages/search.astro` if unused
+- Delete: `src/pages/posts/`, `showcase/`, `category/`, `tag/`, `search.astro`
 - Modify: `astro.config.mjs` — remove `demoBlocksPlugin()`
-- Delete: `src/components/SiteHeader.astro`, `SiteFooter.astro` if still present
+- Delete: old ShittySites `src/components/*` (theme chrome lives in plugin)
 
-- [ ] **Step 1: Remove demo-blocks plugin registration**
+- [x] **Step 1: Remove demo-blocks plugin registration**
 
-- [ ] **Step 2: Delete orphaned pages/components** per fork rules (seed section + routes + components together)
+- [x] **Step 2: Delete orphaned pages/components** per fork rules
 
-- [ ] **Step 3: Run typecheck**
-
-```bash
-bun run typecheck
-```
-
-Expected: 0 errors in BOL-owned files (legacy showcase routes may remain until deleted).
+- [x] **Step 3: Run typecheck** — 0 errors (2026-09-07)
 
 ---
 
@@ -103,15 +103,16 @@ Expected: 0 errors in BOL-owned files (legacy showcase routes may remain until d
 
 - [ ] Fix any regressions before marking complete
 
-- [ ] Update spec status to **Implemented** (only if user asks for doc housekeeping)
+- [x] Update related specs/plans after PT fix + menu tab layout (2026-09-07)
 
 ---
 
 ## Part 5 / migration completion gate
 
-- [x] Home route live (`index.astro`)
-- [ ] Experiences live in all locales
-- [ ] demo-blocks and ShittySites demo routes removed
-- [ ] `bun run typecheck` passes on shipped surface
-- [ ] Spec manual checklist complete
-- [ ] **Bar of Legends migration shipped**
+- [x] Home route live (`index.astro` + locale variants)
+- [x] Experiences live in all locales
+- [x] demo-blocks and ShittySites demo routes removed
+- [x] `bun run typecheck` passes on shipped surface
+- [x] PT blocks read `Astro.props.node`; no hook SSR errors on home
+- [ ] Spec manual checklist complete (375px + 1440px)
+- [ ] **Bar of Legends migration fully QA'd**

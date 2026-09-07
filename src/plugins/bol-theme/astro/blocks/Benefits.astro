@@ -1,21 +1,12 @@
 ---
 import Icon from "../icons/Icon.astro";
+import { getPtNode } from "../../utils/pt-node.ts";
+import type { BolBenefitItem, BolBenefitsNode } from "../../types/pt-blocks.ts";
 
 type BenefitIcon = "beer" | "gamepad" | "users";
 
-interface BenefitItem {
-	icon?: BenefitIcon;
-	title?: string;
-	body?: string;
-}
-
-interface Props {
-	eyebrow?: string;
-	title?: string;
-	items?: BenefitItem[];
-}
-
-const { eyebrow, title, items = [] } = Astro.props;
+const node = getPtNode<BolBenefitsNode>(Astro.props);
+const { eyebrow, title, items = [] } = node;
 
 const iconNames: Record<BenefitIcon, "beer" | "gamepad2" | "users"> = {
 	beer: "beer",
@@ -41,7 +32,7 @@ const iconNames: Record<BenefitIcon, "beer" | "gamepad2" | "users"> = {
 
 	<div class="mt-10 grid gap-4 md:grid-cols-3 md:gap-6">
 		{
-			items.map((item) => {
+			items.map((item: BolBenefitItem) => {
 				const icon = item.icon ? iconNames[item.icon] : undefined;
 				return (
 					<article class="group rounded-card border border-border bg-surface p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand/40 hover:shadow-glow">

@@ -66,7 +66,8 @@ Apply to **every part** (full detail in spec):
 | **2** | [02-plugin-core.md](./2026-09-05-bol-theme-migration-02-plugin-core.md) | 4–8 | `bol-theme` scaffold, venue KV, JSON-LD, `/venue` admin, theme i18n ✅ |
 | **3** | [03-seed-chrome.md](./2026-09-05-bol-theme-migration-03-seed-chrome.md) | 9–12 | CMS seed, header/footer/mobile chrome ✅ |
 | **4** | [04-blocks.md](./2026-09-05-bol-theme-migration-04-blocks.md) | 13–17 | PT block types + renderers (hero → contact/map) ✅ |
-| **5** | [05-pages-ship.md](./2026-09-05-bol-theme-migration-05-pages-ship.md) | 18–21 | Experiences route, demo cleanup, full QA (home route wired in Part 4) |
+| **5** | [05-pages-ship.md](./2026-09-05-bol-theme-migration-05-pages-ship.md) | 18–21 | Experiences route, demo cleanup ✅ |
+| **Fix** | [2026-09-07-bol-pt-blocks-islands-fix.md](../archive/2026-09-07/plans/2026-09-07-bol-pt-blocks-islands-fix.md) | 1–7 | PT `node` props, vanilla PT interactivity, menu tab layout ✅ (archived) |
 
 **Rule:** Finish and verify one part before opening the next. Mark checkboxes in the part file as you go.
 
@@ -83,9 +84,11 @@ Apply to **every part** (full detail in spec):
 | `src/plugins/bol-theme/**` | 2–5 |
 | `seed/seed.json`, `.emdash/uploads/` (WebP), `scripts/generate-bol-seed.ts` | 3 |
 | `src/assets/hero.webp` | 4 |
-| `src/pages/index.astro` | 4 (home), 5 |
-| `src/pages/experiences.astro` | 5 |
+| `src/pages/index.astro`, `hu/index.astro`, `de/index.astro` | 4, 5, Fix |
+| `src/pages/experiences.astro`, `hu/`, `de/` | 5 |
+| `src/plugins/bol-theme/utils/pt-node.ts`, `types/pt-blocks.ts` | Fix |
 | Delete `demo-blocks`, demo routes, `PageDefault`/`PageFullWidth`/`PageSidebar` | 5 |
+| Delete `MenuTabs`, `OpenNowBadge`, `VenueMap`, `HomeRoute` | Fix |
 
 ---
 
@@ -99,11 +102,11 @@ Apply to **every part** (full detail in spec):
 | Venue settings + JSON-LD | 2 ✅ |
 | Collections seed | 3 |
 | Theme chrome | 3 |
-| PT blocks | 4 ✅ |
-| Home route (`index.astro`) | 4 ✅ |
-| Pages + cleanup | 5 |
-| Map z-index fix | 4 (Task 17) |
-| Manual checklist | 5 (Task 21) |
+| PT blocks | 4 ✅, Fix ✅ |
+| Home route (`index.astro`) | 4 ✅, Fix ✅ (inlined) |
+| Pages + cleanup | 5 ✅ |
+| PT props + island fix | Fix ✅ |
+| Manual checklist | 5 (Task 21) — pending full 375px/1440px pass |
 
 ---
 

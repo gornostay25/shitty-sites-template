@@ -3,18 +3,10 @@ import { Image } from "astro:assets";
 import heroFallback from "../../../../assets/hero.webp";
 import Icon from "../icons/Icon.astro";
 import { fetchPublicVenue } from "../../utils/fetch-venue.ts";
+import { getPtNode } from "../../utils/pt-node.ts";
+import type { BolHeroNode } from "../../types/pt-blocks.ts";
 
-interface Props {
-	kicker?: string;
-	titleTop?: string;
-	titleAccent?: string;
-	subtitle?: string;
-	ctaMenu?: string;
-	ctaBook?: string;
-	scrollHint?: string;
-	backgroundImageUrl?: string;
-}
-
+const node = getPtNode<BolHeroNode>(Astro.props);
 const {
 	kicker,
 	titleTop,
@@ -24,7 +16,7 @@ const {
 	ctaBook,
 	scrollHint,
 	backgroundImageUrl,
-} = Astro.props;
+} = node;
 
 const venue = await fetchPublicVenue(Astro.url.origin);
 ---

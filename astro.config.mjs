@@ -5,65 +5,70 @@ import { defineConfig, fontProviders } from "astro/config";
 import { d1, r2, kvCache } from "@emdash-cms/cloudflare";
 import emdash from "emdash/astro";
 import { bolThemePlugin } from "./src/plugins/bol-theme/index.ts";
-import { demoBlocksPlugin } from "./src/plugins/demo-blocks/index.ts";
 
 export default defineConfig({
-	output: "server",
-	adapter: cloudflare(),
-	vite: { plugins: [tailwindcss()] },
-	i18n: {
-		defaultLocale: "en",
-		locales: ["en", "hu", "de"],
-		fallback: { hu: "en", de: "en" },
-		// Do NOT use prefixDefaultLocale — breaks /_emdash/admin
-	},
-	fonts: [
-		{
-			name: "Bebas Neue",
-			cssVariable: "--font-display-src",
-			provider: fontProviders.google(),
-			weights: [400],
-			subsets: ["latin", "latin-ext"],
-			fallbacks: ["Arial Narrow", "ui-sans-serif", "sans-serif"],
-		},
-		{
-			name: "Manrope",
-			cssVariable: "--font-body-src",
-			provider: fontProviders.google(),
-			weights: [400, 500, 600, 700],
-			subsets: ["latin", "latin-ext"],
-			fallbacks: ["ui-sans-serif", "system-ui", "sans-serif"],
-		},
-	],
-	integrations: [
-		react(), // kept — client islands / native plugin React admin UI; demo pages are Astro-only
-		emdash({
-			database: d1({ binding: "DB", session: "auto" }),
-			storage: r2({ binding: "MEDIA" }),
-			/**
-			 * OBJECT CACHE — KV-backed query cache for Cloudflare Workers.
-			 *
-			 * Caches content queries, site settings, menus, and taxonomy terms.
-			 * Admin edits auto-invalidate affected entries. Preview/visual editing
-			 * bypass the cache.
-			 *
-			 * defaultTtl (seconds, default 3600):
-			 *   Lower (e.g. 300) when scheduled publishing must appear quickly
-			 *   without waiting for a collection change. Default is fine for most sites.
-			 *
-			 * keyPrefix (default "em"):
-			 *   Change when multiple EmDash sites share one KV namespace
-			 *   (e.g. keyPrefix: "client-acme") to avoid key collisions.
-			 *
-			 * Docs: https://docs.emdashcms.com/deployment/object-cache/
-			 */
-			objectCache: kvCache({
-				binding: "CACHE",
-				defaultTtl: 3600,
-				keyPrefix: "em",
-			}),
-			plugins: [bolThemePlugin(), demoBlocksPlugin()],
-		}),
-	],
-	devToolbar: { enabled: false },
+  output: "server",
+  adapter: cloudflare(),
+  vite: {
+    plugins: [tailwindcss()],
+    optimizeDeps: {
+      exclude: ["astro/logger/console"],
+    },
+  },
+  i18n: {
+    defaultLocale: "en",
+    locales: ["en", "hu", "de"],
+    fallback: { hu: "en", de: "en" },
+    // Do NOT use prefixDefaultLocale — breaks /_emdash/admin
+  },
+  fonts: [
+    {
+      name: "Bebas Neue",
+      cssVariable: "--font-display-src",
+      provider: fontProviders.google(),
+      weights: [400],
+      subsets: ["latin", "latin-ext"],
+      fallbacks: ["Arial Narrow", "ui-sans-serif", "sans-serif"],
+    },
+    {
+      name: "Manrope",
+      cssVariable: "--font-body-src",
+      provider: fontProviders.google(),
+      weights: [400, 500, 600, 700],
+      subsets: ["latin", "latin-ext"],
+      fallbacks: ["ui-sans-serif", "system-ui", "sans-serif"],
+    },
+  ],
+  integrations: [
+    react(), // kept — client islands / native plugin React admin UI; demo pages are Astro-only
+    emdash({
+      database: d1({ binding: "DB", session: "auto" }),
+      storage: r2({ binding: "MEDIA" }),
+      /**
+       * OBJECT CACHE — KV-backed query cache for Cloudflare Workers.
+      *
+      * Caches content queries, site settings, menus, and taxonomy terms.
+      * Admin edits auto-invalidate affected entries. Preview/visual editing
+      * bypass the cache.
+      *
+      * defaultTtl (seconds, default 3600):
+      *   Lower (e.g. 300) when scheduled publishing must appear quickly
+      *   without waiting for a collection change. Default is fine for most sites.
+      *
+      * keyPrefix (default "em"):
+      *   Change when multiple EmDash sites share one KV namespace
+      *   (e.g. keyPrefix: "client-acme") to avoid key collisions.
+      *
+      * Docs: https://docs.emdashcms.com/deployment/object-cache/
+      */
+     objectCache: kvCache({
+       binding: "CACHE",
+       defaultTtl: 3600,
+       keyPrefix: "em",
+      }),
+      plugins: [bolThemePlugin()],
+      toolbar:false,
+    }),
+  ],
+  devToolbar: { enabled: false },
 });

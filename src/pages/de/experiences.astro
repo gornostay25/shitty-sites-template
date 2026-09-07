@@ -1,0 +1,30 @@
+---
+import ExperiencesRoute from "../../plugins/bol-theme/astro/routes/ExperiencesRoute.astro";
+import ExperienceFilter from "../../plugins/bol-theme/astro/islands/ExperienceFilter.tsx";
+import { loadExperiencesPageData } from "../../plugins/bol-theme/utils/experiences-page.ts";
+import { getUiStrings } from "../../plugins/bol-theme/utils/i18n/index.ts";
+
+const locale = Astro.currentLocale ?? "de";
+const data = await loadExperiencesPageData(locale, Astro.url.origin);
+if (Astro.cache?.enabled && data.cacheHint) Astro.cache.set(data.cacheHint);
+const ui = getUiStrings(locale);
+---
+
+<ExperiencesRoute
+	gridId={data.gridId}
+	items={data.items}
+	venue={data.venue}
+	heroImage={data.heroImage}
+	seo={data.seo}
+	locale={locale}
+	ui={ui}
+>
+	<ExperienceFilter
+		slot="filters"
+		client:load
+		filterLabel={data.filterProps.filterLabel}
+		allLabel={data.filterProps.allLabel}
+		categories={data.filterProps.categories}
+		gridId={data.filterProps.gridId}
+	/>
+</ExperiencesRoute>

@@ -45,6 +45,23 @@ const de: UiStrings = {
 			tiktok: "Bar of Legends auf TikTok",
 		},
 	},
+	experiences: {
+		eyebrow: "Erlebnisse",
+		title: "Mehr als Getränke — wähl deinen Abend",
+		subtitle:
+			"Gaming, Quiz, Brettspiele und private Partys: das gibt's neben dem Bier.",
+		filters: {
+			all: "Alle",
+		},
+		filterLabel: "Erlebnisse filtern",
+		book: "Buchen",
+		ask: "An der Bar fragen",
+		band: {
+			title: "Nicht das Richtige dabei?",
+			body: "Sag uns, was für einen Abend ihr im Kopf habt — Geburtstage, Teamevents, Watchpartys oder erste Dates. Wir kümmern uns.",
+			button: "Schreib uns",
+		},
+	},
 	footer: {
 		tagline: "Esport-Bar & Craftbier-Haus im Herzen von Győr.",
 		contactTitle: "Kontakt",

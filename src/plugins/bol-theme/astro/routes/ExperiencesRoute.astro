@@ -1,0 +1,105 @@
+---
+import type { SeoMeta } from "emdash";
+import Base from "../../../../layouts/Base.astro";
+import ExperienceCard from "../components/ExperienceCard.astro";
+import Icon from "../icons/Icon.astro";
+import { eventMailto } from "../../utils/fetch-venue.ts";
+import type { ExperienceListItem } from "../../utils/experiences-page.ts";
+import type { UiStrings } from "../../utils/i18n/en.ts";
+import type { PublicVenueSettings } from "../../utils/venue.ts";
+
+interface Props {
+	gridId: string;
+	items: ExperienceListItem[];
+	venue: PublicVenueSettings;
+	heroImage?: ExperienceListItem["image"];
+	seo: SeoMeta;
+	locale: string;
+	ui: UiStrings;
+}
+
+const { gridId, items, venue, heroImage, seo, locale, ui } = Astro.props;
+---
+
+<Base {...seo}>
+	<section class="relative overflow-hidden border-b border-border">
+		<div class="absolute inset-0" aria-hidden="true">
+			{
+				heroImage?.src ? (
+					<img
+						src={heroImage.src}
+						alt=""
+						width={heroImage.width}
+						height={heroImage.height}
+						class="size-full object-cover"
+					/>
+				) : (
+					<div class="size-full bg-surface-2" />
+				)
+			}
+			<div class="absolute inset-0 bg-linear-to-b from-bg/80 via-bg/60 to-bg" />
+		</div>
+		<div class="relative mx-auto w-full max-w-6xl px-4 pb-12 pt-16 sm:px-6 md:pb-16 md:pt-24">
+			<p class="text-xs font-semibold uppercase tracking-[0.25em] text-brand">
+				{ui.experiences.eyebrow}
+			</p>
+			<h1 class="mt-3 max-w-3xl font-display text-5xl leading-[1.03] sm:text-6xl">
+				<span class="text-foreground">{ui.experiences.title}</span>
+			</h1>
+			<p class="mt-4 max-w-xl text-sm leading-relaxed text-foreground/80 sm:text-base">
+				{ui.experiences.subtitle}
+			</p>
+		</div>
+	</section>
+
+	<section
+		aria-label={ui.experiences.title}
+		class="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 md:py-16"
+	>
+		<slot name="filters" />
+
+		<div id={gridId} class="mt-8 grid gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-3">
+			{
+				items.map((item) => (
+					<ExperienceCard
+						categorySlug={item.categorySlug}
+						categoryLabel={item.categoryLabel}
+						title={item.title}
+						description={item.description}
+						meta={item.meta}
+						image={item.image}
+						ctaType={item.ctaType}
+						locale={locale}
+						phoneTel={venue.phoneTel}
+						email={venue.email}
+						bookLabel={ui.experiences.book}
+						askLabel={ui.experiences.ask}
+					/>
+				))
+			}
+		</div>
+	</section>
+
+	<section
+		aria-labelledby="cta-band-title"
+		class="mx-auto w-full max-w-6xl px-4 pb-16 sm:px-6 md:pb-24"
+	>
+		<div
+			class="rounded-card border border-brand/30 bg-linear-to-br from-brand/15 via-surface to-surface p-6 md:p-10"
+		>
+			<h2 id="cta-band-title" class="font-display text-3xl tracking-wide sm:text-4xl">
+				{ui.experiences.band.title}
+			</h2>
+			<p class="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+				{ui.experiences.band.body}
+			</p>
+			<a
+				href={eventMailto(venue.email)}
+				class="mt-6 inline-flex min-h-12 items-center gap-2 rounded-md bg-brand px-7 text-base font-semibold text-[#1c1305] transition-colors hover:bg-brand/90"
+			>
+				<Icon name="mail" class="size-4" />
+				{ui.experiences.band.button}
+			</a>
+		</div>
+	</section>
+</Base>

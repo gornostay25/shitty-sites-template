@@ -1,6 +1,7 @@
 ---
 import Icon from "../icons/Icon.astro";
 import { getUiStrings } from "../../utils/i18n/index.ts";
+import { socialLinksFromVenue } from "../../utils/socials.ts";
 import type { PublicVenueSettings } from "../../utils/venue.ts";
 
 interface Props {
@@ -13,11 +14,7 @@ const ui = getUiStrings(locale);
 const year = new Date().getFullYear();
 const rights = ui.footer.rightsTpl.replace("{year}", String(year));
 
-const socials = [
-	{ id: "instagram" as const, href: venue.socialInstagram },
-	{ id: "facebook" as const, href: venue.socialFacebook },
-	{ id: "tiktok" as const, href: venue.socialTiktok },
-];
+const socials = socialLinksFromVenue(venue);
 ---
 
 <footer class="border-t border-border bg-surface/40">
@@ -51,26 +48,26 @@ const socials = [
 
 			<div>
 				<h2 class="font-display text-xl tracking-wide">{ui.footer.contactTitle}</h2>
-				<ul class="mt-4 space-y-3 text-sm">
+				<ul class="mt-4 space-y-4 text-sm">
 					<li class="flex items-start gap-3 text-muted-foreground">
 						<Icon name="map-pin" class="mt-0.5 size-4 shrink-0 text-brand" />
 						<span>{venue.address}</span>
 					</li>
-					<li>
+					<li class="flex items-start gap-3">
+						<Icon name="mail" class="mt-0.5 size-4 shrink-0 text-brand" />
 						<a
 							href={`mailto:${venue.email}`}
-							class="flex min-h-11 items-center gap-3 break-all text-muted-foreground transition-colors hover:text-brand"
+							class="break-all text-muted-foreground transition-colors hover:text-brand"
 						>
-							<Icon name="mail" class="size-4 shrink-0 text-brand" />
 							{venue.email}
 						</a>
 					</li>
-					<li>
+					<li class="flex items-start gap-3">
+						<Icon name="phone" class="mt-0.5 size-4 shrink-0 text-brand" />
 						<a
 							href={`tel:${venue.phoneTel}`}
-							class="flex min-h-11 items-center gap-3 text-muted-foreground transition-colors hover:text-brand"
+							class="text-muted-foreground transition-colors hover:text-brand"
 						>
-							<Icon name="phone" class="size-4 shrink-0 text-brand" />
 							{venue.phoneDisplay}
 						</a>
 					</li>

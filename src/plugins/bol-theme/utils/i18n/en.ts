@@ -43,6 +43,23 @@ const en = {
 			tiktok: "Bar of Legends on TikTok",
 		},
 	},
+	experiences: {
+		eyebrow: "Experiences",
+		title: "More than drinks — pick your night",
+		subtitle:
+			"Gaming, quizzes, board games and private parties: here's what's on the menu besides the beer.",
+		filters: {
+			all: "All",
+		},
+		filterLabel: "Filter experiences",
+		book: "Book",
+		ask: "Ask at the bar",
+		band: {
+			title: "Don't see what you're after?",
+			body: "Tell us what kind of night you have in mind and we'll set it up — birthdays, team nights, watch parties, first dates.",
+			button: "Email us",
+		},
+	},
 	footer: {
 		tagline: "Esports bar & craft beer house in the heart of Győr.",
 		contactTitle: "Contact",
@@ -86,6 +103,22 @@ export type UiStrings = {
 			instagram: string;
 			facebook: string;
 			tiktok: string;
+		};
+	};
+	experiences: {
+		eyebrow: string;
+		title: string;
+		subtitle: string;
+		filters: {
+			all: string;
+		};
+		filterLabel: string;
+		book: string;
+		ask: string;
+		band: {
+			title: string;
+			body: string;
+			button: string;
 		};
 	};
 	footer: {

@@ -1,14 +1,11 @@
 ---
 import { getEmDashCollection } from "emdash";
 import { Image } from "emdash/ui";
+import { getPtNode } from "../../utils/pt-node.ts";
+import type { BolGalleryNode } from "../../types/pt-blocks.ts";
 
-interface Props {
-	eyebrow?: string;
-	title?: string;
-	subtitle?: string;
-}
-
-const { eyebrow, title, subtitle } = Astro.props;
+const node = getPtNode<BolGalleryNode>(Astro.props);
+const { eyebrow, title, subtitle } = node;
 const locale = Astro.currentLocale ?? "en";
 
 const { entries: items, cacheHint } = await getEmDashCollection("gallery_items", {
@@ -47,7 +44,7 @@ const SPAN_CLASSES: Record<string, string> = {
 		}
 
 		<div
-			class="mt-10 grid auto-rows-[150px] grid-cols-2 gap-3 sm:auto-rows-[170px] md:grid-flow-dense md:grid-cols-4 md:gap-4"
+			class="mt-10 grid auto-rows-37.5 grid-cols-2 gap-3 sm:auto-rows-42.5 md:grid-flow-dense md:grid-cols-4 md:gap-4"
 		>
 			{
 				items.map((item) => {

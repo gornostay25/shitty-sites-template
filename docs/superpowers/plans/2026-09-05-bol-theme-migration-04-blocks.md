@@ -8,6 +8,14 @@
 
 **Status:** Shipped (2026-09-06). Manual QA at 375px / 1440px deferred to Part 5 Task 21.
 
+**Superseded (2026-09-07):** Part 4 originally shipped React islands (`MenuTabs`, `OpenNowBadge`, `VenueMap`) inside PT blocks. Replaced by [PT fix plan](../archive/2026-09-07/plans/2026-09-07-bol-pt-blocks-islands-fix.md) — blocks now use `getPtNode()` + CSS/vanilla scripts; only `ExperienceFilter` remains a React island (page-level).
+
+### Amendment log
+
+| Date       | Note |
+| ---------- | ---- |
+| 2026-09-07 | **Superseded (partial):** PT island pattern replaced by CSS/vanilla scripts. See [`../archive/2026-09-07/plans/2026-09-07-bol-pt-blocks-islands-fix.md`](../archive/2026-09-07/plans/2026-09-07-bol-pt-blocks-islands-fix.md). |
+
 **Next:** [Part 5 — Pages + ship](./2026-09-05-bol-theme-migration-05-pages-ship.md)
 
 ---
@@ -143,7 +151,7 @@ Header stays `z-50`. Scroll: map never covers header.
 
 - [x] **Step 6: Add `leaflet` + `@types/leaflet` to package.json**
 
-- [ ] **Step 7: Manual check** — map renders, popup works, header on top when scrolling
+- [x] **Step 7: Manual check** — map renders, popup works, header on top when scrolling (smoke-tested with PT fix)
 
 ---
 
@@ -152,5 +160,6 @@ Header stays `z-50`. Scroll: map never covers header.
 - [x] All five blocks in admin inserter + `blockComponents`
 - [x] Home page PT stack in seed (en/hu/de) + `index.astro` renders PT
 - [x] Map z-index scoped under `.venue-map`
-- [ ] Menu tabs, gallery bento, contact/map verified at 375px
-- [ ] Ready for Part 5 experiences route + demo cleanup
+- [x] PT interactivity refactor — see [PT fix](../archive/2026-09-07/plans/2026-09-07-bol-pt-blocks-islands-fix.md)
+- [x] Menu tabs verified at 375px (2026-09-07); full checklist — Part 5 Task 21
+- [x] Ready for Part 5 experiences route + demo cleanup

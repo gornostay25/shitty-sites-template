@@ -1,0 +1,105 @@
+---
+import Icon from "../icons/Icon.astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { eventMailto } from "../../utils/fetch-venue.ts";
+import type { Experience } from "../../../../../emdash-env.d.ts";
+import { experienceChipClass } from "../../types/taxonomies.ts";
+
+interface Props {
+	categorySlug?: string;
+	categoryLabel?: string;
+	title: string;
+	description?: string;
+	meta?: string;
+	image?: Experience["image"];
+	ctaType?: NonNullable<Experience["cta_type"]> | "ask";
+	locale: string;
+	phoneTel: string;
+	email: string;
+	bookLabel: string;
+	askLabel: string;
+}
+
+const {
+	categorySlug,
+	categoryLabel,
+	title,
+	description,
+	meta,
+	image,
+	ctaType = "ask",
+	locale,
+	phoneTel,
+	email,
+	bookLabel,
+	askLabel,
+} = Astro.props;
+
+const contactHref = getRelativeLocaleUrl(locale, "/") + "#contact";
+const ctaHref =
+	ctaType === "tel"
+		? phoneTel
+		: ctaType === "mailto"
+			? eventMailto(email)
+			: contactHref;
+const ctaLabel = ctaType === "ask" ? askLabel : bookLabel;
+const ctaIcon = ctaType === "tel" ? "phone" : "mail";
+---
+
+<article
+	{...(categorySlug ? { "data-experience-category": categorySlug } : {})}
+	class="group flex h-full flex-col overflow-hidden rounded-card border border-border bg-surface transition-all duration-300 hover:-translate-y-1 hover:border-brand/40 hover:shadow-glow"
+>
+	<div class="relative aspect-16/10 overflow-hidden">
+		{
+			image?.src ? (
+				<img
+					src={image.src}
+					alt={image.alt ?? title}
+					width={image.width}
+					height={image.height}
+					loading="lazy"
+					class="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+				/>
+			) : (
+				<div class="grid size-full place-items-center bg-surface-2 text-muted-foreground">
+					<span class="text-sm">No image</span>
+				</div>
+			)
+		}
+		{
+			categorySlug && categoryLabel && (
+				<span
+					class:list={[
+						"absolute left-3 top-3 rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-wider backdrop-blur",
+						experienceChipClass(categorySlug),
+					]}
+				>
+					{categoryLabel}
+				</span>
+			)
+		}
+	</div>
+
+	<div class="flex flex-1 flex-col p-5">
+		<h3 class="font-display text-2xl tracking-wide">{title}</h3>
+		{description && (
+			<p class="mt-2 text-sm leading-relaxed text-muted-foreground">{description}</p>
+		)}
+		{meta && (
+			<p class="mb-4 mt-3 flex items-center gap-2 text-xs font-semibold text-brand-muted">
+				<Icon name="clock" class="size-3.5" />
+				{meta}
+			</p>
+		)}
+		<div class="mt-auto border-t border-white/5 pt-4">
+			<a
+				href={ctaHref}
+				class="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-brand px-6 text-sm font-semibold text-[#1c1305] transition-colors hover:bg-brand/90 sm:w-auto"
+			>
+				<Icon name={ctaIcon} class="size-4" />
+				{ctaLabel}
+			</a>
+		</div>
+	</div>
+</article>

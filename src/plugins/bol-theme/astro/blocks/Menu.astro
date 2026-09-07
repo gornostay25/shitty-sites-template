@@ -1,29 +1,29 @@
 ---
 import { getEmDashCollection, getTaxonomyTerms } from "emdash";
-import MenuTabs from "../islands/MenuTabs.tsx";
+import { getPtNode } from "../../utils/pt-node.ts";
+import type { BolMenuNode } from "../../types/pt-blocks.ts";
+import { formatHUF } from "../../utils/format.ts";
+import { flattenCategoryTerms } from "../../utils/taxonomy.ts";
+import { MENU_CATEGORY_TAXONOMY } from "../../types/taxonomies.ts";
 
-interface Props {
-	eyebrow?: string;
-	title?: string;
-	subtitle?: string;
-	footnote?: string;
-}
-
-const { eyebrow, title, subtitle, footnote } = Astro.props;
+const node = getPtNode<BolMenuNode>(Astro.props);
+const { eyebrow, title, subtitle, footnote } = node;
 const locale = Astro.currentLocale ?? "en";
+const menuTitle = title ?? "Menu";
 
-const MENU_CATEGORIES = ["alcoholic", "nonalcoholic", "snacks"] as const;
+const categoryTerms = flattenCategoryTerms(
+	await getTaxonomyTerms(MENU_CATEGORY_TAXONOMY),
+);
 
-const [terms, ...categoryResults] = await Promise.all([
-	getTaxonomyTerms("menu_category"),
-	...MENU_CATEGORIES.map((category) =>
+const categoryResults = await Promise.all(
+	categoryTerms.map((term) =>
 		getEmDashCollection("menu_items", {
 			locale,
-			where: { menu_category: category },
+			where: { menu_category: term.slug },
 			orderBy: { sort_order: "asc" },
 		}),
 	),
-]);
+);
 
 for (const result of categoryResults) {
 	if (Astro.cache?.enabled && result.cacheHint) {
@@ -32,15 +32,12 @@ for (const result of categoryResults) {
 }
 
 const tabLabels = Object.fromEntries(
-	MENU_CATEGORIES.map((slug) => {
-		const term = terms.find((entry) => entry.slug === slug);
-		return [slug, term?.label ?? slug];
-	}),
+	categoryTerms.map((term) => [term.slug, term.label]),
 );
 
 const itemsByCategory = Object.fromEntries(
-	MENU_CATEGORIES.map((category, index) => [
-		category,
+	categoryTerms.map((term, index) => [
+		term.slug,
 		categoryResults[index]?.entries.map((entry) => ({
 			id: entry.id,
 			name: entry.data.name,
@@ -75,14 +72,123 @@ const itemsByCategory = Object.fromEntries(
 		)
 	}
 
-	<div class="mt-10">
-		<MenuTabs
-			client:visible
-			locale={locale}
-			title={title ?? "Menu"}
-			tabLabels={tabLabels}
-			items={itemsByCategory}
-			footnote={footnote}
-		/>
+	<div class="menu-tabs mt-10">
+		<div
+			role="radiogroup"
+			aria-label={menuTitle}
+			class="scrollbar-slim -mx-1 flex gap-1 overflow-x-auto rounded-full border border-border bg-surface p-1 sm:mx-0 sm:inline-flex sm:w-auto sm:overflow-visible"
+		>
+			{
+				categoryTerms.map((term, index) => (
+					<>
+						<input
+							type="radio"
+							name="menu-category"
+							id={`menu-tab-${term.slug}`}
+							class="menu-tab-input sr-only"
+							checked={index === 0}
+						/>
+						<label
+							for={`menu-tab-${term.slug}`}
+							id={`menu-tab-label-${term.slug}`}
+							class="menu-tab-label inline-flex min-h-11 shrink-0 cursor-pointer items-center justify-center rounded-full px-4 text-sm font-semibold transition-colors sm:px-6"
+						>
+							{tabLabels[term.slug] ?? term.slug}
+						</label>
+					</>
+				))
+			}
+		</div>
+
+		{
+			categoryTerms.map((term, index) => (
+				<div
+					id={`menu-panel-${term.slug}`}
+					aria-labelledby={`menu-tab-label-${term.slug}`}
+					class="menu-tab-panel mt-8"
+					hidden={index !== 0}
+				>
+					<ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+						{
+							(itemsByCategory[term.slug] ?? []).map((item) => (
+								<li class="group overflow-hidden rounded-card border border-border bg-surface transition-all duration-300 hover:border-brand/40 hover:shadow-glow">
+									<div class="relative aspect-4/3 overflow-hidden">
+										{
+											item.image?.src ? (
+												<img
+													src={item.image.src}
+													alt={item.image.alt ?? item.name}
+													width={item.image.width}
+													height={item.image.height}
+													loading="lazy"
+													class="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+												/>
+											) : (
+												<div class="grid size-full place-items-center bg-surface-2 text-muted-foreground">
+													<span class="text-sm">No image</span>
+												</div>
+											)
+										}
+										<span class="absolute right-3 top-3 rounded-full bg-background/90 px-3 py-1.5 font-display text-lg tracking-wide text-brand backdrop-blur">
+											{formatHUF(item.price, locale)}
+										</span>
+									</div>
+									<div class="p-4">
+										<h3 class="font-display text-2xl tracking-wide">{item.name}</h3>
+										{
+											item.description && (
+												<p class="mt-2 text-sm leading-relaxed text-muted-foreground">
+													{item.description}
+												</p>
+											)
+										}
+									</div>
+								</li>
+							))
+						}
+					</ul>
+				</div>
+			))
+		}
+
+		{footnote && <p class="mt-6 text-xs text-muted-foreground">{footnote}</p>}
 	</div>
 </section>
+
+<style is:global>
+	.menu-tabs .menu-tab-panel[hidden] {
+		display: none;
+	}
+
+	.menu-tab-label[aria-selected="true"] {
+		background-color: var(--color-brand);
+		color: #1c1305;
+	}
+
+	.menu-tab-label {
+		color: var(--color-muted-foreground);
+	}
+
+	.menu-tab-label:hover {
+		color: var(--color-foreground);
+	}
+</style>
+
+<script>
+	function syncMenuTabs(root: HTMLElement) {
+		const radios = root.querySelectorAll<HTMLInputElement>(".menu-tab-input");
+		const sync = () => {
+			for (const radio of radios) {
+				const tabId = radio.id.replace("menu-tab-", "");
+				const label = root.querySelector<HTMLElement>(`#menu-tab-label-${tabId}`);
+				const panel = root.querySelector<HTMLElement>(`#menu-panel-${tabId}`);
+				const selected = radio.checked;
+				label?.setAttribute("aria-selected", String(selected));
+				if (panel) panel.hidden = !selected;
+			}
+		};
+		for (const radio of radios) radio.addEventListener("change", sync);
+		sync();
+	}
+	document.querySelectorAll<HTMLElement>(".menu-tabs").forEach(syncMenuTabs);
+</script>

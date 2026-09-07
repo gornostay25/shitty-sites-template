@@ -45,6 +45,23 @@ const hu: UiStrings = {
 			tiktok: "Bar of Legends a TikTokon",
 		},
 	},
+	experiences: {
+		eyebrow: "Élmények",
+		title: "Több mint italok — válaszd ki az éjszakád",
+		subtitle:
+			"Gaming, kvíz, társasjáték és privát bulik: íme, mi van a menün a sörön túl.",
+		filters: {
+			all: "Összes",
+		},
+		filterLabel: "Élmények szűrése",
+		book: "Foglalás",
+		ask: "Kérdezd a pultnál",
+		band: {
+			title: "Nem találod, amit keresel?",
+			body: "Mondd el, milyen estet képzeltek el, és megrendezzük — szülinapok, céges estek, nézőestek, első randik.",
+			button: "Írj nekünk",
+		},
+	},
 	footer: {
 		tagline: "Esportbár és kézműves sörház Győr szívében.",
 		contactTitle: "Kapcsolat",

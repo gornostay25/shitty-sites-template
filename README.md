@@ -111,6 +111,7 @@ Canonical URLs and Open Graph tags use `resolveSiteIdentity()` and `getSeoMeta()
 - **Storage:** R2
 - **Cache:** KV (`CACHE` binding)
 - **Framework:** Astro 7 with `@astrojs/cloudflare`
+- **Icons (bol-theme):** `@lucide/astro` via `src/plugins/bol-theme/astro/icons/Icon.astro`
 - **CSS:** Tailwind CSS 4 (`@tailwindcss/vite`) — imported, not used on demo markup
 
 ## Documentation

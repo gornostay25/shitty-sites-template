@@ -46,6 +46,17 @@ Docs: [Taxonomies](https://docs.emdashcms.com/guides/taxonomies/)
 
 Fork: remove unused taxonomies from seed **and** delete archive routes + `PostTerms.astro` references.
 
+### BOL site — `experience_category` & `menu_category`
+
+| Taxonomy | Collections | Runtime labels |
+|----------|-------------|----------------|
+| `experience_category` | `experiences` | From `getTaxonomyTerms()` — not i18n |
+| `menu_category` | `menu_items` | From `getTaxonomyTerms()` — not i18n |
+
+- New terms added in admin appear in `/experiences` filters and home `#menu` tabs without a code deploy.
+- Default seed slugs live in `src/plugins/bol-theme/types/taxonomies.ts` (`DEFAULT_EXPERIENCE_CATEGORIES`, `DEFAULT_MENU_CATEGORIES`); seed generator imports those constants.
+- Experience chip colors: known slugs get themed styles in `types/taxonomies.ts`; unknown slugs use a neutral fallback until a palette entry is added.
+
 ---
 
 ## menus

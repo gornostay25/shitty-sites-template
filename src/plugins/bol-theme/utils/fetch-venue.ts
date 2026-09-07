@@ -41,3 +41,8 @@ export function bookingMailto(email: string): string {
 	const subject = encodeURIComponent("Table booking — Bar of Legends");
 	return `mailto:${email}?subject=${subject}`;
 }
+
+export function eventMailto(email: string): string {
+	const subject = encodeURIComponent("Event enquiry — Bar of Legends");
+	return `mailto:${email}?subject=${subject}`;
+}

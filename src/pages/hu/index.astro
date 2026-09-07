@@ -2,9 +2,9 @@
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { getEmDashEntry, getSiteSettings } from "emdash";
 import { PortableText } from "emdash/ui";
-import Base from "../layouts/Base.astro";
-import { resolveSiteIdentity } from "../utils/site-identity";
-import { buildContentSeo } from "../utils/seo";
+import Base from "../../layouts/Base.astro";
+import { resolveSiteIdentity } from "../../utils/site-identity";
+import { buildContentSeo } from "../../utils/seo";
 
 const locale = Astro.currentLocale ?? "en";
 const { entry: page, isPreview, cacheHint } = await getEmDashEntry("pages", "home", {

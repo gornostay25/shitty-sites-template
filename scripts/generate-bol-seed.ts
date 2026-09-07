@@ -4,6 +4,10 @@
  */
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
+import {
+	DEFAULT_EXPERIENCE_CATEGORIES,
+	DEFAULT_MENU_CATEGORIES,
+} from "../src/plugins/bol-theme/types/taxonomies.ts";
 
 type Locale = "en" | "hu" | "de";
 
@@ -30,7 +34,7 @@ const MENU_IMAGE: Record<string, string> = {
 
 const MENU_ITEMS: Array<{
 	id: string;
-	category: "alcoholic" | "nonalcoholic" | "snacks";
+	category: (typeof DEFAULT_MENU_CATEGORIES)[number];
 	price: number;
 	sort_order: number;
 	name: Record<Locale, string>;
@@ -288,7 +292,7 @@ const MENU_ITEMS: Array<{
 
 const EXPERIENCES: Array<{
 	id: string;
-	category: "gaming" | "social" | "events";
+	category: (typeof DEFAULT_EXPERIENCE_CATEGORIES)[number];
 	cta_type: "tel" | "mailto" | "ask";
 	sort_order: number;
 	image: string;
@@ -572,7 +576,7 @@ const GALLERY: Array<{
 ];
 
 const MENU_CATEGORY_LABELS: Record<
-	"alcoholic" | "nonalcoholic" | "snacks",
+	(typeof DEFAULT_MENU_CATEGORIES)[number],
 	Record<Locale, string>
 > = {
 	alcoholic: { en: "Alcoholic", hu: "Alkoholos", de: "Alkoholisch" },
@@ -581,7 +585,7 @@ const MENU_CATEGORY_LABELS: Record<
 };
 
 const EXPERIENCE_CATEGORY_LABELS: Record<
-	"gaming" | "social" | "events",
+	(typeof DEFAULT_EXPERIENCE_CATEGORIES)[number],
 	Record<Locale, string>
 > = {
 	gaming: { en: "Gaming", hu: "Gaming", de: "Gaming" },
@@ -1091,7 +1095,7 @@ const seed = {
 			labelSingular: "Menu Category",
 			hierarchical: false,
 			collections: ["menu_items"],
-			terms: localizedTerms("menu-cat", ["alcoholic", "nonalcoholic", "snacks"], MENU_CATEGORY_LABELS),
+			terms: localizedTerms("menu-cat", [...DEFAULT_MENU_CATEGORIES], MENU_CATEGORY_LABELS),
 		},
 		{
 			id: "experience_category",
@@ -1100,7 +1104,7 @@ const seed = {
 			labelSingular: "Experience Category",
 			hierarchical: false,
 			collections: ["experiences"],
-			terms: localizedTerms("exp-cat", ["gaming", "social", "events"], EXPERIENCE_CATEGORY_LABELS),
+			terms: localizedTerms("exp-cat", [...DEFAULT_EXPERIENCE_CATEGORIES], EXPERIENCE_CATEGORY_LABELS),
 		},
 	],
 	menus: (["en", "hu", "de"] as const).map((locale) => ({

@@ -11,6 +11,12 @@ import { resolveSiteIdentity } from "../utils/site-identity";
 import { buildContentSeo } from "../utils/seo";
 
 const { slug } = Astro.params;
+
+const LOCALES = ["hu", "de"] as const;
+if (slug && LOCALES.includes(slug as (typeof LOCALES)[number])) {
+	return Astro.redirect(`/${slug}/`);
+}
+
 if (!slug) return Astro.redirect("/404");
 
 const { entry: page, isPreview, cacheHint } = await getEmDashEntry("pages", slug);
