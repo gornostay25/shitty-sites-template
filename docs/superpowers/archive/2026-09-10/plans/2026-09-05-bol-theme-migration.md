@@ -1,5 +1,7 @@
 # Bar of Legends Theme Migration — Plan Index
 
+**Status:** Implemented (archived 2026-09-10) — spec at [`../specs/2026-09-05-bol-theme-migration-design.md`](../specs/2026-09-05-bol-theme-migration-design.md). Parts 1–5 shipped; Task 21 manual QA checklist is advisory.
+
 > **For agentic workers:** Execute **one part file at a time** (fits context window). Each part is self-contained with prerequisites and handoff. Use `superpowers:executing-plans` or `superpowers:subagent-driven-development` on the **current part only**.
 
 **Goal:** Ship a production EmDash + Astro site for Bar of Legends with native `bol-theme` plugin, CMS collections, en/hu/de i18n — visually matching `docs/design/v1/` with **rewritten** code.
@@ -67,7 +69,7 @@ Apply to **every part** (full detail in spec):
 | **3** | [03-seed-chrome.md](./2026-09-05-bol-theme-migration-03-seed-chrome.md) | 9–12 | CMS seed, header/footer/mobile chrome ✅ |
 | **4** | [04-blocks.md](./2026-09-05-bol-theme-migration-04-blocks.md) | 13–17 | PT block types + renderers (hero → contact/map) ✅ |
 | **5** | [05-pages-ship.md](./2026-09-05-bol-theme-migration-05-pages-ship.md) | 18–21 | Experiences route, demo cleanup ✅ |
-| **Fix** | [2026-09-07-bol-pt-blocks-islands-fix.md](../archive/2026-09-07/plans/2026-09-07-bol-pt-blocks-islands-fix.md) | 1–7 | PT `node` props, vanilla PT interactivity, menu tab layout ✅ (archived) |
+| **Fix** | [2026-09-07-bol-pt-blocks-islands-fix.md](../../2026-09-07/plans/2026-09-07-bol-pt-blocks-islands-fix.md) | 1–7 | PT `node` props, vanilla PT interactivity, menu tab layout ✅ (archived) |
 
 **Rule:** Finish and verify one part before opening the next. Mark checkboxes in the part file as you go.
 

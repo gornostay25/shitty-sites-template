@@ -1,14 +1,14 @@
 # Bar of Legends — Theme Migration Design Spec
 
-**Status:** Approved (2026-09-05) · amended during Parts 2–5 (2026-09-05 – 2026-09-07)  
+**Status:** Implemented (archived 2026-09-10) — plan at [`../plans/2026-09-05-bol-theme-migration.md`](../plans/2026-09-05-bol-theme-migration.md)  
 **Part 2 shipped (2026-09-05):** single React `/venue` admin (no `settingsSchema`); `mapsUrl` derived from coordinates; opening hours support closed days  
 **Part 3 shipped (2026-09-06):** theme chrome wired; `MobileNav` is Astro + native `<dialog popover>` (not React island); popover styles co-located in component  
 **Part 4 shipped (2026-09-06):** five PT blocks registered + rendered; home seed PT stack (en/hu/de); `index.astro` queries `pages/home`; Leaflet contact map with scoped z-index; hero fallback `src/assets/hero.webp`  
 **Part 5 shipped (2026-09-07):** `/experiences` + locale routes; demo-blocks and ShittySites demo routes removed; `ExperienceFilter` page-level island  
-**PT fix shipped (2026-09-07):** blocks read `Astro.props.node` via `getPtNode()`; PT interactivity is CSS/vanilla scripts (no React in blocks) — [fix spec](../archive/2026-09-07/specs/2026-09-07-bol-pt-blocks-islands-fix-design.md)  
-**Menu tab layout fix (2026-09-07):** `radiogroup` pattern + CMS-driven tabs — see [PT fix spec — post-ship follow-up](../archive/2026-09-07/specs/2026-09-07-bol-pt-blocks-islands-fix-design.md#post-ship-follow-up-2026-09-07)  
-**Final refactor shipped (2026-09-07):** CMS-first taxonomies, social dedupe, `loadExperiencesPageData()` — [refactor spec](../archive/2026-09-07/specs/2026-09-07-bol-final-refactor-design.md)  
-**Lucide icons shipped (2026-09-07):** `@lucide/astro` via `Icon.astro` wrapper — [icons spec](../archive/2026-09-07/specs/2026-09-07-bol-lucide-icons-design.md)  
+**PT fix shipped (2026-09-07):** blocks read `Astro.props.node` via `getPtNode()`; PT interactivity is CSS/vanilla scripts (no React in blocks) — [fix spec](../../2026-09-07/specs/2026-09-07-bol-pt-blocks-islands-fix-design.md)  
+**Menu tab layout fix (2026-09-07):** `radiogroup` pattern + CMS-driven tabs — see [PT fix spec — post-ship follow-up](../../2026-09-07/specs/2026-09-07-bol-pt-blocks-islands-fix-design.md#post-ship-follow-up-2026-09-07)  
+**Final refactor shipped (2026-09-07):** CMS-first taxonomies, social dedupe, `loadExperiencesPageData()` — [refactor spec](../../2026-09-07/specs/2026-09-07-bol-final-refactor-design.md)  
+**Lucide icons shipped (2026-09-07):** `@lucide/astro` via `Icon.astro` wrapper — [icons spec](../../2026-09-07/specs/2026-09-07-bol-lucide-icons-design.md)  
 **Date:** 2026-09-05  
 **EmDash version:** 0.36.0 (+ bun patch for `byline`)  
 **Reference:** `docs/design/v1/` (Next.js visual prototype — **reference only, do not copy code**)  
@@ -18,9 +18,10 @@
 
 | Date       | Note |
 | ---------- | ---- |
-| 2026-09-07 | **Superseded (partial):** PT block `node` props, no React islands in PT blocks. See [`../archive/2026-09-07/specs/2026-09-07-bol-pt-blocks-islands-fix-design.md`](../archive/2026-09-07/specs/2026-09-07-bol-pt-blocks-islands-fix-design.md). |
-| 2026-09-07 | **Superseded (partial):** CMS-first taxonomies, shared utils, no unsafe slug casts. See [`../archive/2026-09-07/specs/2026-09-07-bol-final-refactor-design.md`](../archive/2026-09-07/specs/2026-09-07-bol-final-refactor-design.md). |
-| 2026-09-07 | **Icons:** bol-theme uses `@lucide/astro`. See [`../archive/2026-09-07/specs/2026-09-07-bol-lucide-icons-design.md`](../archive/2026-09-07/specs/2026-09-07-bol-lucide-icons-design.md). |
+| 2026-09-07 | **Superseded (partial):** PT block `node` props, no React islands in PT blocks. See [`../../2026-09-07/specs/2026-09-07-bol-pt-blocks-islands-fix-design.md`](../../2026-09-07/specs/2026-09-07-bol-pt-blocks-islands-fix-design.md). |
+| 2026-09-07 | **Superseded (partial):** CMS-first taxonomies, shared utils, no unsafe slug casts. See [`../../2026-09-07/specs/2026-09-07-bol-final-refactor-design.md`](../../2026-09-07/specs/2026-09-07-bol-final-refactor-design.md). |
+| 2026-09-07 | **Icons:** bol-theme uses `@lucide/astro`. See [`../../2026-09-07/specs/2026-09-07-bol-lucide-icons-design.md`](../../2026-09-07/specs/2026-09-07-bol-lucide-icons-design.md). |
+| 2026-09-10 | **Hero background:** `backgroundImageUrl` editor field is Block Kit `media_picker` (media library) instead of manual URL `text_input`; stored value remains a URL string. |
 
 ---
 
@@ -60,7 +61,7 @@ The Next.js prototype in `docs/design/v1/` establishes visual direction and info
 | Collection features | **No drafts / revisions** — BOL collections use `search` (+ `seo` on `pages` and `experiences` only); edits publish directly |
 | Page layout | **No template field** — `pages` has `title` + `content` only; single full-width `<article>` in routes (no Default / Full Width / Sidebar select) |
 | Seed / CMS media | **WebP** in `.emdash/uploads/` (`img2webp -lossy -q 82`); `$media.file` references `.webp` filenames |
-| Hero background (static) | **`src/assets/hero.webp`** — imported in `bol.hero` block; optional block field `backgroundImageUrl` overrides |
+| Hero background (static) | **`src/assets/hero.webp`** — imported in `bol.hero` block; optional `media_picker` field `backgroundImageUrl` (EmDash media library → URL string) overrides |
 | PT block props | Read CMS fields from **`Astro.props.node`** via `getPtNode()` — not flat `Astro.props` ([EmDash Embed pattern](https://docs.emdashcms.com/plugins/creating-native-plugins/portable-text-components/)) |
 | React islands in PT blocks | **Forbidden** — Astro ignores `client:*` inside Portable Text `components` map; use CSS or co-located `<script>` in block `.astro` files |
 | Page-level React islands | **`ExperienceFilter` only** — `client:load` on `experiences.astro` / `hu/` / `de/` page files, passed into `ExperiencesRoute` via slot |
@@ -149,7 +150,7 @@ Theme reads **venue settings** from plugin KV for phone, email, address, social 
 
 | Block type | Block fields (marketing) | External data |
 |------------|--------------------------|---------------|
-| `bol.hero` | kicker, title lines, subtitle, CTA labels, optional `backgroundImageUrl` | fallback `src/assets/hero.webp`; tel from venue settings |
+| `bol.hero` | kicker, title lines, subtitle, CTA labels, optional `backgroundImageUrl` (`media_picker`, images only) | fallback `src/assets/hero.webp`; tel from venue settings |
 | `bol.benefits` | eyebrow, title, repeater: icon key, title, body (max 3) | — |
 | `bol.menu` | eyebrow, title, subtitle, footnote | queries `menu_items` + `menu_category` taxonomy |
 | `bol.gallery` | eyebrow, title, subtitle | queries `gallery_items` ordered by sort field |
@@ -410,7 +411,7 @@ seed/seed.json      ← $media references by filename (this repo’s seed path)
 
 4. On seed apply, EmDash reads `.emdash/uploads/` and uploads files to R2 — editors then manage them in the Media Library.
 
-**Hero block background** is not seed media — use `src/assets/hero.webp` (Astro-optimized import) unless the block’s optional `backgroundImageUrl` field is set.
+**Hero block background** is not seed media — use `src/assets/hero.webp` (Astro-optimized import) unless the block’s optional `backgroundImageUrl` field is set via the admin `media_picker` (stores the selected image URL).
 
 **Do not:**
 
@@ -545,8 +546,8 @@ After implementation, verify at **375px** and **1440px** in **en**, **hu**, **de
 
 Migration **shipped** (2026-09-07). Post-ship fixes (archived):
 
-- [PT blocks + islands fix](../archive/2026-09-07/specs/2026-09-07-bol-pt-blocks-islands-fix-design.md) — shipped 2026-09-07
-- [Final refactor](../archive/2026-09-07/specs/2026-09-07-bol-final-refactor-design.md) — shipped 2026-09-07: CMS-first taxonomies, social dedupe, `loadExperiencesPageData()` loader, no unsafe category casts
-- [Lucide icons](../archive/2026-09-07/specs/2026-09-07-bol-lucide-icons-design.md) — shipped 2026-09-07: `@lucide/astro` wrapper in bol-theme
+- [PT blocks + islands fix](../../2026-09-07/specs/2026-09-07-bol-pt-blocks-islands-fix-design.md) — shipped 2026-09-07
+- [Final refactor](../../2026-09-07/specs/2026-09-07-bol-final-refactor-design.md) — shipped 2026-09-07: CMS-first taxonomies, social dedupe, `loadExperiencesPageData()` loader, no unsafe category casts
+- [Lucide icons](../../2026-09-07/specs/2026-09-07-bol-lucide-icons-design.md) — shipped 2026-09-07: `@lucide/astro` wrapper in bol-theme
 
 Remaining: full manual QA checklist above (375px + 1440px, en/hu/de).

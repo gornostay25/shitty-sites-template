@@ -56,7 +56,7 @@
 | `src/pages/experiences.astro`, `hu/experiences.astro`, `de/experiences.astro` | **Modify** |
 | `scripts/generate-bol-seed.ts` | **Modify** |
 | `docs/SEED-REFERENCE.md` | **Modify** |
-| `docs/superpowers/specs/2026-09-05-bol-theme-migration-design.md` | **Modify** — changelog |
+| [`../../2026-09-10/specs/2026-09-05-bol-theme-migration-design.md`](../../2026-09-10/specs/2026-09-05-bol-theme-migration-design.md) | **Modify** — changelog |
 | `docs/superpowers/specs/2026-09-07-bol-final-refactor-design.md` | **Modify** — status Implemented |
 | `docs/superpowers/specs/README.md` | **Modify** |
 | `docs/superpowers/plans/README.md` | **Modify** |
@@ -703,7 +703,7 @@ Expected: completes without type errors; output structure unchanged.
 
 **Files:**
 - Modify: `docs/SEED-REFERENCE.md`
-- Modify: `docs/superpowers/specs/2026-09-05-bol-theme-migration-design.md`
+- Modify: [`../../2026-09-10/specs/2026-09-05-bol-theme-migration-design.md`](../../2026-09-10/specs/2026-09-05-bol-theme-migration-design.md)
 - Modify: `docs/superpowers/specs/2026-09-07-bol-final-refactor-design.md`
 - Modify: `docs/superpowers/specs/README.md`
 - Modify: `docs/superpowers/plans/README.md`

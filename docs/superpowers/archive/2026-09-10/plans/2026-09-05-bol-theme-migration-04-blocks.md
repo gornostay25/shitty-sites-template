@@ -1,20 +1,22 @@
 # BOL Migration — Part 4: Portable Text Blocks
 
+**Status:** Implemented (archived 2026-09-10) — spec at [`../specs/2026-09-05-bol-theme-migration-design.md`](../specs/2026-09-05-bol-theme-migration-design.md)
+
 > **Part 4 of 5** · Index: [2026-09-05-bol-theme-migration.md](./2026-09-05-bol-theme-migration.md) · Spec: [design doc](../specs/2026-09-05-bol-theme-migration-design.md)
 
 **Prerequisites:** Part 3 complete (seed collections exist, theme chrome wired).
 
 **Delivers:** Five PT block types registered in admin and rendered on home page — hero, benefits, menu, gallery, contact (with map + open-now badge). Home route wired in `index.astro`.
 
-**Status:** Shipped (2026-09-06). Manual QA at 375px / 1440px deferred to Part 5 Task 21.
+**Shipped (2026-09-06).** Manual QA at 375px / 1440px deferred to Part 5 Task 21.
 
-**Superseded (2026-09-07):** Part 4 originally shipped React islands (`MenuTabs`, `OpenNowBadge`, `VenueMap`) inside PT blocks. Replaced by [PT fix plan](../archive/2026-09-07/plans/2026-09-07-bol-pt-blocks-islands-fix.md) — blocks now use `getPtNode()` + CSS/vanilla scripts; only `ExperienceFilter` remains a React island (page-level).
+**Superseded (2026-09-07):** Part 4 originally shipped React islands (`MenuTabs`, `OpenNowBadge`, `VenueMap`) inside PT blocks. Replaced by [PT fix plan](../../2026-09-07/plans/2026-09-07-bol-pt-blocks-islands-fix.md) — blocks now use `getPtNode()` + CSS/vanilla scripts; only `ExperienceFilter` remains a React island (page-level).
 
 ### Amendment log
 
 | Date       | Note |
 | ---------- | ---- |
-| 2026-09-07 | **Superseded (partial):** PT island pattern replaced by CSS/vanilla scripts. See [`../archive/2026-09-07/plans/2026-09-07-bol-pt-blocks-islands-fix.md`](../archive/2026-09-07/plans/2026-09-07-bol-pt-blocks-islands-fix.md). |
+| 2026-09-07 | **Superseded (partial):** PT island pattern replaced by CSS/vanilla scripts. See [`../../2026-09-07/plans/2026-09-07-bol-pt-blocks-islands-fix.md`](../../2026-09-07/plans/2026-09-07-bol-pt-blocks-islands-fix.md). |
 
 **Next:** [Part 5 — Pages + ship](./2026-09-05-bol-theme-migration-05-pages-ship.md)
 
@@ -73,7 +75,7 @@ Verify against live docs ([Docs MCP](https://docs.emdashcms.com/docs-mcp/) · [l
 - Create: `src/plugins/bol-theme/astro/blocks/Benefits.astro`
 - Modify: `src/plugins/bol-theme/astro/index.ts`
 
-- [x] **Step 1: Hero** — full-viewport; Astro `Image` + `src/assets/hero.webp` fallback (optional `backgroundImageUrl`); CTAs `#menu` + `tel:`
+- [x] **Step 1: Hero** — full-viewport; Astro `Image` + `src/assets/hero.webp` fallback (optional `backgroundImageUrl` via `media_picker`); CTAs `#menu` + `tel:`
 
 - [x] **Step 2: Benefits** — 3-col → 1-col grid, icon keys → inline SVG via `Icon.astro`
 
@@ -160,6 +162,6 @@ Header stays `z-50`. Scroll: map never covers header.
 - [x] All five blocks in admin inserter + `blockComponents`
 - [x] Home page PT stack in seed (en/hu/de) + `index.astro` renders PT
 - [x] Map z-index scoped under `.venue-map`
-- [x] PT interactivity refactor — see [PT fix](../archive/2026-09-07/plans/2026-09-07-bol-pt-blocks-islands-fix.md)
+- [x] PT interactivity refactor — see [PT fix](../../2026-09-07/plans/2026-09-07-bol-pt-blocks-islands-fix.md)
 - [x] Menu tabs verified at 375px (2026-09-07); full checklist — Part 5 Task 21
 - [x] Ready for Part 5 experiences route + demo cleanup

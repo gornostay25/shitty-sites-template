@@ -1,5 +1,7 @@
 # BOL Migration — Part 1: Foundation
 
+**Status:** Implemented (archived 2026-09-10) — spec at [`../specs/2026-09-05-bol-theme-migration-design.md`](../specs/2026-09-05-bol-theme-migration-design.md)
+
 > **Part 1 of 5** · Index: [2026-09-05-bol-theme-migration.md](./2026-09-05-bol-theme-migration.md) · Spec: [design doc](../specs/2026-09-05-bol-theme-migration-design.md)
 
 **Prerequisites:** None — start here.

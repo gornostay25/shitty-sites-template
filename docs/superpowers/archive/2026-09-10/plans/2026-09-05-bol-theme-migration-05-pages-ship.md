@@ -1,12 +1,14 @@
 # BOL Migration — Part 5: Pages + Ship
 
+**Status:** Implemented (archived 2026-09-10) — spec at [`../specs/2026-09-05-bol-theme-migration-design.md`](../specs/2026-09-05-bol-theme-migration-design.md)
+
 > **Part 5 of 5** · Index: [2026-09-05-bol-theme-migration.md](./2026-09-05-bol-theme-migration.md) · Spec: [design doc](../specs/2026-09-05-bol-theme-migration-design.md)
 
 **Prerequisites:** Part 4 complete (all PT blocks render on home).
 
 **Delivers:** `/experiences` route, demo template removed, full manual QA pass. Home route (`/`, `/hu/`, `/de/`) wired in Part 4; inlined in PT fix (2026-09-07).
 
-**Status:** Shipped (2026-09-07). PT block props + island hydration fixed in [PT fix plan](../archive/2026-09-07/plans/2026-09-07-bol-pt-blocks-islands-fix.md).
+**Shipped (2026-09-07).** PT block props + island hydration fixed in [PT fix plan](../../2026-09-07/plans/2026-09-07-bol-pt-blocks-islands-fix.md).
 
 **Next:** Manual QA checklist in main spec (375px + 1440px, en/hu/de).
 

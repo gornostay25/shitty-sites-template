@@ -1,5 +1,7 @@
 # BOL Migration — Part 3: Seed + Theme Chrome
 
+**Status:** Implemented (archived 2026-09-10) — spec at [`../specs/2026-09-05-bol-theme-migration-design.md`](../specs/2026-09-05-bol-theme-migration-design.md)
+
 > **Part 3 of 5** · Index: [2026-09-05-bol-theme-migration.md](./2026-09-05-bol-theme-migration.md) · Spec: [design doc](../specs/2026-09-05-bol-theme-migration-design.md)
 
 **Prerequisites:** Part 2 complete (`bol-theme` registered, venue settings, `getUiStrings()`).

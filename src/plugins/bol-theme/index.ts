@@ -101,9 +101,10 @@ export function createPlugin() {
 							label: "Scroll hint (optional)",
 						},
 						{
-							type: "text_input",
+							type: "media_picker",
 							action_id: "backgroundImageUrl",
-							label: "Background image URL (optional)",
+							label: "Background image (optional)",
+							mime_type_filter: "image/",
 							placeholder: "Leave empty for default hero image",
 						},
 					],

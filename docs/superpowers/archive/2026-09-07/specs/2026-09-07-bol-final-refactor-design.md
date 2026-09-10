@@ -240,7 +240,7 @@ Replace inline `"gaming" | "social" | "events"` and menu unions in `EXPERIENCES`
 | File | Change |
 |------|--------|
 | `docs/SEED-REFERENCE.md` | Note CMS-first categories; new terms work at runtime; chip colors require code for known slugs |
-| `docs/superpowers/specs/2026-09-05-bol-theme-migration-design.md` | Changelog entry linking this spec |
+| [`../../2026-09-10/specs/2026-09-05-bol-theme-migration-design.md`](../../2026-09-10/specs/2026-09-05-bol-theme-migration-design.md) | Changelog entry linking this spec |
 | `docs/superpowers/specs/README.md` | Add this spec |
 | `docs/superpowers/plans/README.md` | Entry after plan is written |
 

@@ -37,3 +37,7 @@ Replaced hand-rolled bol-theme SVGs with `@lucide/astro` via thin `Icon.astro` w
 ### Plans
 
 - [`plans/2026-09-07-bol-lucide-icons.md`](./plans/2026-09-07-bol-lucide-icons.md)
+
+---
+
+**Related:** Main BOL migration spec/plans archived 2026-09-10 → [`../2026-09-10/`](../2026-09-10/)
