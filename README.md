@@ -17,13 +17,28 @@ Design spec: [docs/superpowers/archive/2026-09-03/specs/2026-08-28-shittysites-t
 
 Spec 2 adds full demo routes, seed content, widgets, search, and the `demo-blocks` plugin. See [docs/SEED-REFERENCE.md](./docs/SEED-REFERENCE.md) when available.
 
-### Hub Feedback (`hub-feedback` plugin)
+### Hub Feedback widget
 
-Visual feedback widget for Shitty Hub — enabled in **Plugins → Hub Feedback**. Set **Hub API Key** and **Site ID** in plugin settings. Widget appears on all public pages when the plugin is active and both values are configured.
+Visual feedback widget for Shitty Hub. Set credentials in `.env`:
 
-- Plugin: `src/plugins/hub-feedback/`
+```
+HUB_API_KEY=your-hub-api-key
+HUB_SITE_ID=your-site-id
+```
+
+`astro.config.mjs` bakes them into the client bundle via `vite.define` (required for the React island). Enable on public pages in `src/layouts/Base.astro`:
+
+```astro
+import HubFeedback from "../hub-feedback/astro/HubFeedback.astro";
+<!-- ... -->
+<HubFeedback />
+```
+
+Remove `<HubFeedback />` (and its import) to disable the widget.
+
+- Widget: `src/hub-feedback/`
 - API: `https://shitty-hub.gornostay25.dev/support`
-- Archived spec: [docs/superpowers/archive/2026-09-03/specs/2026-09-03-hub-feedback-plugin-design.md](./docs/superpowers/archive/2026-09-03/specs/2026-09-03-hub-feedback-plugin-design.md)
+- Archived spec: [docs/superpowers/archive/2026-09-12/specs/2026-09-07-hub-feedback-vite-plugin-design.md](./docs/superpowers/archive/2026-09-12/specs/2026-09-07-hub-feedback-vite-plugin-design.md)
 
 ## Fork Workflow
 

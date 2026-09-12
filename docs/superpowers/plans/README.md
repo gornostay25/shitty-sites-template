@@ -8,4 +8,5 @@ _No active plans._
 
 ## Archived
 
-See [../archive/2026-09-03/](../archive/2026-09-03/) — ShittySites Spec 1/2, Hub Feedback plugin.
+- [../archive/2026-09-12/](../archive/2026-09-12/) — Hub Feedback widget
+- [../archive/2026-09-03/](../archive/2026-09-03/) — ShittySites Spec 1/2, Hub Feedback EmDash plugin

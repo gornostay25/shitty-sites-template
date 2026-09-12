@@ -2,6 +2,12 @@
 
 **Status:** Implemented (archived 2026-09-03) — spec at [`../specs/2026-09-03-hub-feedback-plugin-design.md`](../specs/2026-09-03-hub-feedback-plugin-design.md)
 
+### Amendment log
+
+| Date       | Note                                                                                                                                                                      |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-09-12 | **Superseded (fully):** Replaced by hub feedback widget at `src/hub-feedback/`. See [`../../2026-09-12/plans/2026-09-07-hub-feedback-vite-plugin.md`](../../2026-09-12/plans/2026-09-07-hub-feedback-vite-plugin.md). |
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Ship a native EmDash `hub-feedback` plugin that injects a Shitty Hub visual feedback widget on all public pages using copied FasterFixes widget UI and `@fasterfixes/core`.

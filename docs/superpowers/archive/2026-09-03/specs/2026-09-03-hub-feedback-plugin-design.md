@@ -5,6 +5,12 @@
 **EmDash version:** 0.36.0  
 **Scope:** Native plugin injecting a Shitty Hub feedback widget on public site pages
 
+### Amendment log
+
+| Date       | Note                                                                                                                                                                      |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-09-12 | **Superseded (fully):** EmDash plugin removed; hub feedback now `src/hub-feedback/` (`.env` + React island). See [`../../2026-09-12/specs/2026-09-07-hub-feedback-vite-plugin-design.md`](../../2026-09-12/specs/2026-09-07-hub-feedback-vite-plugin-design.md). |
+
 ---
 
 ## Summary
