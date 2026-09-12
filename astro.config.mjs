@@ -8,7 +8,9 @@ import { bolThemePlugin } from "./src/plugins/bol-theme/index.ts";
 
 export default defineConfig({
   output: "server",
-  adapter: cloudflare(),
+  adapter: cloudflare({
+    sessionKVBindingName: "bar-of-legends-SESSION",
+  }),
   vite: {
     plugins: [tailwindcss()],
     optimizeDeps: {
@@ -62,7 +64,7 @@ export default defineConfig({
       * Docs: https://docs.emdashcms.com/deployment/object-cache/
       */
      objectCache: kvCache({
-       binding: "CACHE",
+       binding: "bar-of-legends-CACHE",
        defaultTtl: 3600,
        keyPrefix: "em",
       }),

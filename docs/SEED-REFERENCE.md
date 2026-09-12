@@ -149,11 +149,15 @@ Fork: remove plugin from `astro.config.mjs` and delete `src/plugins/demo-blocks/
 
 ## object cache (config, not seed)
 
-KV-backed query cache in `astro.config.mjs` → `objectCache: kvCache({ binding: "CACHE" })`.
+KV-backed query cache in `astro.config.mjs` → `objectCache: kvCache({ binding: "bar-of-legends-CACHE" })`.
 
-Requires `CACHE` KV namespace in `wrangler.jsonc`. Tune `defaultTtl` and `keyPrefix` per site.
+Requires matching KV namespace `id` in `wrangler.jsonc`. Tune `defaultTtl` and `keyPrefix` per site.
 
 Docs: [Object cache](https://docs.emdashcms.com/deployment/object-cache/)
+
+**Production note:** Applying this seed (~111 entries) through the **setup wizard** on Workers with object cache enabled can fail with KV 429 / subrequest limits. Use **local CLI seed + D1 SQL import** instead — full runbook in [CLOUDFLARE-DEPLOYMENT.md](./CLOUDFLARE-DEPLOYMENT.md).
+
+Direct D1 SQL bypasses EmDash cache invalidation — if the public site lags behind admin after import, re-save content in admin or wait for object-cache TTL.
 
 ---
 
@@ -190,6 +194,21 @@ Docs: [Media Library — Used in](https://docs.emdashcms.com/guides/media-librar
 Fork: replace all demo content with client copy; delete showcase entries entirely for production.
 
 **Do not put `seo` inside `content.*.data`.** Per-entry SEO is stored in `_emdash_seo`. At runtime it appears as `entry.data.seo` when loaded, but seed `data` must only contain collection field slugs.
+
+### BOL seed — media references
+
+Generated seed uses `$media.file` (see `scripts/generate-bol-seed.ts`). EmDash seed apply resolves **`$media.url`** only. After CLI seed, image fields may still contain raw `$media` JSON until:
+
+1. `bun run seed:media-upload` — R2 + D1 patch (`scripts/upload-seed-media.ts`)
+
+See [CLOUDFLARE-DEPLOYMENT.md — Seed media](./CLOUDFLARE-DEPLOYMENT.md#seed-media-mediafile).
+
+### Production seed scripts
+
+| Script | File |
+|--------|------|
+| `seed:d1-export` | `scripts/d1-export-seed-db.ts` |
+| `seed:media-upload` | `scripts/upload-seed-media.ts` |
 
 ---
 

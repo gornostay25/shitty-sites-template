@@ -18,8 +18,6 @@ import {
 	type VenueSettings,
 } from "./utils/venue.ts";
 
-const dir = new URL(".", import.meta.url);
-
 const openingHoursSchema = z.array(
 	z
 		.object({
@@ -54,6 +52,8 @@ const venueSettingsSchema = z.object({
 
 /** Descriptor factory — imported by astro.config.mjs at build time. */
 export function bolThemePlugin(): PluginDescriptor {
+	// Resolve entry paths at config time only — top-level import.meta.url breaks Workers deploy.
+	const dir = new URL(".", import.meta.url);
 	return {
 		id: PLUGIN_ID,
 		version: PLUGIN_VERSION,

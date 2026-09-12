@@ -7,7 +7,15 @@ dist/
 
 # Astro
 .astro/
+
+# EmDash — generated / local-only (regenerate via scripts in docs/CLOUDFLARE-DEPLOYMENT.md)
 .emdash/migrations.json
+.emdash/seed-migration.db
+.emdash/seed-migration.db-*
+.emdash/d1-import.sql
+.emdash/d1-import-*.sql
+.emdash/d1-media-patch.sql
+.emdash/d1-drop-all.sql
 
 # Data
 data.db
@@ -37,3 +45,5 @@ Thumbs.db
 # Logs
 *.log
 npm-debug.log*
+
+wrangler.prod.jsonc

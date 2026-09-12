@@ -13,21 +13,21 @@ import "../../styles/leaflet.css";
 
 const node = getPtNode<BolContactNode>(Astro.props);
 const {
-	eyebrow,
-	title,
-	subtitle,
-	showHours = true,
-	showMap = true,
-	showPhone = true,
-	showSocials = true,
+  eyebrow,
+  title,
+  subtitle,
+  showHours = true,
+  showMap = true,
+  showPhone = true,
+  showSocials = true,
 } = node;
 
 const locale = Astro.currentLocale ?? "en";
 const bolLocale = toBolLocale(locale);
 const ui = getUiStrings(locale);
 const [venue, settings] = await Promise.all([
-	fetchPublicVenue(Astro.url.origin),
-	getSiteSettings(),
+  fetchPublicVenue(Astro.url.origin),
+  getSiteSettings(),
 ]);
 
 const siteTitle = settings.title || "Bar of Legends";
@@ -35,256 +35,277 @@ const siteTitle = settings.title || "Bar of Legends";
 const socials = socialLinksFromVenue(venue);
 
 function formatHoursRow(row: OpeningHoursRow): string | null {
-	const hours = rowToDayHours(row);
-	if (!hours) return null;
-	return `${formatMinutes(hours.open, bolLocale)} – ${formatMinutes(hours.close, bolLocale)}`;
+  const hours = rowToDayHours(row);
+  if (!hours) return null;
+  return `${formatMinutes(hours.open, bolLocale)} – ${formatMinutes(hours.close, bolLocale)}`;
 }
 
 const hoursRows = venue.openingHours
-	.map((row, index) => ({ row, day: ui.contact.days[index], index }))
-	.filter(({ row }) => !row.closed)
-	.map(({ row, day }) => ({ day, hours: formatHoursRow(row) }))
-	.filter((entry): entry is { day: string; hours: string } => entry.hours !== null);
+  .map((row, index) => ({ row, day: ui.contact.days[index], index }))
+  .filter(({ row }) => !row.closed)
+  .map(({ row, day }) => ({ day, hours: formatHoursRow(row) }))
+  .filter(
+    (entry): entry is { day: string; hours: string } => entry.hours !== null,
+  );
 ---
 
 <section id="contact" aria-labelledby="contact-title" class="scroll-mt-20">
-	<div class="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 md:py-24">
-		{eyebrow && (
-			<p class="text-xs font-semibold uppercase tracking-[0.25em] text-brand">{eyebrow}</p>
-		)}
-		{
-			title && (
-				<h2 id="contact-title" class="mt-3 font-display text-4xl tracking-wide sm:text-5xl">
-					{title}
-				</h2>
-			)
-		}
-		{
-			subtitle && (
-				<p class="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-					{subtitle}
-				</p>
-			)
-		}
+  <div class="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 md:py-24">
+    {
+      eyebrow && (
+        <p class="text-xs font-semibold uppercase tracking-[0.25em] text-brand">
+          {eyebrow}
+        </p>
+      )
+    }
+    {
+      title && (
+        <h2
+          id="contact-title"
+          class="mt-3 font-display text-4xl tracking-wide sm:text-5xl"
+        >
+          {title}
+        </h2>
+      )
+    }
+    {
+      subtitle && (
+        <p class="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+          {subtitle}
+        </p>
+      )
+    }
 
-		<div class="mt-10 grid gap-4 md:gap-6 lg:grid-cols-2">
-			{
-				showHours && (
-					<div class="rounded-card border border-border bg-surface p-6">
-						<div class="flex flex-wrap items-center justify-between gap-3">
-							<h3 class="font-display text-2xl tracking-wide">{ui.contact.hoursTitle}</h3>
-							<span
-								id="open-now-badge"
-								aria-live="polite"
-								class="inline-flex min-h-9 items-center gap-2 whitespace-nowrap rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-muted-foreground"
-							>
-								<span class="size-2 rounded-full bg-muted-foreground" aria-hidden="true"
-								></span>
-								<span id="open-now-badge-text">…</span>
-							</span>
-							<script
-								type="application/json"
-								id="open-now-config"
-								set:html={JSON.stringify({
-									openingHours: venue.openingHours,
-									bolLocale,
-									statusOpenTpl: ui.contact.statusOpenTpl,
-									statusClosedTpl: ui.contact.statusClosedTpl,
-									daysShort: ui.contact.daysShort,
-								})}
-							/>
-						</div>
-						<table class="mt-5 w-full text-sm">
-							<caption class="sr-only">{ui.contact.hoursTitle}</caption>
-							<tbody>
-								{
-									hoursRows.map(({ day, hours }) => (
-										<tr class="border-b border-white/5 last:border-0">
-											<th scope="row" class="py-2.5 text-left font-medium text-foreground">
-												{day}
-											</th>
-											<td class="py-2.5 text-right tabular-nums text-muted-foreground">
-												{hours}
-											</td>
-										</tr>
-									))
-								}
-							</tbody>
-						</table>
-					</div>
-				)
-			}
+    <div class="mt-10 grid gap-4 md:gap-6 lg:grid-cols-2">
+      {
+        showHours && (
+          <div class="rounded-card border border-border bg-surface p-6">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <h3 class="font-display text-2xl tracking-wide">
+                {ui.contact.hoursTitle}
+              </h3>
+              <span
+                id="open-now-badge"
+                aria-live="polite"
+                class="inline-flex min-h-9 items-center gap-2 whitespace-nowrap rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-muted-foreground"
+              >
+                <span
+                  class="size-2 rounded-full bg-muted-foreground"
+                  aria-hidden="true"
+                />
+                <span id="open-now-badge-text">…</span>
+              </span>
+              <script
+                is:inline
+                type="application/json"
+                id="open-now-config"
+                set:html={JSON.stringify({
+                  openingHours: venue.openingHours,
+                  bolLocale,
+                  statusOpenTpl: ui.contact.statusOpenTpl,
+                  statusClosedTpl: ui.contact.statusClosedTpl,
+                  daysShort: ui.contact.daysShort,
+                })}
+              />
+            </div>
+            <table class="mt-5 w-full text-sm">
+              <caption class="sr-only">{ui.contact.hoursTitle}</caption>
+              <tbody>
+                {hoursRows.map(({ day, hours }) => (
+                  <tr class="border-b border-white/5 last:border-0">
+                    <th
+                      scope="row"
+                      class="py-2.5 text-left font-medium text-foreground"
+                    >
+                      {day}
+                    </th>
+                    <td class="py-2.5 text-right tabular-nums text-muted-foreground">
+                      {hours}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )
+      }
 
-			<div class="flex flex-col gap-4 md:gap-6">
-				{
-					(showMap || showPhone || showSocials) && (
-						<>
-							{
-								showMap && (
-									<div class="rounded-card border border-border bg-surface p-6">
-										<h3 class="font-display text-2xl tracking-wide">
-											{ui.contact.addressTitle}
-										</h3>
-										<p class="mt-3 flex items-start gap-3 text-sm leading-relaxed text-muted-foreground">
-											<Icon name="map-pin" class="mt-0.5 size-4 shrink-0 text-brand" />
-											{venue.address}
-										</p>
-										<div class="mt-5 overflow-hidden rounded-xl border border-border">
-											<div
-												data-venue-map
-												data-lat={venue.lat}
-												data-lng={venue.lng}
-												data-title={siteTitle}
-												data-address={venue.address}
-												role="region"
-												aria-label={siteTitle}
-												class="venue-map relative h-64 w-full sm:h-72"
-											>
-												<div class="venue-map-canvas h-full w-full"></div>
-												<div
-													class="venue-map-loading absolute inset-0 grid place-items-center bg-surface"
-													aria-hidden="true"
-												>
-													<span class="size-6 animate-spin rounded-full border-2 border-brand/30 border-t-brand"
-													></span>
-												</div>
-											</div>
-										</div>
-										<a
-											href={venue.mapsUrl}
-											target="_blank"
-											rel="noopener noreferrer"
-											class="mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-brand px-4 text-sm font-semibold text-[#1c1305] transition-colors hover:bg-brand/90"
-										>
-											<Icon name="map-pin" class="size-4" />
-											{ui.contact.maps}
-										</a>
-									</div>
-								)
-							}
+      <div class="flex flex-col gap-4 md:gap-6">
+        {
+          (showMap || showPhone || showSocials) && (
+            <>
+              {showMap && (
+                <div class="rounded-card border border-border bg-surface p-6">
+                  <h3 class="font-display text-2xl tracking-wide">
+                    {ui.contact.addressTitle}
+                  </h3>
+                  <p class="mt-3 flex items-start gap-3 text-sm leading-relaxed text-muted-foreground">
+                    <Icon
+                      name="map-pin"
+                      class="mt-0.5 size-4 shrink-0 text-brand"
+                    />
+                    {venue.address}
+                  </p>
+                  <div class="mt-5 overflow-hidden rounded-xl border border-border">
+                    <div
+                      data-venue-map
+                      data-lat={venue.lat}
+                      data-lng={venue.lng}
+                      data-title={siteTitle}
+                      data-address={venue.address}
+                      role="region"
+                      aria-label={siteTitle}
+                      class="venue-map relative h-64 w-full sm:h-72"
+                    >
+                      <div class="venue-map-canvas h-full w-full" />
+                      <div
+                        class="venue-map-loading absolute inset-0 grid place-items-center bg-surface"
+                        aria-hidden="true"
+                      >
+                        <span class="size-6 animate-spin rounded-full border-2 border-brand/30 border-t-brand" />
+                      </div>
+                    </div>
+                  </div>
+                  <a
+                    href={venue.mapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-brand px-4 text-sm font-semibold text-[#1c1305] transition-colors hover:bg-brand/90"
+                  >
+                    <Icon name="map-pin" class="size-4" />
+                    {ui.contact.maps}
+                  </a>
+                </div>
+              )}
 
-							{
-								(showPhone || showSocials) && (
-									<div class="flex-1 rounded-card border border-border bg-surface p-6">
-										{
-											showPhone && (
-												<>
-													<h3 class="font-display text-2xl tracking-wide">
-														{ui.contact.reachTitle}
-													</h3>
-													<div class="mt-3 flex flex-col gap-1">
-														<a
-															href={`tel:${venue.phoneTel}`}
-															class="flex min-h-12 items-center gap-3 rounded-lg px-2 text-sm font-medium transition-colors hover:bg-surface-2"
-														>
-															<Icon name="phone" class="size-4 shrink-0 text-brand" />
-															{venue.phoneDisplay}
-														</a>
-														<a
-															href={`mailto:${venue.email}`}
-															class="flex min-h-12 items-center gap-3 break-all rounded-lg px-2 text-sm font-medium transition-colors hover:bg-surface-2"
-														>
-															<Icon name="mail" class="size-4 shrink-0 text-brand" />
-															{venue.email}
-														</a>
-													</div>
-												</>
-											)
-										}
-										{
-											showSocials && (
-												<>
-													<p
-														class:list={[
-															"text-xs font-semibold uppercase tracking-widest text-muted-foreground",
-															showPhone && "mt-5",
-														]}
-													>
-														{ui.contact.socialTitle}
-													</p>
-													<div class="mt-3 flex gap-2">
-														{
-															socials.map((social) => (
-																<a
-																	href={social.href}
-																	aria-label={ui.contact.socials[social.id]}
-																	class="grid size-12 place-items-center rounded-lg border border-border bg-surface text-muted-foreground transition-colors hover:border-brand/40 hover:text-brand"
-																>
-																	<Icon name={social.id} class="size-5" />
-																</a>
-															))
-														}
-													</div>
-												</>
-											)
-										}
-									</div>
-								)
-							}
-						</>
-					)
-				}
-			</div>
-		</div>
-	</div>
+              {(showPhone || showSocials) && (
+                <div class="flex-1 rounded-card border border-border bg-surface p-6">
+                  {showPhone && (
+                    <>
+                      <h3 class="font-display text-2xl tracking-wide">
+                        {ui.contact.reachTitle}
+                      </h3>
+                      <div class="mt-3 flex flex-col gap-1">
+                        <a
+                          href={`tel:${venue.phoneTel}`}
+                          class="flex min-h-12 items-center gap-3 rounded-lg px-2 text-sm font-medium transition-colors hover:bg-surface-2"
+                        >
+                          <Icon
+                            name="phone"
+                            class="size-4 shrink-0 text-brand"
+                          />
+                          {venue.phoneDisplay}
+                        </a>
+                        <a
+                          href={`mailto:${venue.email}`}
+                          class="flex min-h-12 items-center gap-3 break-all rounded-lg px-2 text-sm font-medium transition-colors hover:bg-surface-2"
+                        >
+                          <Icon
+                            name="mail"
+                            class="size-4 shrink-0 text-brand"
+                          />
+                          {venue.email}
+                        </a>
+                      </div>
+                    </>
+                  )}
+                  {showSocials && (
+                    <>
+                      <p
+                        class:list={[
+                          "text-xs font-semibold uppercase tracking-widest text-muted-foreground",
+                          showPhone && "mt-5",
+                        ]}
+                      >
+                        {ui.contact.socialTitle}
+                      </p>
+                      <div class="mt-3 flex gap-2">
+                        {socials.map((social) => (
+                          <a
+                            href={social.href}
+                            aria-label={ui.contact.socials[social.id]}
+                            class="grid size-12 place-items-center rounded-lg border border-border bg-surface text-muted-foreground transition-colors hover:border-brand/40 hover:text-brand"
+                          >
+                            <Icon name={social.id} class="size-5" />
+                          </a>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+            </>
+          )
+        }
+      </div>
+    </div>
+  </div>
 </section>
 
 <script>
-	import { initOpenNowBadge, type OpenNowConfig } from "./contact-open-now.ts";
+  import { initOpenNowBadge, type OpenNowConfig } from "./contact-open-now.ts";
 
-	const configEl = document.getElementById("open-now-config");
-	if (configEl?.textContent) {
-		initOpenNowBadge("open-now-badge", JSON.parse(configEl.textContent) as OpenNowConfig);
-	}
+  const configEl = document.getElementById("open-now-config");
+  if (configEl?.textContent) {
+    initOpenNowBadge(
+      "open-now-badge",
+      JSON.parse(configEl.textContent) as OpenNowConfig,
+    );
+  }
 </script>
 
 <script>
-	async function initVenueMaps() {
-		const L = (await import("leaflet")).default;
-		await import("leaflet/dist/leaflet.css");
+  async function initVenueMaps() {
+    const L = (await import("leaflet")).default;
+    await import("leaflet/dist/leaflet.css");
 
-		for (const root of document.querySelectorAll<HTMLElement>("[data-venue-map]")) {
-			const canvas = root.querySelector<HTMLElement>(".venue-map-canvas");
-			const loading = root.querySelector<HTMLElement>(".venue-map-loading");
-			if (!canvas || canvas.dataset.initialized === "true") continue;
+    for (const root of document.querySelectorAll<HTMLElement>(
+      "[data-venue-map]",
+    )) {
+      const canvas = root.querySelector<HTMLElement>(".venue-map-canvas");
+      const loading = root.querySelector<HTMLElement>(".venue-map-loading");
+      if (!canvas || canvas.dataset.initialized === "true") continue;
 
-			const lat = Number(root.dataset.lat);
-			const lng = Number(root.dataset.lng);
-			const title = root.dataset.title ?? "";
-			const address = root.dataset.address ?? "";
+      const lat = Number(root.dataset.lat);
+      const lng = Number(root.dataset.lng);
+      const title = root.dataset.title ?? "";
+      const address = root.dataset.address ?? "";
 
-			const map = L.map(canvas, { scrollWheelZoom: false }).setView([lat, lng], 16);
-			const tileOptions = { maxNativeZoom: 16, maxZoom: 19 } as const;
+      const map = L.map(canvas, { scrollWheelZoom: false }).setView(
+        [lat, lng],
+        16,
+      );
+      const tileOptions = { maxNativeZoom: 16, maxZoom: 19 } as const;
 
-			L.tileLayer(
-				"https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
-				{
-					...tileOptions,
-					attribution:
-						'Tiles &copy; Esri — Source: Esri, HERE, Garmin, &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors',
-				},
-			).addTo(map);
-			L.tileLayer(
-				"https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}",
-				tileOptions,
-			).addTo(map);
+      L.tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+        {
+          ...tileOptions,
+          attribution:
+            'Tiles &copy; Esri — Source: Esri, HERE, Garmin, &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors',
+        },
+      ).addTo(map);
+      L.tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}",
+        tileOptions,
+      ).addTo(map);
 
-			const pin = L.divIcon({
-				className: "venue-pin-anchor",
-				html: '<span class="venue-pin" aria-hidden="true"></span>',
-				iconSize: [30, 30],
-				iconAnchor: [15, 34],
-				popupAnchor: [0, -30],
-			});
+      const pin = L.divIcon({
+        className: "venue-pin-anchor",
+        html: '<span class="venue-pin" aria-hidden="true"></span>',
+        iconSize: [30, 30],
+        iconAnchor: [15, 34],
+        popupAnchor: [0, -30],
+      });
 
-			L.marker([lat, lng], { icon: pin, title })
-				.addTo(map)
-				.bindPopup(`<strong>${title}</strong><br/><span>${address}</span>`);
+      L.marker([lat, lng], { icon: pin, title })
+        .addTo(map)
+        .bindPopup(`<strong>${title}</strong><br/><span>${address}</span>`);
 
-			canvas.dataset.initialized = "true";
-			loading?.remove();
-		}
-	}
+      canvas.dataset.initialized = "true";
+      loading?.remove();
+    }
+  }
 
-	initVenueMaps();
+  initVenueMaps();
 </script>

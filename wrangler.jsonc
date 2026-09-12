@@ -1,28 +1,31 @@
 {
-	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "shittysites-template",
-	"main": "./src/worker.ts",
-	"compatibility_date": "2026-02-24",
-	"compatibility_flags": ["nodejs_compat"],
-	"d1_databases": [
-		{
-			"binding": "DB",
-			"database_name": "shittysites-template",
-		},
-	],
-	"r2_buckets": [
-		{
-			"binding": "MEDIA",
-			"bucket_name": "shittysites-template-media",
-		},
-	],
-	"kv_namespaces": [
-		{
-			"binding": "CACHE"
-		}
-	],
-	// General maintenance cron trigger — no dedicated media usage cron (removed in EmDash 0.36)
-	"triggers": {
-		"crons": ["* * * * *"],
-	},
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "bar-of-legends",
+  "main": "./src/worker.ts",
+  "compatibility_date": "2026-02-24",
+  "compatibility_flags": ["nodejs_compat"],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "bar-of-legends",
+    },
+  ],
+  "r2_buckets": [
+    {
+      "binding": "MEDIA",
+      "bucket_name": "bar-of-legends-media",
+    },
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "bar-of-legends-CACHE",
+    },
+    {
+      "binding": "bar-of-legends-SESSION",
+    },
+  ],
+  // General maintenance cron trigger — no dedicated media usage cron (removed in EmDash 0.36)
+  "triggers": {
+    "crons": ["* * * * *"],
+  },
 }

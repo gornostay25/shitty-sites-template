@@ -66,23 +66,31 @@ bun run typecheck   # Astro type check
 bun deploy          # Build + deploy to Cloudflare Workers
 ```
 
+## Production deploy (Cloudflare)
+
+First-time production setup for **Bar of Legends** (large seed + KV object cache) does **not** reliably complete through the admin setup wizard alone. Use the documented workaround: local `emdash seed` → SQL dump → `wrangler d1 execute`.
+
+See **[docs/CLOUDFLARE-DEPLOYMENT.md](./docs/CLOUDFLARE-DEPLOYMENT.md)** for the full runbook. Production content bootstrap scripts:
+
+| Command | Purpose |
+|---------|---------|
+| `bun run seed:d1-export` | SQLite seed → D1-safe SQL (FTS5 fixes) |
+| `bun run seed:media-upload` | Upload `.emdash/uploads/` to R2 + patch D1 image fields |
+
+Also covers: setup wizard KV 429, binding IDs, `import.meta.url` Workers fix, recovery, `$media.file` caveat.
+
 ## Cloudflare KV (Object Cache)
 
-Create a KV namespace and add it to `wrangler.jsonc`:
+This site uses `bar-of-legends-CACHE` (object cache) and `bar-of-legends-SESSION` (Astro sessions). Create namespaces once and copy `id`s into `wrangler.jsonc`:
 
 ```bash
-bunx wrangler kv namespace create CACHE
-bunx wrangler kv namespace create CACHE --preview
+bunx wrangler kv namespace create bar-of-legends-CACHE
+bunx wrangler kv namespace create bar-of-legends-SESSION
 ```
 
-Copy the `id` and `preview_id` into `wrangler.jsonc` under `kv_namespaces`.
+Match `sessionKVBindingName: "bar-of-legends-SESSION"` in `astro.config.mjs` and `objectCache: kvCache({ binding: "bar-of-legends-CACHE" })`.
 
-Object cache tuning lives in `astro.config.mjs`:
-
-- **`defaultTtl`** — lower (e.g. 300) if scheduled publishing must appear quickly without a collection change
-- **`keyPrefix`** — change when multiple EmDash sites share one KV namespace
-
-Docs: [Object Cache](https://docs.emdashcms.com/deployment/object-cache/)
+Object cache tuning in `astro.config.mjs`: `defaultTtl`, `keyPrefix`. Docs: [Object Cache](https://docs.emdashcms.com/deployment/object-cache/)
 
 ## Media Usage Tracking
 
@@ -109,7 +117,7 @@ Canonical URLs and Open Graph tags use `resolveSiteIdentity()` and `getSeoMeta()
 - **Runtime:** Cloudflare Workers
 - **Database:** D1
 - **Storage:** R2
-- **Cache:** KV (`CACHE` binding)
+- **Cache:** KV (`bar-of-legends-CACHE`, `bar-of-legends-SESSION`)
 - **Framework:** Astro 7 with `@astrojs/cloudflare`
 - **Icons (bol-theme):** `@lucide/astro` via `src/plugins/bol-theme/astro/icons/Icon.astro`
 - **CSS:** Tailwind CSS 4 (`@tailwindcss/vite`) — imported, not used on demo markup
@@ -118,4 +126,6 @@ Canonical URLs and Open Graph tags use `resolveSiteIdentity()` and `getSeoMeta()
 
 - [EmDash docs](https://docs.emdashcms.com/) — live reference via MCP at `https://docs.emdashcms.com/mcp`
 - [AGENTS.md](./AGENTS.md) — AI agent guide for this template
+- [Cloudflare deployment runbook](./docs/CLOUDFLARE-DEPLOYMENT.md) — production seed/migration workarounds
+- [Seed reference](./docs/SEED-REFERENCE.md)
 - [Design spec](./docs/superpowers/archive/2026-09-03/specs/2026-08-28-shittysites-template-design.md)
