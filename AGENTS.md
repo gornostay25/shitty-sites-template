@@ -20,7 +20,7 @@ The admin UI is at `http://localhost:4321/_emdash/admin`.
 | `public/`                | Fallback only — fixed URL, no processing (favicons, `robots.txt`, legacy PDFs) |
 | `emdash-env.d.ts`        | Generated types for collections (auto-regenerated on dev server start)             |
 | `src/types/content.ts`   | Shared type aliases (`PageTemplate`) — not generated                               |
-| `patches/emdash@0.36.0.patch` | Adds `byline` to type generator until upstream EmDash fix                     |
+| `patches/emdash@0.37.0.patch` | Adds `byline` to type generator until upstream EmDash fix                     |
 | `src/layouts/Base.astro` | Site shell: SEO, header, footer, plugin page contributions |
 | `src/components/`        | SiteHeader, SiteFooter, SeoHead, MenuNav, SocialLinks      |
 | `src/utils/site-identity.ts` | `resolveSiteIdentity()` — admin settings → template props |
@@ -49,7 +49,7 @@ This template ships with `.mcp.json`, `.cursor/mcp.json`, and `.vscode/mcp.json`
 - Always call `Astro.cache.set(cacheHint)` on pages that query content.
 - Taxonomy names in queries must match the seed's `"name"` field exactly (e.g., `"category"` not `"categories"`).
 - `emdash-env.d.ts` is auto-generated — never hand-edit. Regenerates on dev server start.
-- `entry.data.byline` and `entry.data.bylines` are typed via `patches/emdash@0.36.0.patch` (EmDash 0.36 generator omits `byline`). Remove the patch when upstream ships the fix.
+- `entry.data.byline` and `entry.data.bylines` are typed via `patches/emdash@0.37.0.patch` (EmDash 0.37 generator omits `byline`). Remove the patch when upstream ships the fix.
 - Use `PageTemplate` from `src/types/content.ts` for page layout map keys.
 - **Static assets** — prefer `src/assets/` (import in `.astro`/`.tsx`; Astro optimizes and hashes). CMS images: `<Image image={...} />`. Use `public/` only when a fixed root URL is required (`/favicon.ico`, unprocessed PDFs).
 
