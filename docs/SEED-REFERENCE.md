@@ -157,7 +157,7 @@ Docs: [Object cache](https://docs.emdashcms.com/deployment/object-cache/)
 
 **Production note:** Applying this seed (~111 entries) through the **setup wizard** on Workers with object cache enabled can fail with KV 429 / subrequest limits. Use **local CLI seed + D1 SQL import** instead — full runbook in [CLOUDFLARE-DEPLOYMENT.md](./CLOUDFLARE-DEPLOYMENT.md).
 
-Direct D1 SQL bypasses EmDash cache invalidation — if the public site lags behind admin after import, re-save content in admin or wait for object-cache TTL.
+Direct D1 SQL bypasses EmDash cache invalidation — if the public site lags behind admin after import, open any photo in **Media**, add alt text and save, then remove alt and save again; or re-save affected content; or wait for object-cache TTL.
 
 ---
 

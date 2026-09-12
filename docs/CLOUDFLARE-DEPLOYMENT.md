@@ -40,10 +40,10 @@ First visit to `/_emdash/admin` runs the setup wizard when the D1 database is em
 | Symptom | Cause | Workaround |
 |---------|-------|------------|
 | Setup wizard: **Failed to apply seed** (500) | Single Worker invocation applies full seed + KV object-cache invalidation → Cloudflare subrequest / KV write limits | **Local CLI seed + D1 SQL import** (below) |
-| Deploy tries to create KV namespace / `code: 10014` | Generated `dist/server/wrangler.json` missing KV `id`s | Set `name` + KV `id`s in root `wrangler.jsonc` |
+| Deploy tries to create KV namespace / `code: 10014` | Root `wrangler.jsonc` missing SESSION binding that matches `sessionKVBindingName` | Add both CACHE + SESSION entries under `kv_namespaces`; names must match `astro.config.mjs` |
 | Deploy/runtime: `TypeError: Invalid URL string` | Top-level `import.meta.url` in `bol-theme` plugin evaluated in Workers | `new URL(".", import.meta.url)` moved **inside** `bolThemePlugin()` |
 | Images missing after CLI seed | Seed uses `$media.file`; EmDash apply engine resolves `$media.url` only | `bun run seed:media-upload` (see [Seed media](#seed-media-mediafile)) |
-| Live site shows **No image** but admin has images | D1 patched via SQL; KV object cache still holds pre-patch queries | Re-save affected entries in admin (bumps cache epoch) or wait for `defaultTtl` |
+| Live site shows **No image** but admin has images | D1 patched via SQL; KV object cache still holds pre-patch queries | **Media:** open any photo → add alt text → save → remove alt → save again. Or re-save affected content entries. Or wait for `defaultTtl` |
 | Partial data after failed setup | Wizard aborted mid-seed | Import into **empty** D1 only — do not import over a dirty database |
 
 ---
@@ -169,22 +169,32 @@ bun run build && bunx wrangler deploy
 
 ### Symptom
 
-Wrangler tries to auto-provision KV during deploy, or fails with namespace already exists (`code: 10014`), or CACHE/SESSION bindings lack `id` in the merged config.
+Wrangler tries to auto-provision KV during deploy, or fails with namespace already exists (`code: 10014`). Common cause: root `wrangler.jsonc` lists EmDash CACHE but omits the Astro session binding — merged `dist/server/wrangler.json` then triggers auto-create for a namespace that already exists.
 
 ### Fix (this repo)
 
 1. Set Worker `name` in `wrangler.jsonc` (e.g. `"bar-of-legends"`).
-2. Create namespaces once:
+2. Declare **both** KV bindings in root `wrangler.jsonc` (names must match `astro.config.mjs`):
+
+   ```jsonc
+   "kv_namespaces": [
+     { "binding": "bar-of-legends-CACHE" },
+     { "binding": "bar-of-legends-SESSION" }
+   ]
+   ```
+
+3. Set `sessionKVBindingName: "bar-of-legends-SESSION"` in `astro.config.mjs` — same string as the SESSION binding above.
+
+4. If namespaces do not exist yet, create once:
 
    ```bash
    bunx wrangler kv namespace create bar-of-legends-CACHE
    bunx wrangler kv namespace create bar-of-legends-SESSION
    ```
 
-3. Copy each `id` into `wrangler.jsonc` under `kv_namespaces`.
-4. Match `sessionKVBindingName` in `astro.config.mjs` to the SESSION binding name.
+   Add each returned `id` to the matching entry in `wrangler.jsonc` if Wrangler still fails to resolve them.
 
-Re-deploy after IDs are present so `dist/server/wrangler.json` inherits them.
+Re-deploy so `dist/server/wrangler.json` inherits the explicit bindings.
 
 ---
 
@@ -288,7 +298,7 @@ Requires Wrangler auth (same as D1 import). No admin passkey needed — objects 
 
 Local dev can use files under `.emdash/uploads/`; production serves them via `/_emdash/api/media/file/{storage_key}`.
 
-If the public site still shows **No image** after SQL patches while admin looks correct, the object cache may be stale — re-save an entry in admin or wait for `defaultTtl` (see [Object cache after import](#object-cache-after-import)).
+If the public site still shows **No image** after SQL patches while admin looks correct, the object cache may be stale — in **Media**, open any photo, add alt text and save, then remove alt text and save again (bumps cache without editing every menu item). Alternatively re-save affected content entries or wait for `defaultTtl` (see [Object cache after import](#object-cache-after-import)).
 
 | Flag | Effect |
 |------|--------|
@@ -302,7 +312,11 @@ If the public site still shows **No image** after SQL patches while admin looks 
 
 Object cache is safe to keep enabled **after** the database is populated via CLI import. The failure mode is specific to **bulk seed inside one Worker request**, not normal admin edits or page views.
 
-**Direct D1 writes** (`wrangler d1 execute`, media patch SQL) bypass EmDash invalidation. Stale public pages clear when affected content is saved through admin/API (normal epoch bump) or when cached entries expire (`defaultTtl`, default 3600s).
+**Direct D1 writes** (`wrangler d1 execute`, media patch SQL) bypass EmDash invalidation. Stale public pages clear when:
+
+1. **Media library trick (fastest after bootstrap):** open any uploaded photo → add alt text → save → remove alt text → save again
+2. Affected content entries are re-saved through admin/API (normal epoch bump)
+3. Cached entries expire (`defaultTtl`, default 3600s)
 
 Admin/API content edits invalidate affected collections automatically — no manual purge needed for normal editing.
 
