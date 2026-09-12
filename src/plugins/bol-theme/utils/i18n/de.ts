@@ -62,6 +62,11 @@ const de: UiStrings = {
 			button: "Schreib uns",
 		},
 	},
+	gallery: {
+		lightboxLabel: "Galeriebild-Vorschau",
+		close: "Bild schließen",
+		openImageTpl: "Vergrößern: {alt}",
+	},
 	footer: {
 		tagline: "Esport-Bar & Craftbier-Haus im Herzen von Győr.",
 		contactTitle: "Kontakt",

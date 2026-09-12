@@ -62,6 +62,11 @@ const hu: UiStrings = {
 			button: "Írj nekünk",
 		},
 	},
+	gallery: {
+		lightboxLabel: "Galéria kép nagyítása",
+		close: "Kép bezárása",
+		openImageTpl: "Nagyítás: {alt}",
+	},
 	footer: {
 		tagline: "Esportbár és kézműves sörház Győr szívében.",
 		contactTitle: "Kapcsolat",

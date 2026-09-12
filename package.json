@@ -14,7 +14,8 @@
     "deploy": "astro build && wrangler deploy",
     "typecheck": "astro check",
     "seed:d1-export": "bun scripts/d1-export-seed-db.ts",
-    "seed:media-upload": "bun scripts/upload-seed-media.ts --remote"
+    "seed:media-upload": "bun scripts/upload-seed-media.ts --remote",
+    "seed:media-upload:local": "bun scripts/upload-seed-media.ts --local"
   },
   "dependencies": {
     "@astrojs/cloudflare": "14.3.1",

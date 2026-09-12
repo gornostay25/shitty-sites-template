@@ -197,18 +197,22 @@ Fork: replace all demo content with client copy; delete showcase entries entirel
 
 ### BOL seed — media references
 
-Generated seed uses `$media.file` (see `scripts/generate-bol-seed.ts`). EmDash seed apply resolves **`$media.url`** only. After CLI seed, image fields may still contain raw `$media` JSON until:
+Generated seed uses `$media.file` (see `scripts/generate-bol-seed.ts`). EmDash seed apply resolves **`$media.url`** only. After CLI seed, image fields may still contain raw `$media` JSON until you run the media upload script:
 
-1. `bun run seed:media-upload` — R2 + D1 patch (`scripts/upload-seed-media.ts`)
+| Environment | Command |
+|-------------|---------|
+| Local dev (`bun dev`) | `bun run seed:media-upload:local` |
+| Production (remote D1) | `bun run seed:media-upload` |
 
 See [CLOUDFLARE-DEPLOYMENT.md — Seed media](./CLOUDFLARE-DEPLOYMENT.md#seed-media-mediafile).
 
-### Production seed scripts
+### Seed scripts
 
 | Script | File |
 |--------|------|
 | `seed:d1-export` | `scripts/d1-export-seed-db.ts` |
-| `seed:media-upload` | `scripts/upload-seed-media.ts` |
+| `seed:media-upload:local` | `scripts/upload-seed-media.ts --local` |
+| `seed:media-upload` | `scripts/upload-seed-media.ts --remote` |
 
 ---
 

@@ -5,8 +5,9 @@ This is an EmDash site -- a CMS built on Astro with a full admin UI.
 ```bash
 bun dev                    # Start the Astro dev server
 bunx emdash types          # Regenerate TypeScript types from a running site
-bun run seed:d1-export     # Local SQLite → D1-safe SQL (production import)
-bun run seed:media-upload  # Seed WebP → R2 + D1 image patch (production)
+bun run seed:d1-export          # Local SQLite → D1-safe SQL (production import)
+bun run seed:media-upload:local # Seed WebP → local R2 + local D1 (dev, after bun dev)
+bun run seed:media-upload       # Seed WebP → remote R2 + remote D1 (production)
 ```
 
 Production bootstrap: `docs/CLOUDFLARE-DEPLOYMENT.md`.
@@ -21,7 +22,7 @@ The admin UI is at `http://localhost:4321/_emdash/admin`.
 | `src/live.config.ts`     | EmDash loader registration (boilerplate -- don't modify)                           |
 | `seed/seed.json`         | Schema definition + demo content (collections, fields, taxonomies, menus, widgets) |
 | `scripts/d1-export-seed-db.ts` | D1-safe SQL export after local `emdash seed` |
-| `scripts/upload-seed-media.ts` | R2 upload + D1 media/content patch for `$media.file` |
+| `scripts/upload-seed-media.ts` | R2 upload + D1 media/content patch for `$media.file` (`--local` or `--remote`) |
 | `src/assets/`            | **Preferred** — import in components; Astro optimizes at build time (`import img from "../assets/…"`) |
 | `public/`                | Fallback only — fixed URL, no processing (favicons, `robots.txt`, legacy PDFs) |
 | `emdash-env.d.ts`        | Generated types for collections (auto-regenerated on dev server start)             |
@@ -93,7 +94,7 @@ Agency base for rebuilding client sites on EmDash + Cloudflare. Every route is s
 | Search | [search](https://docs.emdashcms.com/guides/search/) | `SiteHeader.astro` (Spec 2 wires LiveSearch) |
 | Dark mode | [dark-mode](https://docs.emdashcms.com/guides/dark-mode/) | `Base.astro`, `global.css` |
 | Object cache | [object-cache](https://docs.emdashcms.com/deployment/object-cache/) | `astro.config.mjs`, `wrangler.jsonc` |
-| Production deploy / seed import | `docs/CLOUDFLARE-DEPLOYMENT.md` | `seed:d1-export`, `seed:media-upload`; KV wizard limits |
+| Production deploy / seed import | `docs/CLOUDFLARE-DEPLOYMENT.md` | `seed:d1-export`, `seed:media-upload:local`, `seed:media-upload`; KV wizard limits |
 | Native plugins | [creating-native-plugins](https://docs.emdashcms.com/plugins/creating-native-plugins/) | Spec 2: `src/plugins/demo-blocks/` |
 | Themes | [creating-themes](https://docs.emdashcms.com/themes/creating-themes/) | overall structure |
 | i18n | [internationalization](https://docs.emdashcms.com/guides/internationalization/) | `astro.config.mjs` |

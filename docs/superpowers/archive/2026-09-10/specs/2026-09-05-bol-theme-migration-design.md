@@ -22,6 +22,7 @@
 | 2026-09-07 | **Superseded (partial):** CMS-first taxonomies, shared utils, no unsafe slug casts. See [`../../2026-09-07/specs/2026-09-07-bol-final-refactor-design.md`](../../2026-09-07/specs/2026-09-07-bol-final-refactor-design.md). |
 | 2026-09-07 | **Icons:** bol-theme uses `@lucide/astro`. See [`../../2026-09-07/specs/2026-09-07-bol-lucide-icons-design.md`](../../2026-09-07/specs/2026-09-07-bol-lucide-icons-design.md). |
 | 2026-09-10 | **Hero background:** `backgroundImageUrl` editor field is Block Kit `media_picker` (media library) instead of manual URL `text_input`; stored value remains a URL string. |
+| 2026-09-12 | **Superseded (partial):** Gallery bento — mobile 1×1 tiles, `md:` spans, EmDash image fill override, native dialog lightbox with open/close animations. See [`../../2026-09-12/specs/2026-09-12-gallery-grid-lightbox-design.md`](../../2026-09-12/specs/2026-09-12-gallery-grid-lightbox-design.md). |
 
 ---
 
@@ -529,7 +530,7 @@ After implementation, verify at **375px** and **1440px** in **en**, **hu**, **de
 - [ ] Mobile action bar clears footer content; safe-area respected
 - [ ] Mobile menu opens/closes with symmetric CSS transition; header/logo stable; scroll locked while open
 - [x] Menu tabs switch categories; prices format as HUF (375px verified 2026-09-07; hu/de labels pending full pass)
-- [ ] Gallery bento grid balanced on mobile and desktop
+- [x] Gallery bento grid balanced on mobile and desktop (2026-09-12 — [gallery lightbox spec](../../2026-09-12/specs/2026-09-12-gallery-grid-lightbox-design.md))
 - [ ] Contact block: hours table, open/closed badge, map pin, tel/mailto work
 - [ ] Scroll page with map visible — sticky header stays **above** map tiles and Leaflet controls (no z-index bleed)
 - [ ] Footer shows no hours; socials and contact present

@@ -60,6 +60,11 @@ const en = {
 			button: "Email us",
 		},
 	},
+	gallery: {
+		lightboxLabel: "Gallery image preview",
+		close: "Close image",
+		openImageTpl: "View larger: {alt}",
+	},
 	footer: {
 		tagline: "Esports bar & craft beer house in the heart of Győr.",
 		contactTitle: "Contact",
@@ -120,6 +125,11 @@ export type UiStrings = {
 			body: string;
 			button: string;
 		};
+	};
+	gallery: {
+		lightboxLabel: string;
+		close: string;
+		openImageTpl: string;
 	};
 	footer: {
 		tagline: string;

@@ -42,7 +42,7 @@ First visit to `/_emdash/admin` runs the setup wizard when the D1 database is em
 | Setup wizard: **Failed to apply seed** (500) | Single Worker invocation applies full seed + KV object-cache invalidation → Cloudflare subrequest / KV write limits | **Local CLI seed + D1 SQL import** (below) |
 | Deploy tries to create KV namespace / `code: 10014` | Root `wrangler.jsonc` missing SESSION binding that matches `sessionKVBindingName` | Add both CACHE + SESSION entries under `kv_namespaces`; names must match `astro.config.mjs` |
 | Deploy/runtime: `TypeError: Invalid URL string` | Top-level `import.meta.url` in `bol-theme` plugin evaluated in Workers | `new URL(".", import.meta.url)` moved **inside** `bolThemePlugin()` |
-| Images missing after CLI seed | Seed uses `$media.file`; EmDash apply engine resolves `$media.url` only | `bun run seed:media-upload` (see [Seed media](#seed-media-mediafile)) |
+| Images missing after CLI seed | Seed uses `$media.file`; EmDash apply engine resolves `$media.url` only | `seed:media-upload:local` (dev) or `seed:media-upload` (prod) — see [Seed media](#seed-media-mediafile) |
 | Live site shows **No image** but admin has images | D1 patched via SQL; KV object cache still holds pre-patch queries | **Media:** open any photo → add alt text → save → remove alt → save again. Or re-save affected content entries. Or wait for `defaultTtl` |
 | Partial data after failed setup | Wizard aborted mid-seed | Import into **empty** D1 only — do not import over a dirty database |
 
@@ -89,7 +89,8 @@ EmDash docs: `emdash seed` applies to **local SQLite only**; `emdash migrate --d
 | Script | What it does |
 |--------|----------------|
 | `bun run seed:d1-export` | Local SQLite → D1-safe `.emdash/d1-import.sql` (FTS5 fixes) |
-| `bun run seed:media-upload` | `.emdash/uploads/` → R2 + D1 media rows + content/revision patch |
+| `bun run seed:media-upload:local` | `.emdash/uploads/` → **local** R2 + local D1 patch (dev, after `bun dev`) |
+| `bun run seed:media-upload` | `.emdash/uploads/` → **remote** R2 + remote D1 patch (production) |
 
 One-shot production content bootstrap (empty D1):
 
@@ -283,28 +284,43 @@ This project’s `seed/seed.json` (from `scripts/generate-bol-seed.ts`) uses:
 
 EmDash’s seed engine resolves **`$media.url`** (download + storage upload). The `mediaBasePath` / `$media.file` path is documented in types but **not applied** by the current apply engine — after CLI seed, image fields may still contain raw `$media` JSON and the `media` table stays empty.
 
-**Until seed format is fixed**, run the Wrangler-based uploader after D1 import (uploads to R2, inserts `media` rows, patches `$media` JSON in content + revisions):
+**Until seed format is fixed**, run the Wrangler-based uploader after seed apply (uploads to R2, inserts `media` rows, patches `$media` JSON in content + revisions):
+
+**Local dev** (after `bun dev` has created `.wrangler/state/v3/d1/`):
+
+```bash
+bun run seed:media-upload:local
+```
+
+Uses miniflare R2 + local D1. Reads the live dev database (not `.emdash/seed-migration.db` — row IDs differ). No Wrangler remote auth needed.
+
+**Production** (after remote D1 import):
 
 ```bash
 bun run seed:media-upload
-# preview only:
-bun scripts/upload-seed-media.ts --dry-run
-# upload to R2 but write SQL without applying:
-bun scripts/upload-seed-media.ts
-bunx wrangler d1 execute bar-of-legends --remote --file=.emdash/d1-media-patch.sql -y
 ```
 
 Requires Wrangler auth (same as D1 import). No admin passkey needed — objects land in `bar-of-legends-media` with ULID keys matching EmDash’s upload pipeline.
 
-Local dev can use files under `.emdash/uploads/`; production serves them via `/_emdash/api/media/file/{storage_key}`.
+**Preview / manual apply:**
+
+```bash
+bun scripts/upload-seed-media.ts --dry-run
+# upload to R2 but write SQL without applying:
+bun scripts/upload-seed-media.ts --remote   # or --local
+bunx wrangler d1 execute bar-of-legends --remote --file=.emdash/d1-media-patch.sql -y
+```
+
+Both environments serve uploaded files via `/_emdash/api/media/file/{storage_key}`.
 
 If the public site still shows **No image** after SQL patches while admin looks correct, the object cache may be stale — in **Media**, open any photo, add alt text and save, then remove alt text and save again (bumps cache without editing every menu item). Alternatively re-save affected content entries or wait for `defaultTtl` (see [Object cache after import](#object-cache-after-import)).
 
 | Flag | Effect |
 |------|--------|
 | `--dry-run` | Print R2 keys + write patch SQL only |
-| `--remote` | Apply `.emdash/d1-media-patch.sql` to D1 (default via npm script) |
-| `--uploads-dir`, `--database`, `--bucket`, `--d1`, `--out` | Override paths/names |
+| `--local` | Local R2 + local D1; reads live dev D1 from `.wrangler/` (default via `seed:media-upload:local`) |
+| `--remote` | Remote R2 + remote D1 (default via `seed:media-upload`) |
+| `--uploads-dir`, `--database`, `--bucket`, `--d1`, `--out` | Override paths/names. `--database` defaults to live local D1 when `--local`, else `.emdash/seed-migration.db` |
 
 ---
 

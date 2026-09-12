@@ -75,7 +75,8 @@ See **[docs/CLOUDFLARE-DEPLOYMENT.md](./docs/CLOUDFLARE-DEPLOYMENT.md)** for the
 | Command | Purpose |
 |---------|---------|
 | `bun run seed:d1-export` | SQLite seed → D1-safe SQL (FTS5 fixes) |
-| `bun run seed:media-upload` | Upload `.emdash/uploads/` to R2 + patch D1 image fields |
+| `bun run seed:media-upload:local` | Upload `.emdash/uploads/` to **local** R2 + patch local D1 (dev) |
+| `bun run seed:media-upload` | Upload `.emdash/uploads/` to **remote** R2 + patch remote D1 (production) |
 
 Also covers: setup wizard KV 429, binding IDs, `import.meta.url` Workers fix, recovery, `$media.file` caveat.
 

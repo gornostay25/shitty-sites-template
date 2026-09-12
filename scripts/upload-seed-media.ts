@@ -6,12 +6,13 @@
  * Uses Wrangler (same auth as D1 import) — no EmDash admin login required.
  *
  * Usage:
- *   bun scripts/upload-seed-media.ts --remote
+ *   bun scripts/upload-seed-media.ts --local     # local R2 + local D1 (dev)
+ *   bun scripts/upload-seed-media.ts --remote    # remote R2 + remote D1 (production)
  *   bun scripts/upload-seed-media.ts --dry-run
  */
 
 import { Database } from "bun:sqlite";
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { extname, join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 import { ulid } from "ulidx";
@@ -20,12 +21,23 @@ const cwd = process.cwd();
 
 const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
+const applyLocal = args.includes("--local");
 const applyRemote = args.includes("--remote");
+
+if (applyLocal && applyRemote) {
+	console.error("Use only one of --local or --remote.");
+	process.exit(1);
+}
 const uploadsDir = resolve(
 	cwd,
 	valueAfter(args, "--uploads-dir") ?? ".emdash/uploads",
 );
-const dbPath = resolve(cwd, valueAfter(args, "--database") ?? ".emdash/seed-migration.db");
+const databaseArg = valueAfter(args, "--database");
+const dbPath = databaseArg
+	? resolve(cwd, databaseArg)
+	: applyLocal
+		? resolveLocalD1Database()
+		: resolve(cwd, ".emdash/seed-migration.db");
 const bucket = valueAfter(args, "--bucket") ?? "bar-of-legends-media";
 const d1Name = valueAfter(args, "--d1") ?? "bar-of-legends";
 const patchPath = resolve(cwd, valueAfter(args, "--out") ?? ".emdash/d1-media-patch.sql");
@@ -33,6 +45,30 @@ const patchPath = resolve(cwd, valueAfter(args, "--out") ?? ".emdash/d1-media-pa
 function valueAfter(argv: string[], flag: string): string | undefined {
 	const i = argv.indexOf(flag);
 	return i >= 0 ? argv[i + 1] : undefined;
+}
+
+/** Miniflare D1 SQLite used by `bun dev` (Wrangler local persistence). */
+function resolveLocalD1Database(): string {
+	const d1Dir = resolve(cwd, ".wrangler/state/v3/d1/miniflare-D1DatabaseObject");
+	let entries: string[];
+	try {
+		entries = readdirSync(d1Dir).filter(
+			(name) => name.endsWith(".sqlite") && name !== "metadata.sqlite",
+		);
+	} catch {
+		throw new Error(
+			`Local D1 not found at ${d1Dir}. Start the dev server (bun dev) once, then retry.`,
+		);
+	}
+	if (entries.length === 0) {
+		throw new Error(`No local D1 database in ${d1Dir}. Run bun dev first.`);
+	}
+	if (entries.length > 1) {
+		throw new Error(
+			`Multiple local D1 databases in ${d1Dir}: ${entries.join(", ")}. Pass --database explicitly.`,
+		);
+	}
+	return resolve(d1Dir, entries[0]!);
 }
 
 interface ImageValue {
@@ -175,23 +211,26 @@ function readWebpDimensions(bytes: Uint8Array): { width: number; height: number 
 	return null;
 }
 
-function uploadToR2(storageKey: string, filePath: string, mimeType: string): void {
-	const result = spawnSync(
-		"bunx",
-		[
-			"wrangler",
-			"r2",
-			"object",
-			"put",
-			`${bucket}/${storageKey}`,
-			"--file",
-			filePath,
-			"--content-type",
-			mimeType,
-			"--remote",
-		],
-		{ encoding: "utf-8", cwd },
-	);
+function uploadToR2(
+	storageKey: string,
+	filePath: string,
+	mimeType: string,
+	remote: boolean,
+): void {
+	const wranglerArgs = [
+		"wrangler",
+		"r2",
+		"object",
+		"put",
+		`${bucket}/${storageKey}`,
+		"--file",
+		filePath,
+		"--content-type",
+		mimeType,
+	];
+	if (remote) wranglerArgs.push("--remote");
+
+	const result = spawnSync("bunx", wranglerArgs, { encoding: "utf-8", cwd });
 	if (result.status !== 0) {
 		console.error(result.stderr || result.stdout);
 		throw new Error(`R2 upload failed for ${storageKey}`);
@@ -220,6 +259,7 @@ if (neededFiles.length === 0) {
 	process.exit(0);
 }
 
+console.log(`Database: ${dbPath}`);
 console.log(`Found ${neededFiles.length} unique seed media file(s).`);
 
 const uploads = new Map<string, UploadedFile>();
@@ -246,8 +286,9 @@ for (const filename of neededFiles) {
 	};
 
 	if (!dryRun) {
-		uploadToR2(storageKey, filePath, mimeType);
-		console.log(`↑ R2 ${filename} → ${storageKey}`);
+		uploadToR2(storageKey, filePath, mimeType, applyRemote);
+		const target = applyRemote ? "R2 remote" : "R2 local";
+		console.log(`↑ ${target} ${filename} → ${storageKey}`);
 	} else {
 		console.log(`DRY  ${filename} → ${storageKey}`);
 	}
@@ -323,18 +364,18 @@ patchDb.close();
 writeFileSync(patchPath, `${statements.join("\n")}\n`);
 console.log(`Wrote ${patchPath} (${statements.length - 1} statements)`);
 
-if (applyRemote && !dryRun) {
-	const result = spawnSync(
-		"bunx",
-		["wrangler", "d1", "execute", d1Name, "--remote", "--file", patchPath, "-y"],
-		{ encoding: "utf-8", cwd },
-	);
+if ((applyLocal || applyRemote) && !dryRun) {
+	const executeArgs = ["wrangler", "d1", "execute", d1Name, "--file", patchPath, "-y"];
+	if (applyRemote) executeArgs.push("--remote");
+
+	const result = spawnSync("bunx", executeArgs, { encoding: "utf-8", cwd });
 	process.stdout.write(result.stdout);
 	if (result.status !== 0) {
 		console.error(result.stderr || "D1 patch failed");
 		process.exit(1);
 	}
-	console.log("Applied media patch to remote D1.");
+	console.log(`Applied media patch to ${applyRemote ? "remote" : "local"} D1.`);
 } else if (!dryRun) {
-	console.log(`Next: bunx wrangler d1 execute ${d1Name} --remote --file=${patchPath} -y`);
+	console.log(`Next (local):  bun scripts/upload-seed-media.ts --local`);
+	console.log(`Next (remote): bun scripts/upload-seed-media.ts --remote`);
 }

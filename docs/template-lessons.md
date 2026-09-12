@@ -70,7 +70,7 @@ Action backlog for improving the **ShittySites EmDash agency template**, distill
 
 - **Ship `scripts/d1-export-seed-db.ts` (or equivalent)** — raw `sqlite3 .dump` breaks on D1 (FTS5 `sqlite_schema` inserts, pragmas, shadow tables). Template with search/FTS tables needs a sanitizer script. Evidence: [phase 4](worklog/04-cloudflare-deploy.md#d1-import--iterative-exporter-fixes-scriptsd1-export-seed-dbts).
 
-- **Ship `scripts/upload-seed-media.ts` (or equivalent)** — if seed uses local WebP in `.emdash/uploads/` with `$media.file` refs: upload to R2, insert `media` rows, patch content JSON. Evidence: [phase 4](worklog/04-cloudflare-deploy.md#media-upload--mediafile-gap-scriptsupload-seed-mediats).
+- **Ship `scripts/upload-seed-media.ts` (or equivalent)** — if seed uses local WebP in `.emdash/uploads/` with `$media.file` refs: upload to R2, insert `media` rows, patch content JSON. Support `--local` (live dev D1 from `.wrangler/`) and `--remote` (production). Evidence: [phase 4](worklog/04-cloudflare-deploy.md#media-upload--mediafile-gap-scriptsupload-seed-mediats).
 
 - **Document stale KV cache after direct D1 SQL** — public site may lag admin after import. Fix: **Media library** → open any photo → add alt text → save → remove alt → save again. Or re-save affected content entries. Or wait for `defaultTtl`. No bulk KV purge tooling needed. Evidence: [phase 4](worklog/04-cloudflare-deploy.md#stale-object-cache--no-image-persists-on-live-site).
 
@@ -78,7 +78,7 @@ Action backlog for improving the **ShittySites EmDash agency template**, distill
 
 - **Gitignore migration artifacts** — `.emdash/seed-migration.db`, `d1-import.sql`, `d1-media-patch.sql`, etc. Regenerate via scripts; do not commit. Evidence: [phase 4](worklog/04-cloudflare-deploy.md#documentation--gitignore).
 
-- **Add npm scripts** — `seed:d1-export`, `seed:media-upload` in template `package.json` when scripts ship. Evidence: [phase 4](worklog/04-cloudflare-deploy.md#documentation--gitignore).
+- **Add npm scripts** — `seed:d1-export`, `seed:media-upload:local` (dev), `seed:media-upload` (production) in template `package.json` when scripts ship. Evidence: [phase 4](worklog/04-cloudflare-deploy.md#documentation--gitignore).
 
 ---
 
