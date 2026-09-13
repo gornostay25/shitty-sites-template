@@ -1,0 +1,13 @@
+---
+/**
+ * PT block stub — receives full node on Astro.props.node via getPtNode().
+ * No React islands in PT blockComponents map.
+ */
+import { getPtNode } from "../../utils/pt-node.ts";
+
+const node = getPtNode(Astro.props);
+---
+
+<section aria-label="Example block">
+	<p>{String(node.title ?? "Example block")}</p>
+</section>

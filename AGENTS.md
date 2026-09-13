@@ -3,8 +3,12 @@ This is an EmDash site -- a CMS built on Astro with a full admin UI.
 ## Commands
 
 ```bash
-bun dev              # Start the Astro dev server
-bunx emdash types      # Regenerate TypeScript types from a running site
+bun dev                        # Start the Astro dev server
+bunx emdash types              # Regenerate TypeScript types from a running site
+bun run seed:d1-export         # Local SQLite → D1-safe .emdash/d1-import.sql
+bun run seed:media-upload:local  # Upload seed media to local R2 + patch dev D1
+bun run seed:media-upload      # Upload seed media to remote R2 + patch prod D1
+bun run deploy:prod            # Swap wrangler.prod.jsonc → build → deploy → restore
 ```
 
 The admin UI is at `http://localhost:4321/_emdash/admin`.
@@ -20,7 +24,7 @@ The admin UI is at `http://localhost:4321/_emdash/admin`.
 | `public/`                | Fallback only — fixed URL, no processing (favicons, `robots.txt`, legacy PDFs) |
 | `emdash-env.d.ts`        | Generated types for collections (auto-regenerated on dev server start)             |
 | `src/types/content.ts`   | Shared type aliases (`PageTemplate`) — not generated                               |
-| `patches/emdash@0.36.0.patch` | Adds `byline` to type generator until upstream EmDash fix                     |
+| `patches/emdash@0.37.0.patch` | Adds `byline` to type generator until upstream EmDash fix                     |
 | `src/layouts/Base.astro` | Site shell: SEO, header, footer, plugin page contributions |
 | `src/components/`        | SiteHeader, SiteFooter, SeoHead, MenuNav, SocialLinks      |
 | `src/utils/site-identity.ts` | `resolveSiteIdentity()` — admin settings → template props |
@@ -49,7 +53,14 @@ This template ships with `.mcp.json`, `.cursor/mcp.json`, and `.vscode/mcp.json`
 - Always call `Astro.cache.set(cacheHint)` on pages that query content.
 - Taxonomy names in queries must match the seed's `"name"` field exactly (e.g., `"category"` not `"categories"`).
 - `emdash-env.d.ts` is auto-generated — never hand-edit. Regenerates on dev server start.
-- `entry.data.byline` and `entry.data.bylines` are typed via `patches/emdash@0.36.0.patch` (EmDash 0.36 generator omits `byline`). Remove the patch when upstream ships the fix.
+- `entry.data.byline` and `entry.data.bylines` are typed via `patches/emdash@0.37.0.patch` (EmDash 0.37 generator omits `byline`). Remove the patch when upstream ships the fix.
+- Native plugins: `import.meta.url` only **inside** plugin factory functions (Workers deploy bug).
+- PT blocks receive `Astro.props.node` — use `getPtNode()` helper; no React islands in PT `components` map.
+- Admin UI: `@cloudflare/kumo` + `apiFetch()` with `{ success, data }` unwrap — not `@emdash-cms/admin` Card/Input.
+- Block Kit: no object groups; repeater sub-fields scalar only.
+- Patch lifecycle: `bun patch`, filename must match installed EmDash version.
+- Fork theme: enable `siteThemePlugin()` in `astro.config.mjs`; delete `demo-blocks` if unused.
+- Production deploy: [docs/CLOUDFLARE-DEPLOYMENT.md](./docs/CLOUDFLARE-DEPLOYMENT.md) — swap `wrangler.prod.jsonc`, never `--config`.
 - Use `PageTemplate` from `src/types/content.ts` for page layout map keys.
 - **Static assets** — prefer `src/assets/` (import in `.astro`/`.tsx`; Astro optimizes and hashes). CMS images: `<Image image={...} />`. Use `public/` only when a fixed root URL is required (`/favicon.ico`, unprocessed PDFs).
 
@@ -91,27 +102,23 @@ Agency base for rebuilding client sites on EmDash + Cloudflare. Every route is s
 | Themes | [creating-themes](https://docs.emdashcms.com/themes/creating-themes/) | overall structure |
 | i18n | [internationalization](https://docs.emdashcms.com/guides/internationalization/) | `astro.config.mjs` |
 
-### i18n — adding locales
-
-Currently English only in `astro.config.mjs`:
-
-```js
-i18n: {
-  defaultLocale: "en",
-  locales: ["en"],
-},
-```
-
-To add Ukrainian (example):
+### i18n — demo (`en` + `uk`)
 
 ```js
 i18n: {
   defaultLocale: "en",
   locales: ["en", "uk"],
   fallback: { uk: "en" },
+  routing: { fallbackType: "rewrite" }, // required — single-template EmDash, no src/pages/uk/
   // NEVER set prefixDefaultLocale: true — breaks /_emdash/admin
 },
 ```
+
+- Ukrainian routes: `/uk/…` (e.g. `/uk/pro-nas`, `/uk/vitayemo`)
+- Root `[slug].astro` must guard non-default locale codes (`src/utils/i18n/locales.ts`) — see BOL pattern
+- Chrome copy: `getUiStrings(Astro.currentLocale)` from `src/utils/i18n/`
+- Content: pass `locale: Astro.currentLocale` on `getEmDashEntry`, `getEmDashCollection`, `getMenu`, `getTerm`, `getEntryTerms`
+- Seed rules: [docs/SEED-REFERENCE.md](./docs/SEED-REFERENCE.md#internationalization)
 
 See [internationalization guide](https://docs.emdashcms.com/guides/internationalization/) for translated content and menu locales.
 
@@ -133,7 +140,7 @@ In `astro.config.mjs`, `objectCache: kvCache({ ... })`:
 - **`defaultTtl`** (seconds, default 3600) — lower when scheduled publishing must appear quickly without waiting for a collection change
 - **`keyPrefix`** (default `"em"`) — change when multiple EmDash sites share one KV namespace
 
-Requires `CACHE` KV binding in `wrangler.jsonc`. Create with `bunx wrangler kv namespace create CACHE`.
+Requires `shittysites-template-CACHE` and `shittysites-template-SESSION` in `wrangler.jsonc`. Prod IDs in gitignored `wrangler.prod.jsonc`.
 
 ### Media usage tracking
 

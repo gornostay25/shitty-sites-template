@@ -10,12 +10,14 @@ import { getEmDashCollection, getSiteSettings, getTerm } from "emdash";
 import Base from "../../layouts/Base.astro";
 import { resolveSiteIdentity } from "../../utils/site-identity";
 import { buildStaticPageSeo } from "../../utils/seo";
+import { notFoundPath } from "../../utils/i18n/index.ts";
 
 const { slug } = Astro.params;
-if (!slug) return Astro.redirect("/404");
+if (!slug) return Astro.redirect(notFoundPath(Astro.currentLocale));
 
-const term = await getTerm("category", slug);
-if (!term) return Astro.redirect("/404");
+const locale = Astro.currentLocale;
+const term = await getTerm("category", slug, { locale });
+if (!term) return Astro.redirect(notFoundPath(Astro.currentLocale));
 
 const settings = await getSiteSettings();
 const identity = resolveSiteIdentity(settings);
@@ -26,6 +28,7 @@ const seo = buildStaticPageSeo({
 });
 
 const { entries: posts, cacheHint } = await getEmDashCollection("posts", {
+	locale,
 	where: { category: term.slug },
 	orderBy: { published_at: "desc" },
 });

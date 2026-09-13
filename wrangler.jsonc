@@ -18,18 +18,19 @@
 	],
 	"kv_namespaces": [
 		{
-			"binding": "CACHE",
-			"id": "54198a915d184371b822199afec552da",
-			"preview_id": "aa675bd3e8814dee96b7a143599f641a",
+			"binding": "shittysites-template-CACHE",
 		},
-	],
-	// Worker Loader for plugin sandboxing
-	"worker_loaders": [
 		{
-			"binding": "LOADER",
+			"binding": "shittysites-template-SESSION",
 		},
 	],
-	// General maintenance cron trigger — no dedicated media usage cron (removed in EmDash 0.36)
+	// Worker Loader — sandbox/isolate plugins only; not on Workers Free. Template uses native plugins (`format: "native"`).
+	// "worker_loaders": [
+	// 	{
+	// 		"binding": "LOADER",
+	// 	},
+	// ],
+	// General maintenance cron trigger
 	"triggers": {
 		"crons": ["* * * * *"],
 	},

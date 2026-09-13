@@ -15,13 +15,23 @@ import PageSidebar from "../layouts/PageSidebar.astro";
 import HtmlBlock from "../components/HtmlBlock.astro";
 import { resolveSiteIdentity } from "../utils/site-identity";
 import { buildContentSeo } from "../utils/seo";
+import { isNonDefaultLocale, notFoundPath } from "../utils/i18n/index.ts";
 import type { PageTemplate } from "../types/content";
 
 const { slug } = Astro.params;
-if (!slug) return Astro.redirect("/404");
+if (slug && isNonDefaultLocale(slug)) {
+	const normalized = Astro.url.pathname.replace(/\/$/, "") || "/";
+	if (normalized === `/${slug}`) {
+		return Astro.rewrite("/");
+	}
+}
+if (!slug) return Astro.redirect(notFoundPath(Astro.currentLocale));
 
-const { entry: page, isPreview, cacheHint } = await getEmDashEntry("pages", slug);
-if (!page) return Astro.redirect("/404");
+const locale = Astro.currentLocale;
+const { entry: page, isPreview, cacheHint } = await getEmDashEntry("pages", slug, {
+	locale,
+});
+if (!page) return Astro.redirect(notFoundPath(Astro.currentLocale));
 
 if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 

@@ -22,10 +22,10 @@ import type { PluginDescriptor } from "emdash";
 
 const id = "demo-blocks";
 const version = "0.1.0";
-const dir = new URL(".", import.meta.url);
 
 /** Descriptor factory — imported by astro.config.mjs at build time. */
 export function demoBlocksPlugin(): PluginDescriptor {
+	const dir = new URL(".", import.meta.url);
 	return {
 		id,
 		version,

@@ -14,6 +14,7 @@ interface Props {
 }
 
 const { name } = Astro.props;
+const locale = Astro.currentLocale;
 const area = await getWidgetArea(name);
 
 const widgets = await Promise.all(
@@ -21,7 +22,7 @@ const widgets = await Promise.all(
 		widget,
 		menu:
 			widget.type === "menu" && widget.menuName
-				? await getMenu(widget.menuName)
+				? await getMenu(widget.menuName, { locale })
 				: null,
 	})),
 );

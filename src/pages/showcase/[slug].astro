@@ -11,12 +11,14 @@ import { Image, PortableText } from "emdash/ui";
 import Base from "../../layouts/Base.astro";
 import { resolveSiteIdentity } from "../../utils/site-identity";
 import { buildContentSeo } from "../../utils/seo";
+import { notFoundPath } from "../../utils/i18n/index.ts";
 
 const { slug } = Astro.params;
-if (!slug) return Astro.redirect("/404");
+if (!slug) return Astro.redirect(notFoundPath(Astro.currentLocale));
 
-const { entry, cacheHint } = await getEmDashEntry("showcase", slug);
-if (!entry) return Astro.redirect("/404");
+const locale = Astro.currentLocale;
+const { entry, cacheHint } = await getEmDashEntry("showcase", slug, { locale });
+if (!entry) return Astro.redirect(notFoundPath(Astro.currentLocale));
 
 if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 

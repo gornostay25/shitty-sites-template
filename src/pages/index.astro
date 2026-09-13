@@ -8,9 +8,14 @@
  */
 import { getEmDashCollection, getSection, getSiteSettings } from "emdash";
 import { PortableText } from "emdash/ui";
+import { getRelativeLocaleUrl } from "astro:i18n";
 import Base from "../layouts/Base.astro";
 import { resolveSiteIdentity } from "../utils/site-identity";
 import { buildStaticPageSeo } from "../utils/seo";
+import { getUiStrings } from "../utils/i18n/index.ts";
+
+const locale = Astro.currentLocale ?? "en";
+const ui = getUiStrings(locale);
 
 const settings = await getSiteSettings();
 const identity = resolveSiteIdentity(settings);
@@ -19,6 +24,7 @@ const seo = buildStaticPageSeo({ path: "/", identity });
 const [{ entries: posts, cacheHint: postsCache }, newsletterSection] =
 	await Promise.all([
 		getEmDashCollection("posts", {
+			locale,
 			limit: identity.postsPerPage,
 			orderBy: { published_at: "desc" },
 		}),
@@ -32,25 +38,30 @@ if (Astro.cache?.enabled) Astro.cache.set(postsCache);
 	<article>
 		<h1>{identity.siteTitle}</h1>
 		<p>{identity.siteTagline}</p>
-		<p><a href="/feature-guide">Feature guide</a> — full EmDash capability index.</p>
+		<p>
+			<a href={getRelativeLocaleUrl(locale, "/feature-guide")}>Feature guide</a> — full EmDash
+			capability index.
+		</p>
 
 		<section>
-			<h2>Recent posts</h2>
+			<h2>{ui.recentPosts}</h2>
 			{
 				posts.length === 0 ? (
-					<p>No posts yet.</p>
+					<p>{ui.noPosts}</p>
 				) : (
 					<ul>
 						{posts.map((post) => (
 							<li>
-								<a href={`/posts/${post.id}`}>{post.data.title}</a>
+								<a href={getRelativeLocaleUrl(locale, `/posts/${post.id}`)}>
+									{post.data.title}
+								</a>
 								{post.data.excerpt && <p>{post.data.excerpt}</p>}
 							</li>
 						))}
 					</ul>
 				)
 			}
-			<p><a href="/posts">All posts</a></p>
+			<p><a href={getRelativeLocaleUrl(locale, "/posts")}>{ui.allPosts}</a></p>
 		</section>
 
 		{

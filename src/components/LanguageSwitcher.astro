@@ -1,14 +1,53 @@
 ---
-/**
- * i18n stub — uncomment and wire when adding locales in astro.config.mjs.
- *
- * 1. Add locales: ["en", "uk"], fallback: { uk: "en" }
- * 2. NEVER set prefixDefaultLocale: true — breaks /_emdash/admin
- * 3. Import and render this component in SiteHeader.astro
- *
- * Docs: https://docs.emdashcms.com/guides/internationalization/
- */
-// import { getHreflangAlternates } from "emdash";
+import { getTranslations } from "emdash";
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+interface Props {
+	collection?: string;
+	entryId?: string;
+}
+
+const { collection, entryId } = Astro.props;
+const locales = ["en", "uk"] as const;
+const labels = { en: "EN", uk: "UK" } as const;
+
+let links: Array<{ locale: string; href: string }> = [];
+
+if (collection && entryId) {
+	const { translations } = await getTranslations(collection, entryId);
+	const published = translations.filter(
+		(t): t is typeof t & { slug: string } => t.status === "published" && t.slug !== null,
+	);
+	links = published.map((t) => ({
+		locale: t.locale,
+		href: getRelativeLocaleUrl(
+			t.locale,
+			collection === "pages" ? `/${t.slug}` : `/${collection}/${t.slug}`,
+		),
+	}));
+} else {
+	const path = Astro.url.pathname.replace(/^\/uk(?=\/|$)/, "") || "/";
+	links = locales.map((l) => ({
+		locale: l,
+		href: getRelativeLocaleUrl(l, path),
+	}));
+}
 ---
 
-<!-- LanguageSwitcher disabled — English only in astro.config.mjs -->
+<nav aria-label="Language">
+	<ul>
+		{
+			links.map((link) => (
+				<li>
+					<a
+						href={link.href}
+						hreflang={link.locale}
+						aria-current={link.locale === Astro.currentLocale ? "page" : undefined}
+					>
+						{labels[link.locale as keyof typeof labels] ?? link.locale.toUpperCase()}
+					</a>
+				</li>
+			))
+		}
+	</ul>
+</nav>

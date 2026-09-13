@@ -11,9 +11,25 @@ Design spec: [docs/superpowers/archive/2026-09-03/specs/2026-08-28-shittysites-t
 - Admin-driven site identity (`src/utils/site-identity.ts`)
 - SEO pipeline (`src/utils/seo.ts`, `src/components/SeoHead.astro`)
 - Base layout with header, footer, dark-mode theme switcher demo
-- KV object cache (`objectCache: kvCache({ binding: "CACHE" })` in `astro.config.mjs`)
+- KV object cache (`shittysites-template-CACHE` + SESSION bindings in `wrangler.jsonc`)
 - Built-in `/sitemap.xml` and `/robots.txt` (requires Site URL in admin)
-- i18n configured for English only — see [AGENTS.md](./AGENTS.md) to add locales
+- i18n demo: English + Ukrainian (`/uk/…`) — see below, [AGENTS.md](./AGENTS.md), and [SEED-REFERENCE.md](./docs/SEED-REFERENCE.md#internationalization)
+
+### i18n (English + Ukrainian)
+
+EmDash uses **one page template set** with `locale: Astro.currentLocale` — not duplicate files under `src/pages/uk/`.
+
+| Setting | Value |
+|---------|--------|
+| Default locale | `en` — unprefixed URLs (`/`, `/posts/…`) |
+| Other locale | `uk` — prefixed URLs (`/uk/`, `/uk/pro-nas`) |
+| Fallback | `uk → en` for missing translations |
+| Required routing | `routing: { fallbackType: "rewrite" }` in `astro.config.mjs` |
+| Forbidden | `prefixDefaultLocale: true` — breaks `/_emdash/admin` |
+
+Root `[slug].astro` guards locale codes (`src/utils/i18n/locales.ts`); `/uk/` rewrites to home via `Astro.rewrite("/")`. 404 redirects use `notFoundPath()` for locale-aware paths.
+
+Design: [docs/superpowers/archive/2026-09-13/specs/2026-09-13-post-backport-fixes-design.md](./docs/superpowers/archive/2026-09-13/specs/2026-09-13-post-backport-fixes-design.md)
 
 Spec 2 adds full demo routes, seed content, widgets, search, and the `demo-blocks` plugin. See [docs/SEED-REFERENCE.md](./docs/SEED-REFERENCE.md) when available.
 
@@ -26,7 +42,7 @@ HUB_API_KEY=your-hub-api-key
 HUB_SITE_ID=your-site-id
 ```
 
-`astro.config.mjs` bakes them into the client bundle via `vite.define` (required for the React island). Enable on public pages in `src/layouts/Base.astro`:
+`astro.config.mjs` bakes them into the client bundle via `vite.define` (required for the React island). Restart `bun dev` after changing `HUB_API_KEY` or `HUB_SITE_ID` in `.env`. Enable on public pages in `src/layouts/Base.astro`:
 
 ```astro
 import HubFeedback from "../hub-feedback/astro/HubFeedback.astro";
@@ -99,26 +115,58 @@ For images processed by Astro (optimization, imports), use `src/assets/` instead
 
 ```bash
 bun run typecheck   # Astro type check
-bun deploy          # Build + deploy to Cloudflare Workers
+bun run deploy      # Build + deploy (template wrangler.jsonc)
 ```
+
+### Seed media bootstrap
+
+WebP assets live in `seed/media/` (committed). CLI seed and upload scripts read that path directly:
+
+```bash
+bunx emdash seed seed/seed.json --database .emdash/seed-migration.db --uploads-dir seed/media
+bun run seed:d1-export
+```
+
+After dev bypass or D1 import, upload images to R2:
+
+```bash
+bun run seed:media-upload:local   # dev
+bun run seed:media-upload         # production
+```
+
+See [docs/SEED-REFERENCE.md](./docs/SEED-REFERENCE.md) and [docs/CLOUDFLARE-DEPLOYMENT.md](./docs/CLOUDFLARE-DEPLOYMENT.md).
+
+## Production deploy
+
+1. Copy `wrangler.jsonc` → `wrangler.prod.jsonc` (gitignored)
+2. Provision D1, R2, KV; paste IDs into `wrangler.prod.jsonc` (**no `preview_id`**)
+3. Bootstrap content via CLI seed + D1 import (see [CLOUDFLARE-DEPLOYMENT.md](./docs/CLOUDFLARE-DEPLOYMENT.md))
+4. Deploy with swap pattern:
+
+```bash
+bun run deploy:prod
+# cp wrangler.prod.jsonc wrangler.jsonc && build && deploy && git restore wrangler.jsonc
+```
+
+**Never** use `wrangler deploy --config wrangler.prod.jsonc` — use swap instead.
 
 ## Cloudflare KV (Object Cache)
 
-Create a KV namespace and add it to `wrangler.jsonc`:
+Template `wrangler.jsonc` declares binding names only:
+
+- `shittysites-template-CACHE` — EmDash object cache
+- `shittysites-template-SESSION` — Astro sessions (`sessionKVBindingName` in `astro.config.mjs`)
+
+Create namespaces once per client and paste `id` values into `wrangler.prod.jsonc`:
 
 ```bash
-bunx wrangler kv namespace create CACHE
-bunx wrangler kv namespace create CACHE --preview
+bunx wrangler kv namespace create shittysites-template-CACHE
+bunx wrangler kv namespace create shittysites-template-SESSION
 ```
 
-Copy the `id` and `preview_id` into `wrangler.jsonc` under `kv_namespaces`.
+Object cache tuning in `astro.config.mjs`: `defaultTtl`, `keyPrefix`.
 
-Object cache tuning lives in `astro.config.mjs`:
-
-- **`defaultTtl`** — lower (e.g. 300) if scheduled publishing must appear quickly without a collection change
-- **`keyPrefix`** — change when multiple EmDash sites share one KV namespace
-
-Docs: [Object Cache](https://docs.emdashcms.com/deployment/object-cache/)
+Docs: [Object Cache](https://docs.emdashcms.com/deployment/object-cache/) · [CLOUDFLARE-DEPLOYMENT.md](./docs/CLOUDFLARE-DEPLOYMENT.md)
 
 ## Media Usage Tracking
 
@@ -145,7 +193,7 @@ Canonical URLs and Open Graph tags use `resolveSiteIdentity()` and `getSeoMeta()
 - **Runtime:** Cloudflare Workers
 - **Database:** D1
 - **Storage:** R2
-- **Cache:** KV (`CACHE` binding)
+- **Cache:** KV (`shittysites-template-CACHE` + SESSION)
 - **Framework:** Astro 7 with `@astrojs/cloudflare`
 - **CSS:** Tailwind CSS 4 (`@tailwindcss/vite`) — imported, not used on demo markup
 - **Feedback widget:** `@fasterfixes/core`, `@floating-ui/react`, `modern-screenshot` (Hub Feedback plugin)

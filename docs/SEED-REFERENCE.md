@@ -10,6 +10,8 @@ Companion to `seed/seed.json`. Maps each seed section to template files, EmDash 
 
 If dev bypass returns **500**, check the terminal — common cause: invalid keys inside `content.*.data` (e.g. `seo` belongs in `_emdash_seo`, not in collection field data). Fix the seed and reset `.wrangler/state`.
 
+If **Settings → SEO** will not save, check `settings.seo.robotsTxt` in seed/DB — `null` breaks the form; use a string (see [settings → robotsTxt](#settingsseorobotstxt--must-not-be-null)).
+
 ---
 
 ## settings
@@ -19,6 +21,18 @@ If dev bypass returns **500**, check the terminal — common cause: invalid keys
 | Template | `src/utils/site-identity.ts`, `SeoHead.astro`, `Base.astro` |
 | Docs | [Site settings](https://docs.emdashcms.com/guides/site-settings/) |
 | Fork | **Keep** — every client site needs identity + SEO URL for sitemap |
+
+### `settings.seo.robotsTxt` — must not be `null`
+
+EmDash admin **Settings → SEO** fails to save when `robotsTxt` is `null` in the database (validation expects a string). Use at least `""` in seed; never omit or set `null`.
+
+This template seeds **deny-all** until a client opens indexing:
+
+```json
+"robotsTxt": "User-agent: *\nDisallow: /"
+```
+
+Replace with client-specific rules (or `""` to fall back to EmDash default `/robots.txt`) before production launch. After changing seed, reset local DB (`.wrangler/state`) or update the value in admin.
 
 ---
 
@@ -136,11 +150,72 @@ Fork: remove plugin from `astro.config.mjs` and delete `src/plugins/demo-blocks/
 
 ---
 
+## Internationalization
+
+Demo locales: `en` (default) + `uk` in `astro.config.mjs`. Ukrainian routes use `/uk/…` prefix (never `prefixDefaultLocale`).
+
+EmDash uses **one set of page templates** (not `src/pages/uk/` folders). Set `routing: { fallbackType: "rewrite" }` in `astro.config.mjs` so `/uk/…` rewrites to root templates with `Astro.currentLocale = "uk"`. Guard non-default locale slugs in root `[slug].astro` via `src/utils/i18n/locales.ts`.
+
+### Seed rules
+
+1. Source entry must appear **before** translations in the seed file
+2. `translationOf` references source seed `id`, not slug
+3. Menus: same `name`, per-locale rows with `id`, `locale`, optional `translationOf`
+4. Taxonomy term labels: per-locale rows with `translationOf`; query via `getTerm(..., { locale })` — not `getUiStrings`
+5. Add explicit `"locale": "en"` on source rows when a collection has translations
+
+### Demo translations (this template)
+
+| Entity | EN | UK |
+|--------|----|----|
+| Page | `about` / `/about` | `about-uk` / `/uk/pro-nas` |
+| Post | `welcome` / `/posts/welcome` | `welcome-uk` / `/uk/vitayemo` |
+| Menu | `primary` | `primary-uk` (translated labels, `/uk/…` URLs) |
+| Category term | `guides` → Guides | `guides-uk` → Посібники |
+
+Template chrome strings: `src/utils/i18n/` (`getUiStrings`). Language switcher: `LanguageSwitcher.astro`.
+
+Docs: [Internationalization](https://docs.emdashcms.com/guides/internationalization/)
+
+---
+
+## Seed media
+
+**Preferred:** `$media.file` pointing at filenames in committed `seed/media/`:
+
+```json
+"featured_image": {
+  "$media": { "file": "welcome-featured.webp", "alt": "…" }
+}
+```
+
+CLI seed and upload scripts use `seed/media/` directly:
+
+```bash
+bunx emdash seed seed/seed.json --database .emdash/seed-migration.db --uploads-dir seed/media
+```
+
+EmDash apply does not upload `$media.file` to R2. After seed or D1 import, run media upload:
+
+| Script | Target |
+|--------|--------|
+| `bun run seed:media-upload:local` | Local R2 + dev D1 (after `bun dev`) |
+| `bun run seed:media-upload` | Remote R2 + remote D1 (production swap) |
+| `bun run seed:d1-export` | SQLite → `.emdash/d1-import.sql` for D1 execute |
+
+**Alternative:** `$media.url` for external URLs (no upload script needed).
+
+Docs: [CLOUDFLARE-DEPLOYMENT.md](./CLOUDFLARE-DEPLOYMENT.md)
+
+---
+
 ## object cache (config, not seed)
 
-KV-backed query cache in `astro.config.mjs` → `objectCache: kvCache({ binding: "CACHE" })`.
+KV-backed query cache in `astro.config.mjs` → `objectCache: kvCache({ binding: "shittysites-template-CACHE" })`.
 
-Requires `CACHE` KV namespace in `wrangler.jsonc`. Tune `defaultTtl` and `keyPrefix` per site.
+Requires `shittysites-template-CACHE` and `shittysites-template-SESSION` KV bindings in `wrangler.jsonc`. Tune `defaultTtl` and `keyPrefix` per site.
+
+**Production:** bulk seed via setup wizard can hit KV 429 / subrequest limits when object cache is enabled. Use CLI seed + D1 import ([CLOUDFLARE-DEPLOYMENT.md](./CLOUDFLARE-DEPLOYMENT.md)). After direct SQL import, stale cache may hide patched media — see deployment doc.
 
 Docs: [Object cache](https://docs.emdashcms.com/deployment/object-cache/)
 
@@ -206,4 +281,4 @@ Files in `public/` are served from the site root with no build processing. Use r
 | Search | `search.astro`, `SiteHeader.astro` (LiveSearch) |
 | Comments | `posts/[slug].astro` |
 | HTML blocks | `HtmlBlock.astro` |
-| i18n stub | `LanguageSwitcher.astro`, `astro.config.mjs` |
+| i18n demo | `LanguageSwitcher.astro`, `src/utils/i18n/`, `astro.config.mjs` |

@@ -13,7 +13,13 @@ dist/
 data.db
 data.db-shm
 data.db-wal
-uploads/
+.emdash/seed-migration.db
+.emdash/seed-migration.db-*
+.emdash/d1-import.sql
+.emdash/d1-import-*.sql
+.emdash/d1-media-patch.sql
+.emdash/d1-drop-all.sql
+wrangler.prod.jsonc
 
 # Environment
 .env

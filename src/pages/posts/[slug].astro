@@ -15,12 +15,16 @@ import PostMeta from "../../components/PostMeta.astro";
 import PostTerms from "../../components/PostTerms.astro";
 import { resolveSiteIdentity } from "../../utils/site-identity";
 import { buildContentSeo } from "../../utils/seo";
+import { notFoundPath } from "../../utils/i18n/index.ts";
 
 const { slug } = Astro.params;
-if (!slug) return Astro.redirect("/404");
+if (!slug) return Astro.redirect(notFoundPath(Astro.currentLocale));
 
-const { entry: post, isPreview, cacheHint } = await getEmDashEntry("posts", slug);
-if (!post) return Astro.redirect("/404");
+const locale = Astro.currentLocale;
+const { entry: post, isPreview, cacheHint } = await getEmDashEntry("posts", slug, {
+	locale,
+});
+if (!post) return Astro.redirect(notFoundPath(Astro.currentLocale));
 
 if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 

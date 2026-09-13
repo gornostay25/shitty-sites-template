@@ -21,11 +21,13 @@ const seo = buildStaticPageSeo({
 	identity,
 });
 
+const locale = Astro.currentLocale;
 const results = query
 	? await search(query, {
 			collections: ["posts", "pages"],
 			status: "published",
 			limit: 20,
+			locale,
 		})
 	: null;
 ---

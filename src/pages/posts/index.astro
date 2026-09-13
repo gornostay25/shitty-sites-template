@@ -19,10 +19,12 @@ const seo = buildStaticPageSeo({
 	identity,
 });
 
+const locale = Astro.currentLocale;
 const cursor = Astro.url.searchParams.get("cursor") ?? undefined;
 const { entries: posts, nextCursor, cacheHint } = await getEmDashCollection(
 	"posts",
 	{
+		locale,
 		limit: identity.postsPerPage,
 		cursor,
 		orderBy: { published_at: "desc" },

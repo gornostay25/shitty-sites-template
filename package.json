@@ -12,6 +12,10 @@
     "build": "astro build",
     "preview": "astro preview",
     "deploy": "astro build && wrangler deploy",
+    "deploy:prod": "cp wrangler.prod.jsonc wrangler.jsonc && astro build && wrangler deploy; git restore wrangler.jsonc",
+    "seed:d1-export": "bun scripts/d1-export-seed-db.ts",
+    "seed:media-upload:local": "bun scripts/upload-seed-media.ts --local",
+    "seed:media-upload": "bun scripts/upload-seed-media.ts --remote",
     "typecheck": "astro check"
   },
   "dependencies": {
@@ -30,8 +34,10 @@
     "@astrojs/check": "0.9.10",
     "@cloudflare/workers-types": "^5.20260911.1",
     "@tailwindcss/vite": "^4.0.0",
+    "@types/bun": "^1.4.2",
     "@types/sanitize-html": "^2.16.0",
     "tailwindcss": "^4.0.0",
+    "ulidx": "^2.4.1",
     "wrangler": "^4.131.1"
   },
   "patchedDependencies": {

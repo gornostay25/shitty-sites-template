@@ -10,9 +10,11 @@ interface Props {
 const { post } = Astro.props;
 const contentId = post.data.id;
 
+const locale = Astro.currentLocale;
+
 const [categories, tags] = await Promise.all([
-	getEntryTerms("posts", contentId, "category"),
-	getEntryTerms("posts", contentId, "tag"),
+	getEntryTerms("posts", contentId, "category", { locale }),
+	getEntryTerms("posts", contentId, "tag", { locale }),
 ]);
 ---
 

@@ -19,7 +19,7 @@
 		},
 		"seo": {
 			"titleSeparator": " | ",
-			"robotsTxt": null,
+			"robotsTxt": "User-agent: *\nDisallow: /",
 			"googleVerification": "",
 			"bingVerification": ""
 		}
@@ -233,10 +233,20 @@
 					"description": "EmDash platform topics"
 				},
 				{
+					"id": "guides",
 					"slug": "guides",
 					"label": "Guides",
+					"locale": "en",
 					"parent": "emdash",
 					"description": "How-to guides and walkthroughs"
+				},
+				{
+					"id": "guides-uk",
+					"slug": "guides",
+					"label": "Посібники",
+					"locale": "uk",
+					"translationOf": "guides",
+					"description": "Посібники та покрокові інструкції"
 				},
 				{
 					"slug": "reference",
@@ -290,8 +300,10 @@
 	],
 	"menus": [
 		{
+			"id": "primary",
 			"name": "primary",
 			"label": "Primary Navigation",
+			"locale": "en",
 			"items": [
 				{
 					"type": "custom",
@@ -342,6 +354,67 @@
 							"type": "custom",
 							"label": "Search",
 							"url": "/search"
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "primary-uk",
+			"name": "primary",
+			"label": "Primary Navigation",
+			"locale": "uk",
+			"translationOf": "primary",
+			"items": [
+				{
+					"type": "custom",
+					"label": "Головна",
+					"url": "/uk/"
+				},
+				{
+					"type": "custom",
+					"label": "Записи",
+					"url": "/uk/posts"
+				},
+				{
+					"type": "page",
+					"ref": "about-uk"
+				},
+				{
+					"type": "post",
+					"ref": "welcome-uk",
+					"label": "Вітальний запис"
+				},
+				{
+					"type": "taxonomy",
+					"label": "Посібники",
+					"ref": "guides",
+					"collection": "category"
+				},
+				{
+					"type": "custom",
+					"label": "Більше",
+					"url": "#",
+					"children": [
+						{
+							"type": "custom",
+							"label": "Довідник можливостей",
+							"url": "/uk/feature-guide"
+						},
+						{
+							"type": "custom",
+							"label": "Showcase",
+							"url": "/uk/showcase/all-fields"
+						},
+						{
+							"type": "page",
+							"ref": "contact",
+							"label": "Контакт"
+						},
+						{
+							"type": "custom",
+							"label": "Пошук",
+							"url": "/uk/search"
 						}
 					]
 				}
@@ -614,6 +687,7 @@
 			{
 				"id": "welcome",
 				"slug": "welcome",
+				"locale": "en",
 				"status": "published",
 				"bylines": [
 					{ "byline": "editorial" },
@@ -628,9 +702,8 @@
 					"excerpt": "Your first demo post — bylines, taxonomies, featured image, and comments.",
 					"featured_image": {
 						"$media": {
-							"url": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&h=630&fit=crop",
-							"alt": "Laptop displaying code on a desk",
-							"filename": "welcome-featured.jpg"
+							"file": "welcome-featured.webp",
+							"alt": "Laptop displaying code on a desk"
 						}
 					},
 					"content": [
@@ -670,6 +743,47 @@
 									"_type": "span",
 									"_key": "welcome-p2-rest",
 									"text": " (ULID) for Comments and CommentForm — not post.id (slug).",
+									"marks": []
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"id": "welcome-uk",
+				"slug": "vitayemo",
+				"locale": "uk",
+				"translationOf": "welcome",
+				"status": "published",
+				"bylines": [
+					{ "byline": "editorial" },
+					{ "byline": "guest-author", "roleLabel": "Гостевий есе" }
+				],
+				"taxonomies": {
+					"category": ["guides"],
+					"tag": ["welcome", "demo", "comments"]
+				},
+				"data": {
+					"title": "Ласкаво просимо до ShittySites",
+					"excerpt": "Перший демо-запис — автори, таксономії, зображення та коментарі.",
+					"featured_image": {
+						"$media": {
+							"file": "welcome-featured.webp",
+							"alt": "Ноутбук із кодом на столі"
+						}
+					},
+					"content": [
+						{
+							"_type": "block",
+							"_key": "welcome-uk-p1",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "welcome-uk-p1-span",
+									"text": "Цей запис демонструє кількох авторів, категорії, теги, зображення та коментарі. Залиште коментар нижче, щоб перевірити UI.",
 									"marks": []
 								}
 							]
@@ -719,15 +833,13 @@
 					"excerpt": "Featured image with light and dark variants — swap themes to compare.",
 					"featured_image": {
 						"$media": {
-							"url": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&h=630&fit=crop",
-							"alt": "Light theme — laptop with bright workspace",
-							"filename": "dark-scheme-light.jpg"
+							"file": "dark-scheme-light.webp",
+							"alt": "Light theme — laptop with bright workspace"
 						},
 						"darkVariant": {
 							"$media": {
-								"url": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&h=630&fit=crop",
-								"alt": "Dark theme — code editor on dark background",
-								"filename": "dark-scheme-dark.jpg"
+								"file": "dark-scheme-dark.webp",
+								"alt": "Dark theme — code editor on dark background"
 							}
 						}
 					},
@@ -783,6 +895,7 @@
 			{
 				"id": "about",
 				"slug": "about",
+				"locale": "en",
 				"status": "published",
 				"data": {
 					"title": "About",
@@ -826,6 +939,47 @@
 									"_type": "span",
 									"_key": "about-body-span",
 									"text": "Content mirrors the hero-centered section — insert /section in admin to embed reusable blocks. See /feature-guide for the full capability index.",
+									"marks": []
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"id": "about-uk",
+				"slug": "pro-nas",
+				"locale": "uk",
+				"translationOf": "about",
+				"status": "published",
+				"data": {
+					"title": "Про нас",
+					"template": "Default",
+					"content": [
+						{
+							"_type": "block",
+							"_key": "about-uk-h1",
+							"style": "h1",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "about-uk-h1-span",
+									"text": "Про ShittySites",
+									"marks": []
+								}
+							]
+						},
+						{
+							"_type": "block",
+							"_key": "about-uk-lead",
+							"style": "normal",
+							"markDefs": [],
+							"children": [
+								{
+									"_type": "span",
+									"_key": "about-uk-lead-span",
+									"text": "Агентський базовий шаблон для клієнтських сайтів на EmDash + Cloudflare. Усі маршрути рендеряться на сервері; демо-розмітка навмисно без стилів.",
 									"marks": []
 								}
 							]
@@ -972,15 +1126,13 @@
 					],
 					"field_image": {
 						"$media": {
-							"url": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=800&fit=crop",
-							"alt": "Analytics dashboard on a laptop",
-							"filename": "showcase-light.jpg"
+							"file": "showcase-light.webp",
+							"alt": "Analytics dashboard on a laptop"
 						},
 						"darkVariant": {
 							"$media": {
-								"url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop",
-								"alt": "Dark analytics dashboard",
-								"filename": "showcase-dark.jpg"
+								"file": "showcase-dark.webp",
+								"alt": "Dark analytics dashboard"
 							}
 						}
 					},

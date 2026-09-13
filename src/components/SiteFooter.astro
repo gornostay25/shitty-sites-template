@@ -10,7 +10,7 @@ interface Props {
 }
 
 const { identity } = Astro.props;
-const footerMenu = await getMenu("footer");
+const footerMenu = await getMenu("footer", { locale: Astro.currentLocale });
 ---
 
 <footer>

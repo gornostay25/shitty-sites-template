@@ -51,7 +51,7 @@ const pageCtx = createPublicPageContext({
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={Astro.currentLocale ?? "en"}>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -70,7 +70,11 @@ const pageCtx = createPublicPageContext({
 	</head>
 	<body>
 		<!-- Apply Tailwind classes when theming a client site -->
-		<SiteHeader identity={identity} />
+		<SiteHeader
+			identity={identity}
+			collection={content?.collection}
+			entryId={content?.id}
+		/>
 
 		<main>
 			<slot />
