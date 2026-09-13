@@ -5,6 +5,7 @@ import { createPublicPageContext } from "emdash/page";
 import type { SeoMeta } from "emdash";
 import "../styles/global.css";
 import SeoHead from "../components/SeoHead.astro";
+import HubFeedback from "../hub-feedback/astro/HubFeedback.astro";
 import { resolveSiteIdentity } from "../utils/site-identity";
 import { getSiteSettings } from "emdash";
 import SiteHeader from "../plugins/bol-theme/astro/theme/SiteHeader.astro";
@@ -74,5 +75,6 @@ const pageCtx = createPublicPageContext({
 		<MobileActionBar locale={locale} venue={venue} />
 
 		<EmDashBodyEnd page={pageCtx} />
+		<HubFeedback />
 	</body>
 </html>

@@ -4,6 +4,7 @@
   "main": "./src/worker.ts",
   "compatibility_date": "2026-02-24",
   "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": false,
   "d1_databases": [
     {
       "binding": "DB",
@@ -24,7 +25,6 @@
       "binding": "bar-of-legends-SESSION",
     },
   ],
-  // General maintenance cron trigger — no dedicated media usage cron (removed in EmDash 0.36)
   "triggers": {
     "crons": ["* * * * *"],
   },

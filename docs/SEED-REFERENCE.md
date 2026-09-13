@@ -74,6 +74,18 @@ Fork: trim items to client navigation; delete unused menus from seed.
 
 ---
 
+## Internationalization
+
+Locales: `en` (default), `hu`, `de` in `astro.config.mjs`. Hungarian and German routes use `/hu/…` and `/de/…` prefixes.
+
+EmDash uses **one set of page templates** — not duplicate files under `src/pages/hu/` or `src/pages/de/`. Required: `routing: { fallbackType: "rewrite" }`. Guard non-default locale slugs in `[slug].astro` via `src/plugins/bol-theme/utils/i18n/locales.ts`. Use `notFoundPath()` for locale-aware 404 redirects.
+
+Theme UI copy: `getUiStrings()` from `src/plugins/bol-theme/utils/i18n/`. CMS content: pass `locale: Astro.currentLocale` on all EmDash queries.
+
+Docs: [Internationalization](https://docs.emdashcms.com/guides/internationalization/)
+
+---
+
 ## widgetAreas
 
 | Area | Used in |
@@ -197,7 +209,13 @@ Fork: replace all demo content with client copy; delete showcase entries entirel
 
 ### BOL seed — media references
 
+Committed WebP sources live in **`seed/media/`** (26 files). `$media.file` in `seed/seed.json` references filenames there — not `.emdash/uploads/`.
+
 Generated seed uses `$media.file` (see `scripts/generate-bol-seed.ts`). EmDash seed apply resolves **`$media.url`** only. After CLI seed, image fields may still contain raw `$media` JSON until you run the media upload script:
+
+```bash
+bunx emdash seed seed/seed.json --database .emdash/seed-migration.db --uploads-dir seed/media
+```
 
 | Environment | Command |
 |-------------|---------|
@@ -235,4 +253,4 @@ Files in `public/` are served from the site root with no build processing. For o
 | Search | `search.astro`, `SiteHeader.astro` (LiveSearch) |
 | Comments | `posts/[slug].astro` |
 | HTML blocks | `HtmlBlock.astro` |
-| i18n | `LanguageSwitcher.astro` (reference stub), `astro.config.mjs`, bol-theme switcher (migration plan) |
+| i18n | `src/plugins/bol-theme/utils/i18n/`, `LanguageSwitcher.astro`, `astro.config.mjs` (`fallbackType: "rewrite"`) |

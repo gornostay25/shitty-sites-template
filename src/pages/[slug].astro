@@ -4,23 +4,26 @@
  * CMS pages — single full-width layout, Portable Text (+ plugin blocks).
  */
 import { getEmDashEntry, getSiteSettings } from "emdash";
-import { PortableText } from "emdash/ui";
 import Base from "../layouts/Base.astro";
-import HtmlBlock from "../components/HtmlBlock.astro";
+import BolPortableText from "../components/BolPortableText.astro";
 import { resolveSiteIdentity } from "../utils/site-identity";
 import { buildContentSeo } from "../utils/seo";
+import { isNonDefaultLocale, notFoundPath } from "../plugins/bol-theme/utils/i18n/index.ts";
 
 const { slug } = Astro.params;
-
-const LOCALES = ["hu", "de"] as const;
-if (slug && LOCALES.includes(slug as (typeof LOCALES)[number])) {
-	return Astro.redirect(`/${slug}/`);
+if (slug && isNonDefaultLocale(slug)) {
+	const normalized = Astro.url.pathname.replace(/\/$/, "") || "/";
+	if (normalized === `/${slug}`) {
+		return Astro.rewrite("/");
+	}
 }
+if (!slug) return Astro.redirect(notFoundPath(Astro.currentLocale));
 
-if (!slug) return Astro.redirect("/404");
-
-const { entry: page, isPreview, cacheHint } = await getEmDashEntry("pages", slug);
-if (!page) return Astro.redirect("/404");
+const locale = Astro.currentLocale;
+const { entry: page, isPreview, cacheHint } = await getEmDashEntry("pages", slug, {
+	locale,
+});
+if (!page) return Astro.redirect(notFoundPath(Astro.currentLocale));
 
 if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 
@@ -48,10 +51,7 @@ const seo = buildContentSeo({
 		{
 			page.data.content && (
 				<div {...page.edit.content}>
-					<PortableText
-						value={page.data.content}
-						components={{ type: { htmlBlock: HtmlBlock } }}
-					/>
+					<BolPortableText value={page.data.content} />
 				</div>
 			)
 		}

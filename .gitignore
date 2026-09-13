@@ -31,6 +31,9 @@ data.db-wal
 .dev.vars
 .dev.vars.*
 
+# Production wrangler (per-deploy IDs)
+wrangler.prod.jsonc
+
 # IDE
 .vscode/*
 !.vscode/mcp.json
@@ -45,5 +48,3 @@ Thumbs.db
 # Logs
 *.log
 npm-debug.log*
-
-wrangler.prod.jsonc

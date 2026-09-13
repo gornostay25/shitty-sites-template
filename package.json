@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "emdash": {
-    "label": "ShittySites Template",
+    "label": "Bar of Legends",
     "seed": "seed/seed.json"
   },
   "scripts": {
@@ -12,6 +12,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "deploy": "astro build && wrangler deploy",
+    "deploy:prod": "cp wrangler.prod.jsonc wrangler.jsonc && astro build && wrangler deploy; git restore wrangler.jsonc",
     "typecheck": "astro check",
     "seed:d1-export": "bun scripts/d1-export-seed-db.ts",
     "seed:media-upload": "bun scripts/upload-seed-media.ts --remote",
@@ -21,11 +22,14 @@
     "@astrojs/cloudflare": "14.3.1",
     "@astrojs/react": "6.0.5",
     "@emdash-cms/cloudflare": "^0.37.0",
+    "@fasterfixes/core": "^0.0.7",
+    "@floating-ui/react": "^0.27.16",
     "@lucide/astro": "^1.45.0",
     "astro": "7.3.2",
     "emdash": "^0.37.0",
     "leaflet": "^1.9.4",
     "libphonenumber-js": "^1.13.13",
+    "modern-screenshot": "^4.6.8",
     "react": "19.3.0",
     "react-dom": "19.3.0"
   },
@@ -37,6 +41,7 @@
     "@types/leaflet": "^1.9.22",
     "@types/sanitize-html": "^2.16.0",
     "tailwindcss": "^4.0.0",
+    "ulidx": "^2.4.1",
     "wrangler": "^4.131.1"
   },
   "patchedDependencies": {

@@ -89,13 +89,13 @@ EmDash docs: `emdash seed` applies to **local SQLite only**; `emdash migrate --d
 | Script | What it does |
 |--------|----------------|
 | `bun run seed:d1-export` | Local SQLite → D1-safe `.emdash/d1-import.sql` (FTS5 fixes) |
-| `bun run seed:media-upload:local` | `.emdash/uploads/` → **local** R2 + local D1 patch (dev, after `bun dev`) |
-| `bun run seed:media-upload` | `.emdash/uploads/` → **remote** R2 + remote D1 patch (production) |
+| `bun run seed:media-upload:local` | `seed/media/` → **local** R2 + local D1 patch (dev, after `bun dev`) |
+| `bun run seed:media-upload` | `seed/media/` → **remote** R2 + remote D1 patch (production) |
 
 One-shot production content bootstrap (empty D1):
 
 ```bash
-bunx emdash seed seed/seed.json --database .emdash/seed-migration.db --uploads-dir .emdash/uploads
+bunx emdash seed seed/seed.json --database .emdash/seed-migration.db --uploads-dir seed/media
 sqlite3 .emdash/seed-migration.db "UPDATE options SET value='\"https://YOUR-URL\"' WHERE name='site:url';"
 bun run seed:d1-export
 bunx wrangler d1 execute bar-of-legends --remote --file=.emdash/d1-import.sql -y
@@ -110,7 +110,7 @@ rm -f .emdash/seed-migration.db
 
 bunx emdash seed seed/seed.json \
   --database .emdash/seed-migration.db \
-  --uploads-dir .emdash/uploads
+  --uploads-dir seed/media
 ```
 
 Runs migrations + full seed in Bun/Node (no Worker subrequest cap). Expect ~111 content entries, collections, taxonomies, and menus.

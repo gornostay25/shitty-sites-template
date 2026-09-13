@@ -1,19 +1,15 @@
 # Archive — 2026-09-12
 
-Shipped gallery block hardening: bento grid image fill, mobile-uniform tiles, native dialog lightbox with open/close animations.
+Shipped work archived from `docs/superpowers/specs/` and `docs/superpowers/plans/`.
 
-## Gallery Grid + Lightbox (2026-09-12)
+## Hub Feedback widget (2026-09-12)
 
-Fixed `bol.gallery` tile sizing (EmDash image CSS override), restricted bento spans to `md+`, added clickable tiles with `<dialog popover="auto">` lightbox (caption + backdrop/X/Esc close, popover enter/exit transitions).
+Replaced the EmDash native `hub-feedback` plugin with `src/hub-feedback/` — React island, `.env` credentials (`HUB_API_KEY`, `HUB_SITE_ID`), and `vite.define` in `astro.config.mjs`. No Vite plugin wrapper; no compile-time source annotations in client HTML.
 
 ### Specs
 
-- [`specs/2026-09-12-gallery-grid-lightbox-design.md`](./specs/2026-09-12-gallery-grid-lightbox-design.md)
+- [`specs/2026-09-07-hub-feedback-vite-plugin-design.md`](./specs/2026-09-07-hub-feedback-vite-plugin-design.md)
 
 ### Plans
 
-- [`plans/2026-09-12-gallery-grid-lightbox.md`](./plans/2026-09-12-gallery-grid-lightbox.md)
-
----
-
-**Related:** BOL theme migration → [`../2026-09-10/`](../2026-09-10/)
+- [`plans/2026-09-07-hub-feedback-vite-plugin.md`](./plans/2026-09-07-hub-feedback-vite-plugin.md)

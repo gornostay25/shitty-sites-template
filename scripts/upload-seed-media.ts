@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 /**
- * Upload `.emdash/uploads/` seed images to R2, insert `media` rows, and patch
+ * Upload `seed/media/` WebP assets to R2, insert `media` rows, and patch
  * content/revision JSON that still contains `{ "$media": { "file": "…" } }`.
  *
  * Uses Wrangler (same auth as D1 import) — no EmDash admin login required.
@@ -30,7 +30,7 @@ if (applyLocal && applyRemote) {
 }
 const uploadsDir = resolve(
 	cwd,
-	valueAfter(args, "--uploads-dir") ?? ".emdash/uploads",
+	valueAfter(args, "--uploads-dir") ?? "seed/media",
 );
 const databaseArg = valueAfter(args, "--database");
 const dbPath = databaseArg

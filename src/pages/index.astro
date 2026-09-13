@@ -1,10 +1,11 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { getEmDashEntry, getSiteSettings } from "emdash";
-import { PortableText } from "emdash/ui";
+import BolPortableText from "../components/BolPortableText.astro";
 import Base from "../layouts/Base.astro";
 import { resolveSiteIdentity } from "../utils/site-identity";
 import { buildContentSeo } from "../utils/seo";
+import { notFoundPath } from "../plugins/bol-theme/utils/i18n/index.ts";
 
 const locale = Astro.currentLocale ?? "en";
 const { entry: page, isPreview, cacheHint } = await getEmDashEntry("pages", "home", {
@@ -12,7 +13,7 @@ const { entry: page, isPreview, cacheHint } = await getEmDashEntry("pages", "hom
 });
 
 if (!page) {
-	return Astro.redirect("/404");
+	return Astro.redirect(notFoundPath(locale));
 }
 
 if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
@@ -39,7 +40,7 @@ const seo = buildContentSeo({
 	{
 		page.data.content && (
 			<div {...page.edit.content}>
-				<PortableText value={page.data.content} />
+				<BolPortableText value={page.data.content} />
 			</div>
 		)
 	}

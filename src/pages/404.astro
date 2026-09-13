@@ -1,8 +1,12 @@
 ---
+import { getRelativeLocaleUrl } from "astro:i18n";
 import Base from "../layouts/Base.astro";
 import { getSiteSettings } from "emdash";
 import { resolveSiteIdentity } from "../utils/site-identity";
 import { buildStaticPageSeo } from "../utils/seo";
+
+const locale = Astro.currentLocale ?? "en";
+const homeHref = getRelativeLocaleUrl(locale, "/");
 
 const settings = await getSiteSettings();
 const identity = resolveSiteIdentity(settings);
@@ -18,6 +22,6 @@ const seo = buildStaticPageSeo({
 	<article>
 		<h1>Page not found</h1>
 		<p>The page you're looking for doesn't exist or has been moved.</p>
-		<p><a href="/">Go home</a></p>
+		<p><a href={homeHref}>Go home</a></p>
 	</article>
 </Base>

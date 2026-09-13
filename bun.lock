@@ -8,11 +8,14 @@
         "@astrojs/cloudflare": "14.3.1",
         "@astrojs/react": "6.0.5",
         "@emdash-cms/cloudflare": "^0.37.0",
+        "@fasterfixes/core": "^0.0.7",
+        "@floating-ui/react": "^0.27.16",
         "@lucide/astro": "^1.45.0",
         "astro": "7.3.2",
         "emdash": "^0.37.0",
         "leaflet": "^1.9.4",
         "libphonenumber-js": "^1.13.13",
+        "modern-screenshot": "^4.6.8",
         "react": "19.3.0",
         "react-dom": "19.3.0",
       },
@@ -24,6 +27,7 @@
         "@types/leaflet": "^1.9.22",
         "@types/sanitize-html": "^2.16.0",
         "tailwindcss": "^4.0.0",
+        "ulidx": "^2.4.1",
         "wrangler": "^4.131.1",
       },
     },
@@ -301,6 +305,8 @@
     "@esbuild/win32-ia32": ["@esbuild/win32-ia32@0.28.1", "", { "os": "win32", "cpu": "ia32" }, "sha512-zvb/mB2bSCoJOpoCBgYKKpX6YM6mJBlBUVUtVj41DlZJVEB6/0CKlRYxP5wWl1C1ILiCoAU5wZZ4q1P3qeS6Eg=="],
 
     "@esbuild/win32-x64": ["@esbuild/win32-x64@0.28.1", "", { "os": "win32", "cpu": "x64" }, "sha512-bm4Mowrv+GXMlpWX++EcXw/iLyd1o3+bJkC2DkWXYVvgZCqD/bSj9ctZeAMC3cIxgjRVR2Dufaiu4YPxr5gW1A=="],
+
+    "@fasterfixes/core": ["@fasterfixes/core@0.0.7", "", {}, "sha512-CRIl+ctg/flW3I0AzKGFI3uIbhVUeAIoISI9Feex5ZkF0KE0VedT9oL5DcdUN47Lm4VVXYQ0N6VIc06PIpEc/A=="],
 
     "@floating-ui/core": ["@floating-ui/core@1.8.0", "", { "dependencies": { "@floating-ui/utils": "^0.2.12" } }, "sha512-0CIZ5itps/8x7BG8dEIhs53BvCUH2PCoogtakwRTut+Arm58sJooJ0AuZhLw2HJYIR5cMLNPBSS728sPho2khQ=="],
 
@@ -1123,6 +1129,8 @@
     "mime-types": ["mime-types@3.0.2", "", { "dependencies": { "mime-db": "^1.54.0" } }, "sha512-Lbgzdk0h4juoQ9fCKXW4by0UJqj+nOOrI9MJ1sSj4nI8aI2eo1qmvQEie4VD1glsS250n15LsWsYtCugiStS5A=="],
 
     "miniflare": ["miniflare@5.20260911.0-alpha", "", { "dependencies": { "@cspotcode/source-map-support": "0.8.1", "sharp": "0.35.4", "undici": "7.29.0", "workerd": "1.20260911.1", "ws": "8.21.0", "youch": "4.1.0-beta.10" } }, "sha512-CRieJmvHx+7rNqnA5SKdsYsER6rfkUIE/jruIUw+fLhsQ4sORfuMtr3+FQzsQ9/y8lhk061V4Fl1DFdHiyBB6g=="],
+
+    "modern-screenshot": ["modern-screenshot@4.7.0", "", {}, "sha512-9YxN+ddPSMMlhylOv25VHzXrl9u67QRxoh7+SEewGtgUw7t6hHTrjptSDJUSne9oG4Xk/h2cwG15nIt4Hc9ujg=="],
 
     "modern-tar": ["modern-tar@0.7.7", "", {}, "sha512-t9VmxaqrmANnEOBhpSDI6HD192Ge48k8vmWqQQL7hSFEqHEYwZbbsu49+aKLWZeRvFs3j1pMhXOqqF4kPlvjkQ=="],
 
