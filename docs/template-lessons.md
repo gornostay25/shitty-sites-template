@@ -22,7 +22,7 @@ Action backlog for improving the **ShittySites EmDash agency template**, distill
 
 - **Document EmDash byline patch lifecycle** — when to add `patches/emdash@X.Y.Z.patch`, when to remove after upstream fix; keep `AGENTS.md` patch version in sync. Evidence: [phase 1](worklog/01-template-foundation.md#template-takeaways), [phase 3](worklog/03-bol-hardening.md#template-takeaways).
 
-- **Document `bun patch` recreation on EmDash upgrade** — patch file name must match installed version exactly; recreate, do not rename. Evidence: [phase 3](worklog/03-bol-hardening.md#2026-09-12--c7eb374-emdash-037-upgrade).
+- **Document `bun patch` recreation on EmDash upgrade** — patch file name must match installed version exactly; recreate, do not rename. Evidence: [phase 3](worklog/03-bol-hardening.md#2026-09-12--c7eb374-emdash-037-upgrade), [phase 5](worklog/06-post-deploy-polish.md#8-emdash-patch-version-drift) (0.38).
 
 - **Upgrade EmDash before first production deploy** — avoid going live on stale version then upgrading. Evidence: [phase 3](worklog/03-bol-hardening.md#template-takeaways).
 
@@ -37,6 +37,13 @@ Action backlog for improving the **ShittySites EmDash agency template**, distill
 - **Document Astro Portable Text block rules** in AGENTS.md or plugin skill:
   - Block components receive **`Astro.props.node`**, not flat props — provide a `getPtNode()` helper in scaffold
   - **No React islands inside PT `components` map** — Astro ignores `client:*` there; use vanilla JS/CSS in blocks or page-level islands via slots. Evidence: [phase 2](worklog/02-bol-migration.md#2026-09-07--post-ship-fix-1-pt-blocks--islands).
+  - **No hoisted `<script>` inside PT block `.astro` files** — import a small **enhancer** child component (processed `<script>` there) or a page-level island. Evidence: [phase 5](worklog/06-post-deploy-polish.md#4-portable-text-blocks-and-client-scripts).
+
+- **Document public interactivity defaults** — no global layout client boot; co-located Astro scripts or React islands with `client:idle` / `client:visible` (optional `rootMargin` for maps). Evidence: [phase 5](worklog/06-post-deploy-polish.md#2026-09-17--396b989-lighthouse-hero--prod-interactivity--i18n-guards).
+
+- **Document deferred map island on Workers** — Leaflet via React island + `client:visible`; **static top-level CSS imports** in the island (dynamic CSS import can return HTML MIME on Workers). Evidence: [phase 5](worklog/06-post-deploy-polish.md#5-leaflet-css-on-cloudflare-workers).
+
+- **Use EmDash `ImageValue` + `<Image />` for CMS media in blocks** — do not invent parallel image types; allow `ImageValue | string` only when legacy URL strings may remain in content. Evidence: [phase 5](worklog/06-post-deploy-polish.md#6-hero-lcp-and-media-types).
 
 - **Document EmDash admin API gaps (0.36+)** — `usePluginAPI`, `Card`, `Input` not exported from `@emdash-cms/admin`; working pattern is `@cloudflare/kumo` form primitives + `apiFetch()` wrapper with `{ success, data }` unwrap. Evidence: [phase 2](worklog/02-bol-migration.md#2026-09-05--part-1--2-foundation--plugin-core--75fdd64).
 
@@ -44,7 +51,7 @@ Action backlog for improving the **ShittySites EmDash agency template**, distill
 
 - **Optional venue-as-KV scaffold** — reusable pattern for structured business facts (hours, phone, address) with a single admin page; not a CMS collection. Ship as commented example or minimal plugin stub. Evidence: [phase 2](worklog/02-bol-migration.md#template-takeaways).
 
-- **Keep agency tools out of default template** — `hub-feedback` was correct as optional add-on; client forks should not inherit agency-internal widgets. Evidence: [phase 1](worklog/01-template-foundation.md#template-takeaways), [phase 2](worklog/02-bol-migration.md#2026-09-05--part-1--2-foundation--plugin-core--75fdd64).
+- **Keep agency tools out of default template** — `hub-feedback` as optional **`src/hub-feedback/` env island** (not an EmDash native plugin); client forks omit or wire via `.env`. Evidence: [phase 1](worklog/01-template-foundation.md#template-takeaways), [phase 5](worklog/06-post-deploy-polish.md#2026-09-12--bb6ac4c-hub-feedback-env-island).
 
 ---
 
@@ -61,6 +68,8 @@ Action backlog for improving the **ShittySites EmDash agency template**, distill
 - **Document when to write a seed generator script** — hand-editing large `seed.json` does not scale; client-specific generators (like `generate-bol-seed.ts`) are valid; template should explain the trade-off. Evidence: [phase 2](worklog/02-bol-migration.md#template-takeaways).
 
 - **Verify Block Kit field types before ship** — migrating hero `text_input` → `media_picker` post-ship was low-cost but avoidable with upfront verification. Evidence: [phase 3](worklog/03-bol-hardening.md#2026-09-10--4be3086-hero-media-picker--archive-migration-docs).
+
+- **Commit LCP-critical hero (and similar) under `seed/media/`** — not only `src/assets/`; pair with `$media.file` + upload script and `<Image priority />` on the block. Evidence: [phase 5](worklog/06-post-deploy-polish.md#6-hero-lcp-and-media-types).
 
 ---
 
@@ -94,6 +103,10 @@ Action backlog for improving the **ShittySites EmDash agency template**, distill
 
 - **Cross-link worklog ↔ lessons** — worklog = chronicle; this file = actionable backlog. Evidence: [worklog README](worklog/README.md).
 - **Document design → EmDash pipeline** — two-pipeline model, component mapping, PT/island rules. Evidence: [design migration worklog](worklog/05-design-migration.md).
+
+- **Document EmDash rewrite i18n locale resolution** — with `routing.fallbackType: "rewrite"` and no `src/pages/{locale}/` tree, **`Astro.currentLocale` on `[slug].astro` is often the default locale**; derive locale from **`Astro.originPathname`** (`getRequestLocale`) for redirects, CMS queries, and switcher parity. Symptom: switcher shows HU, body is EN. Never build locale home with `Astro.rewrite("/")` alone on slug routes. Evidence: [phase 5 pitfalls](worklog/06-post-deploy-polish.md#pitfalls--platform-nuances).
+
+- **Document template backport workflow** — after production fork proves scripts/runbook, merge patterns to ShittySites template; locale codes differ per client but deploy and i18n pitfalls transfer. Evidence: [phase 5](worklog/06-post-deploy-polish.md#2026-09-13--d39dd77-template-backport-merged-via-2896253).
 
 ---
 

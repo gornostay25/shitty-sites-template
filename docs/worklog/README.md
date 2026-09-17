@@ -1,6 +1,6 @@
 # EmDash pipeline worklog — Bar of Legends
 
-Chronicle of building the Bar of Legends production site on the ShittySites EmDash template. Covers **template foundation → BOL migration → hardening → Cloudflare deploy**.
+Chronicle of building the Bar of Legends production site on the ShittySites EmDash template. Covers **template foundation → BOL migration → hardening → Cloudflare deploy → post-deploy polish**.
 
 **Purpose:** Capture what was done, why, and how — including decisions and template gaps — so learnings can feed back into the ShittySites template for future client sites.
 
@@ -18,6 +18,7 @@ Chronicle of building the Bar of Legends production site on the ShittySites EmDa
 | 2 — BOL migration | 2026-09-05 – 2026-09-07 | `5cc37b2` → `291ca20` | [`02-bol-migration.md`](./02-bol-migration.md) |
 | 3 — BOL hardening | 2026-09-10 – 2026-09-12 | `4be3086`, `c7eb374` | [`03-bol-hardening.md`](./03-bol-hardening.md) |
 | 4 — Cloudflare deploy | 2026-09-12 | `4ed0ae1` | [`04-cloudflare-deploy.md`](./04-cloudflare-deploy.md) |
+| 5 — Post-deploy polish | 2026-09-12 – 2026-09-17 | `191271d` → `396b989` | [`06-post-deploy-polish.md`](./06-post-deploy-polish.md) |
 
 ### Supplementary
 
@@ -29,7 +30,7 @@ Chronicle of building the Bar of Legends production site on the ShittySites EmDa
 
 ## Project arc (one paragraph)
 
-The repo started as the EmDash Marketing starter, was reshaped into the **ShittySites agency base** (unstyled semantic HTML + full EmDash demo), then forked for **Bar of Legends**: a native `bol-theme` plugin with CMS collections, Portable Text blocks, en/hu/de i18n, and venue admin. Production deploy on Cloudflare Workers exposed platform limits (setup wizard + KV object cache, D1 FTS5 import, `$media.file` seed gap) that required custom Bun scripts and a dedicated runbook.
+The repo started as the EmDash Marketing starter, was reshaped into the **ShittySites agency base** (unstyled semantic HTML + full EmDash demo), then forked for **Bar of Legends**: a native `bol-theme` plugin with CMS collections, Portable Text blocks, en/hu/de i18n, and venue admin. Production deploy on Cloudflare Workers exposed platform limits (setup wizard + KV object cache, D1 FTS5 import, `$media.file` seed gap) that required custom Bun scripts and a dedicated runbook. Follow-up work polished gallery and client JS (Lighthouse LCP, co-located scripts, deferred map island), merged template backport from main, and fixed subtle **rewrite i18n** bugs where `Astro.currentLocale` disagreed with the URL the language switcher used.
 
 ---
 
@@ -53,6 +54,8 @@ The repo started as the EmDash Marketing starter, was reshaped into the **Shitty
 | `c466be39` | 3 | Hero media picker + archive specs (Sep 9–10) |
 | `518544bc` | 3 | EmDash 0.37 upgrade + patch (Sep 12) |
 | `d363f8e1` | 4 | D1 export script TypeScript fix (Sep 12) |
+| `03075cf0` | 5 | Lighthouse + prod interactivity + locale redirect fixes (Sep 17) |
+| `2c2b2dff` | 5 | Template merge / hub-feedback alignment (Sep 13) |
 | `ab5753af`, `bc62729d` | 5 (design) | Prototype → EmDash design brainstorm + failed monolith (Sep 5) |
 
 **Gaps:** Commits `ef717c3`, `47ee3fb`, `5ea961c` (phase 1) have no agent transcript coverage. Reconstructed from git diff and archived specs only.
@@ -65,5 +68,6 @@ Every phase file follows the same structure:
 
 1. **Context** — template/site state at phase start
 2. **Work log** — chronological entries (what / why / how)
-3. **Key decisions** — summary table
-4. **Template takeaways** — phase-local bullets; consolidated in [`../template-lessons.md`](../template-lessons.md)
+3. **Pitfalls & platform nuances** — phase 5 only; symptom → cause → fix (see [`06-post-deploy-polish.md`](./06-post-deploy-polish.md))
+4. **Key decisions** — summary table
+5. **Template takeaways** — phase-local bullets; consolidated in [`../template-lessons.md`](../template-lessons.md)
