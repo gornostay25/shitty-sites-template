@@ -5,7 +5,9 @@ import { getSiteSettings } from "emdash";
 import { resolveSiteIdentity } from "../utils/site-identity";
 import { buildStaticPageSeo } from "../utils/seo";
 
-const locale = Astro.currentLocale ?? "en";
+import { getRequestLocale } from "../plugins/bol-theme/utils/i18n/index.ts";
+
+const locale = getRequestLocale(Astro.originPathname);
 const homeHref = getRelativeLocaleUrl(locale, "/");
 
 const settings = await getSiteSettings();

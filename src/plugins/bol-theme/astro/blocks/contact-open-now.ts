@@ -15,10 +15,9 @@ export type OpenNowConfig = {
 	daysShort: string[];
 };
 
-export function initOpenNowBadge(badgeId: string, config: OpenNowConfig): void {
-	const badgeEl = document.getElementById(badgeId);
-	const textEl = document.getElementById(`${badgeId}-text`);
-	if (!badgeEl || !textEl) return;
+export function initOpenNowBadge(badgeEl: HTMLElement, config: OpenNowConfig): void {
+	const textEl = badgeEl.querySelector<HTMLElement>("[data-open-now-text]");
+	if (!textEl) return;
 
 	const weekHours = rowsToWeekHours(config.openingHours);
 

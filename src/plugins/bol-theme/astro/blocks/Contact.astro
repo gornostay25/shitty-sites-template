@@ -9,7 +9,9 @@ import { socialLinksFromVenue } from "../../utils/socials.ts";
 import { toBolLocale } from "../../utils/format.ts";
 import { getPtNode } from "../../utils/pt-node.ts";
 import type { BolContactNode } from "../../types/pt-blocks.ts";
-import "../../styles/leaflet.css";
+import OpenNowBadge from "../components/OpenNowBadge.astro";
+import VenueMap from "../islands/VenueMap.tsx";
+import { VIEWPORT_LAZY_ROOT_MARGIN } from "../islands/constants.ts";
 
 const node = getPtNode<BolContactNode>(Astro.props);
 const {
@@ -84,28 +86,14 @@ const hoursRows = venue.openingHours
               <h3 class="font-display text-2xl tracking-wide">
                 {ui.contact.hoursTitle}
               </h3>
-              <span
-                id="open-now-badge"
-                aria-live="polite"
-                class="inline-flex min-h-9 items-center gap-2 whitespace-nowrap rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-muted-foreground"
-              >
-                <span
-                  class="size-2 rounded-full bg-muted-foreground"
-                  aria-hidden="true"
-                />
-                <span id="open-now-badge-text">…</span>
-              </span>
-              <script
-                is:inline
-                type="application/json"
-                id="open-now-config"
-                set:html={JSON.stringify({
+              <OpenNowBadge
+                config={{
                   openingHours: venue.openingHours,
                   bolLocale,
                   statusOpenTpl: ui.contact.statusOpenTpl,
                   statusClosedTpl: ui.contact.statusClosedTpl,
                   daysShort: ui.contact.daysShort,
-                })}
+                }}
               />
             </div>
             <table class="mt-5 w-full text-sm">
@@ -147,24 +135,14 @@ const hoursRows = venue.openingHours
                     {venue.address}
                   </p>
                   <div class="mt-5 overflow-hidden rounded-xl border border-border">
-                    <div
-                      data-venue-map
-                      data-lat={venue.lat}
-                      data-lng={venue.lng}
-                      data-title={siteTitle}
-                      data-address={venue.address}
-                      role="region"
-                      aria-label={siteTitle}
-                      class="venue-map relative h-64 w-full sm:h-72"
-                    >
-                      <div class="venue-map-canvas h-full w-full" />
-                      <div
-                        class="venue-map-loading absolute inset-0 grid place-items-center bg-surface"
-                        aria-hidden="true"
-                      >
-                        <span class="size-6 animate-spin rounded-full border-2 border-brand/30 border-t-brand" />
-                      </div>
-                    </div>
+                    <VenueMap
+                      client:visible={{ rootMargin: VIEWPORT_LAZY_ROOT_MARGIN }}
+                      lat={venue.lat}
+                      lng={venue.lng}
+                      title={siteTitle}
+                      address={venue.address}
+                      ariaLabel={siteTitle}
+                    />
                   </div>
                   <a
                     href={venue.mapsUrl}
@@ -241,71 +219,3 @@ const hoursRows = venue.openingHours
     </div>
   </div>
 </section>
-
-<script>
-  import { initOpenNowBadge, type OpenNowConfig } from "./contact-open-now.ts";
-
-  const configEl = document.getElementById("open-now-config");
-  if (configEl?.textContent) {
-    initOpenNowBadge(
-      "open-now-badge",
-      JSON.parse(configEl.textContent) as OpenNowConfig,
-    );
-  }
-</script>
-
-<script>
-  async function initVenueMaps() {
-    const L = (await import("leaflet")).default;
-    await import("leaflet/dist/leaflet.css");
-
-    for (const root of document.querySelectorAll<HTMLElement>(
-      "[data-venue-map]",
-    )) {
-      const canvas = root.querySelector<HTMLElement>(".venue-map-canvas");
-      const loading = root.querySelector<HTMLElement>(".venue-map-loading");
-      if (!canvas || canvas.dataset.initialized === "true") continue;
-
-      const lat = Number(root.dataset.lat);
-      const lng = Number(root.dataset.lng);
-      const title = root.dataset.title ?? "";
-      const address = root.dataset.address ?? "";
-
-      const map = L.map(canvas, { scrollWheelZoom: false }).setView(
-        [lat, lng],
-        16,
-      );
-      const tileOptions = { maxNativeZoom: 16, maxZoom: 19 } as const;
-
-      L.tileLayer(
-        "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
-        {
-          ...tileOptions,
-          attribution:
-            'Tiles &copy; Esri — Source: Esri, HERE, Garmin, &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors',
-        },
-      ).addTo(map);
-      L.tileLayer(
-        "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}",
-        tileOptions,
-      ).addTo(map);
-
-      const pin = L.divIcon({
-        className: "venue-pin-anchor",
-        html: '<span class="venue-pin" aria-hidden="true"></span>',
-        iconSize: [30, 30],
-        iconAnchor: [15, 34],
-        popupAnchor: [0, -30],
-      });
-
-      L.marker([lat, lng], { icon: pin, title })
-        .addTo(map)
-        .bindPopup(`<strong>${title}</strong><br/><span>${address}</span>`);
-
-      canvas.dataset.initialized = "true";
-      loading?.remove();
-    }
-  }
-
-  initVenueMaps();
-</script>

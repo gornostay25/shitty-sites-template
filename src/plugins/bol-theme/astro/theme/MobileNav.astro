@@ -5,6 +5,7 @@ import type { NavItem } from "../../utils/nav.ts";
 import type { PublicVenueSettings } from "../../utils/venue.ts";
 import type { UiStrings } from "../../utils/i18n/en.ts";
 import { socialNavLinksFromVenue } from "../../utils/socials.ts";
+import MobileNavEnhancer from "../components/MobileNavEnhancer.astro";
 
 interface Props {
 	part: "trigger" | "panel";
@@ -28,6 +29,8 @@ const socials = venue ? socialNavLinksFromVenue(venue) : [];
 			aria-expanded="false"
 			aria-haspopup="dialog"
 			aria-label={ui.nav.openMenu}
+			data-open-label={ui.nav.openMenu}
+			data-close-label={ui.nav.closeMenu}
 		>
 			<span class="bol-mobile-nav-trigger__open grid place-items-center">
 				<Icon name="menu" class="size-6" />
@@ -70,7 +73,7 @@ const socials = venue ? socialNavLinksFromVenue(venue) : [];
 					<p class="mb-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
 						{ui.nav.language}
 					</p>
-					<LanguageSwitcher locale={locale} variant="drawer" />
+					<LanguageSwitcher variant="drawer" />
 				</div>
 
 				<div class="bol-mobile-nav__section mt-auto pt-10">
@@ -206,24 +209,7 @@ const socials = venue ? socialNavLinksFromVenue(venue) : [];
 				}
 			</style>
 
-			<script is:inline define:vars={{ openLabel: ui.nav.openMenu, closeLabel: ui.nav.closeMenu }}>
-				const dialog = document.getElementById("bol-mobile-nav");
-				const trigger = document.querySelector(".bol-mobile-nav-trigger");
-
-				dialog?.addEventListener("toggle", (event) => {
-					const open = event.newState === "open";
-					trigger?.setAttribute("aria-expanded", String(open));
-					trigger?.setAttribute("aria-label", open ? closeLabel : openLabel);
-				});
-
-				dialog?.addEventListener("click", (event) => {
-					const link =
-						event.target instanceof Element ? event.target.closest("a[href]") : null;
-					if (link && dialog.contains(link)) {
-						dialog.hidePopover();
-					}
-				});
-			</script>
+			<MobileNavEnhancer />
 		</>
 	)
 }

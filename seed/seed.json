@@ -2791,7 +2791,13 @@
 							"subtitle": "High-spec gaming rigs, Hungarian Vaskakas craft beer on tap and cocktails shaken by award-winning bartenders — one room, seven days a week.",
 							"ctaMenu": "View menu",
 							"ctaBook": "Book a table",
-							"scrollHint": "Scroll"
+							"scrollHint": "Scroll",
+							"backgroundImage": {
+								"$media": {
+									"file": "hero.webp",
+									"alt": "Bar of Legends interior"
+								}
+							}
 						},
 						{
 							"_type": "bol.benefits",
@@ -2863,7 +2869,13 @@
 							"subtitle": "Csúcskategoriás játékgépek, hazai Vaskakas kézműves sör csapon és az év bartendere mixtúrájában készülő koktélok — egy helyen, a hét hét napján.",
 							"ctaMenu": "Itallap megtekintése",
 							"ctaBook": "Asztalfoglalás",
-							"scrollHint": "Görgess"
+							"scrollHint": "Görgess",
+							"backgroundImage": {
+								"$media": {
+									"file": "hero.webp",
+									"alt": "Bar of Legends interior"
+								}
+							}
 						},
 						{
 							"_type": "bol.benefits",
@@ -2935,7 +2947,13 @@
 							"subtitle": "High-End-Gaming-PCs, ungarisches Vaskakas-Craftbier vom Fass und Cocktails vom Barkeeper des Jahres — alles unter einem Dach, sieben Tage die Woche.",
 							"ctaMenu": "Karte ansehen",
 							"ctaBook": "Tisch reservieren",
-							"scrollHint": "Scrollen"
+							"scrollHint": "Scrollen",
+							"backgroundImage": {
+								"$media": {
+									"file": "hero.webp",
+									"alt": "Bar of Legends interior"
+								}
+							}
 						},
 						{
 							"_type": "bol.benefits",

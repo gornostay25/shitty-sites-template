@@ -1,10 +1,11 @@
 ---
-import { Image } from "astro:assets";
-import heroFallback from "../../../../assets/hero.webp";
 import Icon from "../icons/Icon.astro";
+import { Image } from "emdash/ui";
 import { fetchPublicVenue } from "../../utils/fetch-venue.ts";
 import { getPtNode } from "../../utils/pt-node.ts";
+import { safeMediaUrl } from "../../utils/safe-media-url.ts";
 import type { BolHeroNode } from "../../types/pt-blocks.ts";
+import type { ImageValue } from "emdash";
 
 const node = getPtNode<BolHeroNode>(Astro.props);
 const {
@@ -15,30 +16,40 @@ const {
 	ctaMenu,
 	ctaBook,
 	scrollHint,
-	backgroundImageUrl,
+	backgroundImage,
 } = node;
 
 const venue = await fetchPublicVenue(Astro.url.origin);
+
+function normalizeHeroImage(raw: BolHeroNode["backgroundImage"]): ImageValue | null {
+	if (!raw) return null;
+	if (typeof raw === "string") {
+		const src = safeMediaUrl(raw);
+		return src ? { src, alt: "", id: "" } : null;
+	}
+	const src = safeMediaUrl(raw.src);
+	if (!src) return null;
+	return { ...raw, src, id: raw.id ?? "" };
+}
+
+const heroImage = normalizeHeroImage(backgroundImage);
 ---
 
 <section class="relative flex min-h-svh flex-col justify-end overflow-hidden bg-bg">
 	<div class="absolute inset-0" aria-hidden="true">
 		{
-			backgroundImageUrl ? (
-				<img
-					src={backgroundImageUrl}
-					alt=""
-					class="size-full object-cover motion-safe:animate-kenburns"
-				/>
-			) : (
-				<Image
-					src={heroFallback}
-					alt=""
-					widths={[640, 1024, 1536, 1920]}
-					sizes="100vw"
-					class="size-full object-cover motion-safe:animate-kenburns"
-				/>
-			)
+			heroImage ? (
+				<div class="bol-hero-cover size-full motion-safe:animate-kenburns">
+					<Image
+						image={heroImage}
+						alt=""
+						priority
+						sizes="100vw"
+						placeholder={false}
+						class="size-full object-cover"
+					/>
+				</div>
+			) : null
 		}
 		<div class="absolute inset-0 bg-linear-to-b from-bg/70 via-bg/30 to-bg"></div>
 		<div class="absolute inset-0 bg-linear-to-r from-bg/60 via-transparent to-bg/20"></div>

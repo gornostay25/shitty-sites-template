@@ -29,12 +29,13 @@ The admin UI is at `http://localhost:4321/_emdash/admin`.
 | `src/hub-feedback/` | Optional Shitty Hub feedback widget (env-driven React island) |
 | `src/layouts/Base.astro` | Site shell: SEO, header, footer, hub-feedback |
 | `emdash-env.d.ts` | Generated types for collections (auto-regenerated on dev server start) |
-| `patches/emdash@0.37.0.patch` | Adds `byline` to type generator until upstream EmDash fix |
+| `patches/emdash@0.38.0.patch` | Adds `byline` to type generator until upstream EmDash fix |
 
 ## Rules
 
 - All content pages must be server-rendered (`output: "server"`). No `getStaticPaths()` for CMS content.
-- Image fields are objects (`{ src, alt }`), not strings. Use `<Image image={...} />` from `"emdash/ui"`.
+- CMS media fields resolve to **`ImageValue`** from `emdash` (see collection types in `emdash-env.d.ts`). Use `<Image image={…} />` from `"emdash/ui"`. PT types (e.g. `BolHeroNode.backgroundImage`) use `ImageValue | string` when a legacy URL string may appear.
+- Public interactivity: no global layout script boot — co-located Astro `<script>` in imported components, or React islands with `client:*` (e.g. `VenueMap` + `client:visible`). Do not add hoisted `<script>` inside PT block `.astro` files.
 - `entry.id` is the slug (for URLs). `entry.data.id` is the database ULID (for API calls like `getEntryTerms`).
 - Always call `Astro.cache.set(cacheHint)` on pages that query content.
 - Taxonomy names in queries must match the seed's `"name"` field exactly.
@@ -57,7 +58,7 @@ i18n: {
 
 - Locale routes: `/hu/…`, `/de/…` (default `en` unprefixed)
 - Helpers: `src/plugins/bol-theme/utils/i18n/locales.ts`, `notFoundPath()`, `getUiStrings()`
-- Content queries: pass `locale: Astro.currentLocale`
+- Content queries: pass `locale: Astro.currentLocale` on index and prefixed locale routes. On `[slug].astro` before redirect/rewrite, derive locale with `getRequestLocale(Astro.originPathname)` when `currentLocale` may still be `en`.
 - Seed rules: `docs/SEED-REFERENCE.md#internationalization`
 
 ### Hub Feedback

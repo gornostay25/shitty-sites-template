@@ -98,8 +98,8 @@ export type UiStrings = {
 		hoursTitle: string;
 		statusOpenTpl: string;
 		statusClosedTpl: string;
-		days: readonly string[];
-		daysShort: readonly string[];
+		days: string[];
+		daysShort: string[];
 		addressTitle: string;
 		maps: string;
 		reachTitle: string;

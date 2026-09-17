@@ -1,14 +1,14 @@
 ---
 import { getEmDashCollection } from "emdash";
 import { Image } from "emdash/ui";
-import Icon from "../icons/Icon.astro";
 import { getPtNode } from "../../utils/pt-node.ts";
-import { getUiStrings } from "../../utils/i18n/index.ts";
+import { getRequestLocale, getUiStrings } from "../../utils/i18n/index.ts";
 import type { BolGalleryNode } from "../../types/pt-blocks.ts";
+import GalleryLightbox from "../components/GalleryLightbox.astro";
 
 const node = getPtNode<BolGalleryNode>(Astro.props);
 const { eyebrow, title, subtitle } = node;
-const locale = Astro.currentLocale ?? "en";
+const locale = getRequestLocale(Astro.originPathname);
 const ui = getUiStrings(locale);
 
 const { entries: items, cacheHint } = await getEmDashCollection("gallery_items", {
@@ -42,86 +42,60 @@ function galleryImageSrc(image: GalleryImage): string {
 ---
 
 <section aria-labelledby="gallery-title" class="border-y border-border bg-surface/30">
-	<div class="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 md:py-24">
-		{eyebrow && (
-			<p class="text-xs font-semibold uppercase tracking-[0.25em] text-brand">{eyebrow}</p>
-		)}
-		{
-			title && (
-				<h2 id="gallery-title" class="mt-3 font-display text-4xl tracking-wide sm:text-5xl">
-					{title}
-				</h2>
-			)
-		}
-		{
-			subtitle && (
-				<p class="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-					{subtitle}
-				</p>
-			)
-		}
-
-		<div
-			class="bol-gallery-grid mt-10 grid auto-rows-37.5 grid-cols-2 gap-3 sm:auto-rows-42.5 md:grid-flow-dense md:grid-cols-4 md:gap-4"
-		>
+	<GalleryLightbox lightboxLabel={ui.gallery.lightboxLabel} closeLabel={ui.gallery.close}>
+		<div class="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 md:py-24">
+			{eyebrow && (
+				<p class="text-xs font-semibold uppercase tracking-[0.25em] text-brand">{eyebrow}</p>
+			)}
 			{
-				items.map((item) => {
-					const span = item.data.grid_span ?? "default";
-					const spanClass = SPAN_CLASSES[span] ?? "";
-					const alt = item.data.alt;
-					const src = galleryImageSrc(item.data.image);
-					return (
-						<button
-							type="button"
-							class:list={[
-								"bol-gallery__trigger group h-full w-full cursor-pointer rounded-card border border-border p-0 text-left",
-								spanClass,
-							]}
-							data-src={src}
-							data-alt={alt}
-							aria-label={galleryOpenLabel(ui.gallery.openImageTpl, alt)}
-						>
-							<figure class="bol-gallery__tile relative h-full min-h-0 overflow-hidden rounded-[inherit]">
-								<Image
-									image={item.data.image}
-									alt={alt}
-									class="absolute inset-0 size-full object-cover transition duration-500 group-hover:scale-105 group-hover:brightness-110"
-								/>
-							</figure>
-						</button>
-					);
-				})
+				title && (
+					<h2 id="gallery-title" class="mt-3 font-display text-4xl tracking-wide sm:text-5xl">
+						{title}
+					</h2>
+				)
 			}
-		</div>
+			{
+				subtitle && (
+					<p class="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+						{subtitle}
+					</p>
+				)
+			}
 
-		<dialog
-			id="bol-gallery-lightbox"
-			popover="auto"
-			class="bol-gallery-lightbox"
-			aria-label={ui.gallery.lightboxLabel}
-		>
-			<div class="bol-gallery-lightbox__inner">
-				<button
-					type="button"
-					class="bol-gallery-lightbox__close grid size-10 place-items-center rounded-full border border-border bg-surface text-foreground transition-colors hover:border-brand/40"
-					aria-label={ui.gallery.close}
-					data-gallery-close
-				>
-					<Icon name="x" class="size-5" />
-				</button>
-				<img
-					id="bol-gallery-lightbox-img"
-					class="bol-gallery-lightbox__img max-h-[85vh] max-w-[min(90vw,72rem)] object-contain"
-					alt=""
-					aria-describedby="bol-gallery-lightbox-caption"
-				/>
-				<p
-					id="bol-gallery-lightbox-caption"
-					class="bol-gallery-lightbox__caption mt-4 max-w-[min(90vw,42rem)] text-center text-sm text-muted-foreground"
-				/>
+			<div
+				class="bol-gallery-grid mt-10 grid auto-rows-37.5 grid-cols-2 gap-3 sm:auto-rows-42.5 md:grid-flow-dense md:grid-cols-4 md:gap-4"
+			>
+				{
+					items.map((item) => {
+						const span = item.data.grid_span ?? "default";
+						const spanClass = SPAN_CLASSES[span] ?? "";
+						const alt = item.data.alt;
+						const src = galleryImageSrc(item.data.image);
+						return (
+							<button
+								type="button"
+								class:list={[
+									"bol-gallery__trigger group h-full w-full cursor-pointer rounded-card border border-border p-0 text-left",
+									spanClass,
+								]}
+								data-src={src}
+								data-alt={alt}
+								aria-label={galleryOpenLabel(ui.gallery.openImageTpl, alt)}
+							>
+								<figure class="bol-gallery__tile relative h-full min-h-0 overflow-hidden rounded-[inherit]">
+									<Image
+										image={item.data.image}
+										alt={alt}
+										class="absolute inset-0 size-full object-cover transition duration-500 group-hover:scale-105 group-hover:brightness-110"
+									/>
+								</figure>
+							</button>
+						);
+					})
+				}
 			</div>
-		</dialog>
-	</div>
+		</div>
+	</GalleryLightbox>
 </section>
 
 <style is:global>
@@ -249,37 +223,3 @@ function galleryImageSrc(image: GalleryImage): string {
 		}
 	}
 </style>
-
-<script is:inline>
-	const dialog = document.getElementById("bol-gallery-lightbox");
-	const img = document.getElementById("bol-gallery-lightbox-img");
-	const caption = document.getElementById("bol-gallery-lightbox-caption");
-	const grid = document.querySelector(".bol-gallery-grid");
-
-	grid?.addEventListener("click", (event) => {
-		const trigger =
-			event.target instanceof Element ? event.target.closest(".bol-gallery__trigger") : null;
-		if (!trigger || !dialog || !img || !caption) return;
-
-		const src = trigger.dataset.src;
-		const alt = trigger.dataset.alt ?? "";
-		if (!src) return;
-
-		img.src = src;
-		img.alt = alt;
-		caption.textContent = alt;
-		if (typeof dialog.showPopover === "function") {
-			dialog.showPopover();
-		}
-	});
-
-	dialog?.addEventListener("click", (event) => {
-		if (event.target === dialog) {
-			dialog.hidePopover();
-		}
-	});
-
-	document.querySelector("[data-gallery-close]")?.addEventListener("click", () => {
-		dialog?.hidePopover();
-	});
-</script>

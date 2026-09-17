@@ -2,9 +2,12 @@
 import ExperiencesRoute from "../plugins/bol-theme/astro/routes/ExperiencesRoute.astro";
 import ExperienceFilter from "../plugins/bol-theme/astro/islands/ExperienceFilter.tsx";
 import { loadExperiencesPageData } from "../plugins/bol-theme/utils/experiences-page.ts";
-import { getUiStrings } from "../plugins/bol-theme/utils/i18n/index.ts";
+import {
+	getRequestLocale,
+	getUiStrings,
+} from "../plugins/bol-theme/utils/i18n/index.ts";
 
-const locale = Astro.currentLocale ?? "en";
+const locale = getRequestLocale(Astro.originPathname);
 const data = await loadExperiencesPageData(locale, Astro.url.origin);
 if (Astro.cache?.enabled && data.cacheHint) Astro.cache.set(data.cacheHint);
 const ui = getUiStrings(locale);
@@ -21,7 +24,7 @@ const ui = getUiStrings(locale);
 >
 	<ExperienceFilter
 		slot="filters"
-		client:load
+		client:idle
 		filterLabel={data.filterProps.filterLabel}
 		allLabel={data.filterProps.allLabel}
 		categories={data.filterProps.categories}

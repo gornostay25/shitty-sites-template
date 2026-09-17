@@ -57,7 +57,7 @@ export default defineConfig({
     },
   ],
   integrations: [
-    react(),
+    react(), // Need for admin panel
     emdash({
       database: d1({ binding: "DB", session: "auto" }),
       storage: r2({ binding: "MEDIA" }),

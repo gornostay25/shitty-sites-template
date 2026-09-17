@@ -6,13 +6,25 @@
  * Uses Wrangler (same auth as D1 import) — no EmDash admin login required.
  *
  * Usage:
- *   bun scripts/upload-seed-media.ts --local     # local R2 + local D1 (dev)
+ *   bun scripts/upload-seed-media.ts --local     # local R2 + local D1 (creates local D1 via wrangler if missing)
  *   bun scripts/upload-seed-media.ts --remote    # remote R2 + remote D1 (production)
  *   bun scripts/upload-seed-media.ts --dry-run
+ *   bun scripts/upload-seed-media.ts --local --patch-d1-only  # patch JSON only (existing media rows)
+ *
+ * `bol.hero` `backgroundImage` is stored as a media_picker URL string (not `$media` or image objects).
+ * After `--local`, clears Miniflare KV object cache so pages/admin see patched D1 (TTL cache otherwise keeps `$media`).
  */
 
 import { Database } from "bun:sqlite";
-import { readFileSync, readdirSync, writeFileSync } from "node:fs";
+import {
+	existsSync,
+	mkdtempSync,
+	readFileSync,
+	readdirSync,
+	rmSync,
+	writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
 import { extname, join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 import { ulid } from "ulidx";
@@ -21,6 +33,7 @@ const cwd = process.cwd();
 
 const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
+const patchD1Only = args.includes("--patch-d1-only");
 const applyLocal = args.includes("--local");
 const applyRemote = args.includes("--remote");
 
@@ -33,13 +46,15 @@ const uploadsDir = resolve(
 	valueAfter(args, "--uploads-dir") ?? "seed/media",
 );
 const databaseArg = valueAfter(args, "--database");
-const dbPath = databaseArg
-	? resolve(cwd, databaseArg)
-	: applyLocal
-		? resolveLocalD1Database()
-		: resolve(cwd, ".emdash/seed-migration.db");
 const bucket = valueAfter(args, "--bucket") ?? "bar-of-legends-media";
 const d1Name = valueAfter(args, "--d1") ?? "bar-of-legends";
+const dbPath = resolve(
+	databaseArg
+		? resolve(cwd, databaseArg)
+		: applyLocal
+			? resolveLocalD1Database(d1Name)
+			: resolve(cwd, ".emdash/seed-migration.db"),
+);
 const patchPath = resolve(cwd, valueAfter(args, "--out") ?? ".emdash/d1-media-patch.sql");
 
 function valueAfter(argv: string[], flag: string): string | undefined {
@@ -48,20 +63,53 @@ function valueAfter(argv: string[], flag: string): string | undefined {
 }
 
 /** Miniflare D1 SQLite used by `bun dev` (Wrangler local persistence). */
-function resolveLocalD1Database(): string {
-	const d1Dir = resolve(cwd, ".wrangler/state/v3/d1/miniflare-D1DatabaseObject");
-	let entries: string[];
+/** Drop cached entries from `objectCache: kvCache({ binding: "bar-of-legends-CACHE" })`. */
+function purgeLocalObjectCacheKv(): void {
+	const blobsDir = resolve(cwd, ".wrangler/state/v3/kv/bar-of-legends-CACHE/blobs");
+	if (!existsSync(blobsDir)) return;
+	for (const name of readdirSync(blobsDir)) {
+		rmSync(resolve(blobsDir, name), { force: true });
+	}
+	console.log("Cleared local EmDash object cache (KV). Reload admin + site if content looked stale.");
+}
+
+function listLocalD1SqliteFiles(d1Dir: string): string[] {
 	try {
-		entries = readdirSync(d1Dir).filter(
+		return readdirSync(d1Dir).filter(
 			(name) => name.endsWith(".sqlite") && name !== "metadata.sqlite",
 		);
 	} catch {
+		return [];
+	}
+}
+
+/** Wrangler creates the Miniflare D1 SQLite on first `--local` execute (no `bun dev` required). */
+function materializeLocalD1Database(d1: string): void {
+	const d1Dir = resolve(cwd, ".wrangler/state/v3/d1/miniflare-D1DatabaseObject");
+	if (listLocalD1SqliteFiles(d1Dir).length > 0) return;
+
+	console.log("Local D1 SQLite missing — running wrangler d1 execute --local to create it…");
+	const result = spawnSync(
+		"bunx",
+		["wrangler", "d1", "execute", d1, "--local", "--command", "SELECT 1", "-y"],
+		{ encoding: "utf-8", cwd },
+	);
+	if (result.status !== 0) {
+		console.error(result.stderr || result.stdout);
 		throw new Error(
-			`Local D1 not found at ${d1Dir}. Start the dev server (bun dev) once, then retry.`,
+			"Could not initialize local D1. Run `bun dev` once so EmDash seeds the database, then retry.",
 		);
 	}
+}
+
+function resolveLocalD1Database(d1: string): string {
+	const d1Dir = resolve(cwd, ".wrangler/state/v3/d1/miniflare-D1DatabaseObject");
+	materializeLocalD1Database(d1);
+	const entries = listLocalD1SqliteFiles(d1Dir);
 	if (entries.length === 0) {
-		throw new Error(`No local D1 database in ${d1Dir}. Run bun dev first.`);
+		throw new Error(
+			`No local D1 database in ${d1Dir} after wrangler init. Run \`bun dev\` once, then retry.`,
+		);
 	}
 	if (entries.length > 1) {
 		throw new Error(
@@ -129,6 +177,44 @@ function isMediaRef(value: unknown): value is { $media: { file: string; alt?: st
 	);
 }
 
+/** EmDash Block Kit `media_picker` persists the asset URL string, not a full image object. */
+function normalizeBolHeroMediaPickerInBlocks(blocks: unknown[]): unknown[] {
+	return blocks.map((block) => {
+		if (typeof block !== "object" || block === null) return block;
+		const hero = block as Record<string, unknown>;
+		if (hero._type !== "bol.hero") return block;
+		const bg = hero.backgroundImage;
+		if (typeof bg === "object" && bg !== null && "src" in bg) {
+			const src = (bg as ImageValue).src;
+			if (typeof src === "string" && src.length > 0) {
+				return { ...hero, backgroundImage: src };
+			}
+		}
+		return block;
+	});
+}
+
+function normalizePortableTextMediaPickers(
+	table: string,
+	column: string,
+	parsed: unknown,
+): unknown {
+	if (table === "ec_pages" && column === "content" && Array.isArray(parsed)) {
+		return normalizeBolHeroMediaPickerInBlocks(parsed);
+	}
+	if (
+		table === "revisions" &&
+		column === "data" &&
+		typeof parsed === "object" &&
+		parsed !== null &&
+		Array.isArray((parsed as { content?: unknown }).content)
+	) {
+		const data = parsed as { content: unknown[] };
+		return { ...data, content: normalizeBolHeroMediaPickerInBlocks(data.content) };
+	}
+	return parsed;
+}
+
 function patchValue(
 	value: unknown,
 	resolveImage: (file: string, alt?: string) => ImageValue,
@@ -155,6 +241,7 @@ function collectMediaFiles(db: Database): Set<string> {
 		"SELECT image AS json FROM ec_menu_items WHERE image LIKE '%$media%'",
 		"SELECT image AS json FROM ec_gallery_items WHERE image LIKE '%$media%'",
 		"SELECT image AS json FROM ec_experiences WHERE image LIKE '%$media%'",
+		"SELECT content AS json FROM ec_pages WHERE content LIKE '%$media%'",
 		"SELECT data AS json FROM revisions WHERE data LIKE '%$media%'",
 	];
 
@@ -250,19 +337,142 @@ function buildImageValue(upload: UploadedFile, alt?: string): ImageValue {
 	};
 }
 
-const db = new Database(dbPath, { readonly: true });
-const neededFiles = [...collectMediaFiles(db)].sort();
-db.close();
+function loadExistingUploads(db: Database): Map<string, UploadedFile> {
+	const uploads = new Map<string, UploadedFile>();
+	const rows = db
+		.query(
+			"SELECT id, filename, mime_type, size, width, height, storage_key, content_hash FROM media WHERE status = 'ready'",
+		)
+		.all() as Array<{
+		id: string;
+		filename: string;
+		mime_type: string;
+		size: number;
+		width: number | null;
+		height: number | null;
+		storage_key: string;
+		content_hash: string;
+	}>;
 
-if (neededFiles.length === 0) {
+	for (const row of rows) {
+		uploads.set(row.filename, {
+			id: row.id,
+			storageKey: row.storage_key,
+			filename: row.filename,
+			mimeType: row.mime_type,
+			size: row.size,
+			contentHash: row.content_hash,
+			width: row.width,
+			height: row.height,
+		});
+	}
+	return uploads;
+}
+
+function assertLocalEmDashDatabase(db: Database): void {
+	const row = db
+		.query("SELECT 1 AS ok FROM sqlite_master WHERE type = 'table' AND name = 'ec_pages' LIMIT 1")
+		.get();
+	if (!row) {
+		throw new Error(
+			"Local D1 has no EmDash content yet. Run `bun dev`, wait until the site loads (seed runs), then retry `bun run seed:media-upload:local` (dev can stay running).",
+		);
+	}
+}
+
+function isSqliteCantOpen(error: unknown): boolean {
+	return (
+		typeof error === "object" &&
+		error !== null &&
+		"code" in error &&
+		(error as { code?: string }).code === "SQLITE_CANTOPEN"
+	);
+}
+
+/** Bun often cannot read live Miniflare D1 while `bun dev` runs — snapshot via sqlite3 backup. */
+function openPatchDatabase(path: string): { db: Database; snapshotDir: string | null } {
+	if (!applyLocal) {
+		try {
+			const db = new Database(path, { readonly: true });
+			db.query("SELECT 1").get();
+			return { db, snapshotDir: null };
+		} catch (error) {
+			if (!isSqliteCantOpen(error)) throw error;
+		}
+		return { db: new Database(path), snapshotDir: null };
+	}
+
+	try {
+		const db = new Database(path, { readonly: true });
+		db.query("SELECT 1").get();
+		return { db, snapshotDir: null };
+	} catch (error) {
+		if (!isSqliteCantOpen(error)) throw error;
+	}
+
+	console.log(
+		"Direct SQLite read blocked (Miniflare D1 while dev runs) — sqlite3 backup snapshot…",
+	);
+
+	const snapshotDir = mkdtempSync(join(tmpdir(), "bol-d1-read-"));
+	const snapshotPath = join(snapshotDir, "snapshot.sqlite");
+	const backup = spawnSync("sqlite3", [path, `.backup ${snapshotPath}`], {
+		encoding: "utf-8",
+		cwd,
+	});
+	if (backup.status !== 0) {
+		rmSync(snapshotDir, { recursive: true, force: true });
+		throw new Error(
+			`Could not snapshot local D1 (${path}). Install \`sqlite3\`, or stop \`bun dev\` and retry.\n${backup.stderr || backup.stdout}`,
+		);
+	}
+
+	const db = new Database(snapshotPath, { readonly: true });
+	return { db, snapshotDir };
+}
+
+if (!existsSync(dbPath)) {
+	if (applyRemote) {
+		console.error(
+			`Missing database file: ${dbPath}\n\n` +
+				"`--remote` reads `$media.file` refs from a local SQLite snapshot (not live remote D1).\n" +
+				"Create it from seed, then retry:\n\n" +
+				"  bunx emdash seed seed/seed.json --database .emdash/seed-migration.db --uploads-dir seed/media\n\n" +
+				"  bun run seed:media-upload\n",
+		);
+	} else {
+		console.error(`Missing database file: ${dbPath}`);
+	}
+	process.exit(1);
+}
+
+/** One read-only handle — no second open on live Miniflare D1 while dev runs. */
+const { db: patchDb, snapshotDir: patchDbSnapshotDir } = openPatchDatabase(dbPath);
+if (applyLocal) assertLocalEmDashDatabase(patchDb);
+const neededFiles = [...collectMediaFiles(patchDb)].sort();
+
+if (neededFiles.length === 0 && !patchD1Only) {
 	console.log("No $media.file references found — nothing to upload.");
 	process.exit(0);
 }
 
 console.log(`Database: ${dbPath}`);
-console.log(`Found ${neededFiles.length} unique seed media file(s).`);
 
 const uploads = new Map<string, UploadedFile>();
+
+if (patchD1Only) {
+	const existing = loadExistingUploads(patchDb);
+	for (const filename of neededFiles) {
+		const record = existing.get(filename);
+		if (!record) {
+			console.error(`No media row for ${filename} — run full upload first.`);
+			process.exit(1);
+		}
+		uploads.set(filename, record);
+	}
+	console.log(`Patch-only: resolving ${neededFiles.length} file(s) from existing media rows.`);
+} else {
+	console.log(`Found ${neededFiles.length} unique seed media file(s).`);
 
 for (const filename of neededFiles) {
 	const filePath = join(uploadsDir, filename);
@@ -295,6 +505,7 @@ for (const filename of neededFiles) {
 
 	uploads.set(filename, record);
 }
+}
 
 const resolveImage = (file: string, alt?: string) => {
 	const upload = uploads.get(file);
@@ -302,13 +513,13 @@ const resolveImage = (file: string, alt?: string) => {
 	return buildImageValue(upload, alt);
 };
 
-const patchDb = new Database(dbPath, { readonly: true });
 const statements: string[] = [
 	"-- Seed media patch: R2 objects + media rows + content image fields",
 ];
 
 const now = new Date().toISOString();
 
+if (!patchD1Only) {
 for (const upload of uploads.values()) {
 	statements.push(
 		`INSERT INTO media (id, filename, mime_type, size, width, height, alt, storage_key, content_hash, status, created_at) VALUES (${[
@@ -326,6 +537,7 @@ for (const upload of uploads.values()) {
 		].join(", ")});`,
 	);
 }
+}
 
 type RowPatch = { table: string; id: string; column: string; value: string };
 
@@ -337,7 +549,11 @@ function collectRowPatches(table: string, column: string, idColumn = "id"): RowP
 
 	for (const row of rows) {
 		const parsed = JSON.parse(row.json);
-		const patched = patchValue(parsed, resolveImage);
+		const patched = normalizePortableTextMediaPickers(
+			table,
+			column,
+			patchValue(parsed, resolveImage),
+		);
 		patches.push({
 			table,
 			id: row.id,
@@ -352,6 +568,7 @@ for (const patch of [
 	...collectRowPatches("ec_menu_items", "image"),
 	...collectRowPatches("ec_gallery_items", "image"),
 	...collectRowPatches("ec_experiences", "image"),
+	...collectRowPatches("ec_pages", "content"),
 	...collectRowPatches("revisions", "data"),
 ]) {
 	statements.push(
@@ -360,6 +577,7 @@ for (const patch of [
 }
 
 patchDb.close();
+if (patchDbSnapshotDir) rmSync(patchDbSnapshotDir, { recursive: true, force: true });
 
 writeFileSync(patchPath, `${statements.join("\n")}\n`);
 console.log(`Wrote ${patchPath} (${statements.length - 1} statements)`);
@@ -375,6 +593,7 @@ if ((applyLocal || applyRemote) && !dryRun) {
 		process.exit(1);
 	}
 	console.log(`Applied media patch to ${applyRemote ? "remote" : "local"} D1.`);
+	if (applyLocal) purgeLocalObjectCacheKv();
 } else if (!dryRun) {
 	console.log(`Next (local):  bun scripts/upload-seed-media.ts --local`);
 	console.log(`Next (remote): bun scripts/upload-seed-media.ts --remote`);

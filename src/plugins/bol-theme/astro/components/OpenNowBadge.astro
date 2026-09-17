@@ -1,0 +1,28 @@
+---
+import type { OpenNowConfig } from "../blocks/contact-open-now.ts";
+
+interface Props {
+	config: OpenNowConfig;
+}
+
+const { config } = Astro.props;
+---
+
+<span
+	aria-live="polite"
+	class="inline-flex min-h-9 items-center gap-2 whitespace-nowrap rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-muted-foreground"
+	data-open-now-config={JSON.stringify(config)}
+>
+	<span class="size-2 rounded-full bg-muted-foreground" aria-hidden="true"></span>
+	<span data-open-now-text>…</span>
+</span>
+
+<script>
+	import { initOpenNowBadge, type OpenNowConfig } from "../blocks/contact-open-now.ts";
+
+	for (const badge of document.querySelectorAll<HTMLElement>("[data-open-now-config]")) {
+		const raw = badge.dataset.openNowConfig;
+		if (!raw) continue;
+		initOpenNowBadge(badge, JSON.parse(raw) as OpenNowConfig);
+	}
+</script>

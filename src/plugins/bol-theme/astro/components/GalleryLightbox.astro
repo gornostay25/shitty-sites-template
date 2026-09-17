@@ -1,0 +1,47 @@
+---
+import Icon from "../icons/Icon.astro";
+
+interface Props {
+	lightboxLabel: string;
+	closeLabel: string;
+}
+
+const { lightboxLabel, closeLabel } = Astro.props;
+---
+
+<div data-bol-gallery-root>
+	<slot />
+	<dialog
+		popover="auto"
+		class="bol-gallery-lightbox"
+		aria-label={lightboxLabel}
+		data-gallery-dialog
+	>
+		<div class="bol-gallery-lightbox__inner">
+			<button
+				type="button"
+				class="bol-gallery-lightbox__close grid size-10 place-items-center rounded-full border border-border bg-surface text-foreground transition-colors hover:border-brand/40"
+				aria-label={closeLabel}
+				data-gallery-close
+			>
+				<Icon name="x" class="size-5" />
+			</button>
+			<img
+				class="bol-gallery-lightbox__img max-h-[85vh] max-w-[min(90vw,72rem)] object-contain"
+				alt=""
+				data-gallery-img
+				aria-describedby="bol-gallery-lightbox-caption"
+			/>
+			<p
+				id="bol-gallery-lightbox-caption"
+				class="bol-gallery-lightbox__caption mt-4 max-w-[min(90vw,42rem)] text-center text-sm text-muted-foreground"
+				data-gallery-caption
+			></p>
+		</div>
+	</dialog>
+</div>
+
+<script>
+	import { initGalleryLightbox } from "./gallery-lightbox.ts";
+	document.querySelectorAll<HTMLElement>("[data-bol-gallery-root]").forEach(initGalleryLightbox);
+</script>

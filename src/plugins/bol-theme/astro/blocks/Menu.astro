@@ -5,6 +5,7 @@ import type { BolMenuNode } from "../../types/pt-blocks.ts";
 import { formatHUF } from "../../utils/format.ts";
 import { flattenCategoryTerms } from "../../utils/taxonomy.ts";
 import { MENU_CATEGORY_TAXONOMY } from "../../types/taxonomies.ts";
+import MenuTabsEnhancer from "../components/MenuTabsEnhancer.astro";
 
 const node = getPtNode<BolMenuNode>(Astro.props);
 const { eyebrow, title, subtitle, footnote } = node;
@@ -74,28 +75,24 @@ const itemsByCategory = Object.fromEntries(
 
 	<div class="menu-tabs mt-10">
 		<div
-			role="radiogroup"
+			role="tablist"
 			aria-label={menuTitle}
 			class="scrollbar-slim -mx-1 flex gap-1 overflow-x-auto rounded-full border border-border bg-surface p-1 sm:mx-0 sm:inline-flex sm:w-auto sm:overflow-visible"
 		>
 			{
 				categoryTerms.map((term, index) => (
-					<>
-						<input
-							type="radio"
-							name="menu-category"
-							id={`menu-tab-${term.slug}`}
-							class="menu-tab-input sr-only"
-							checked={index === 0}
-						/>
-						<label
-							for={`menu-tab-${term.slug}`}
-							id={`menu-tab-label-${term.slug}`}
-							class="menu-tab-label inline-flex min-h-11 shrink-0 cursor-pointer items-center justify-center rounded-full px-4 text-sm font-semibold transition-colors sm:px-6"
-						>
-							{tabLabels[term.slug] ?? term.slug}
-						</label>
-					</>
+					<button
+						type="button"
+						role="tab"
+						id={`menu-tab-${term.slug}`}
+						aria-selected={index === 0 ? "true" : "false"}
+						aria-controls={`menu-panel-${term.slug}`}
+						tabindex={index === 0 ? 0 : -1}
+						class="menu-tab-btn inline-flex min-h-11 shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent px-4 font-[inherit] text-sm font-semibold transition-colors sm:px-6"
+						data-tab={term.slug}
+					>
+						{tabLabels[term.slug] ?? term.slug}
+					</button>
 				))
 			}
 		</div>
@@ -104,7 +101,9 @@ const itemsByCategory = Object.fromEntries(
 			categoryTerms.map((term, index) => (
 				<div
 					id={`menu-panel-${term.slug}`}
-					aria-labelledby={`menu-tab-label-${term.slug}`}
+					role="tabpanel"
+					aria-labelledby={`menu-tab-${term.slug}`}
+					tabindex={index === 0 ? 0 : undefined}
 					class="menu-tab-panel mt-8"
 					hidden={index !== 0}
 				>
@@ -160,35 +159,18 @@ const itemsByCategory = Object.fromEntries(
 		display: none;
 	}
 
-	.menu-tab-label[aria-selected="true"] {
+	.menu-tab-btn[aria-selected="true"] {
 		background-color: var(--color-brand);
 		color: #1c1305;
 	}
 
-	.menu-tab-label {
+	.menu-tab-btn {
 		color: var(--color-muted-foreground);
 	}
 
-	.menu-tab-label:hover {
+	.menu-tab-btn:hover {
 		color: var(--color-foreground);
 	}
 </style>
 
-<script>
-	function syncMenuTabs(root: HTMLElement) {
-		const radios = root.querySelectorAll<HTMLInputElement>(".menu-tab-input");
-		const sync = () => {
-			for (const radio of radios) {
-				const tabId = radio.id.replace("menu-tab-", "");
-				const label = root.querySelector<HTMLElement>(`#menu-tab-label-${tabId}`);
-				const panel = root.querySelector<HTMLElement>(`#menu-panel-${tabId}`);
-				const selected = radio.checked;
-				label?.setAttribute("aria-selected", String(selected));
-				if (panel) panel.hidden = !selected;
-			}
-		};
-		for (const radio of radios) radio.addEventListener("change", sync);
-		sync();
-	}
-	document.querySelectorAll<HTMLElement>(".menu-tabs").forEach(syncMenuTabs);
-</script>
+<MenuTabsEnhancer />

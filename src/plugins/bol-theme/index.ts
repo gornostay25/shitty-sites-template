@@ -102,10 +102,10 @@ export function createPlugin() {
 						},
 						{
 							type: "media_picker",
-							action_id: "backgroundImageUrl",
-							label: "Background image (optional)",
+							action_id: "backgroundImage",
+							label: "Background image",
 							mime_type_filter: "image/",
-							placeholder: "Leave empty for default hero image",
+							placeholder: "Leave empty for gradient-only background",
 						},
 					],
 				},

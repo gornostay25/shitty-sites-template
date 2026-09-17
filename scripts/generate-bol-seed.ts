@@ -811,6 +811,7 @@ function homePageContent(locale: Locale) {
 			_type: "bol.hero",
 			_key: `home-hero-${locale}`,
 			...copy.hero,
+			backgroundImage: media("hero.webp", "Bar of Legends interior"),
 		},
 		{
 			_type: "bol.benefits",
@@ -1206,7 +1207,6 @@ const seed = {
 	},
 };
 
-//@ts-expect-error
 const outPath = join(import.meta.dir, "..", "seed", "seed.json");
 writeFileSync(outPath, `${JSON.stringify(seed, null, "\t")}\n`);
 console.log(`Wrote ${outPath}`);

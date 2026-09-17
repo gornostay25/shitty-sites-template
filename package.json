@@ -19,14 +19,14 @@
     "seed:media-upload:local": "bun scripts/upload-seed-media.ts --local"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "14.3.1",
-    "@astrojs/react": "6.0.5",
-    "@emdash-cms/cloudflare": "^0.37.0",
+    "@astrojs/cloudflare": "14.3.2",
+    "@astrojs/react": "6.0.6",
+    "@emdash-cms/cloudflare": "^0.38.0",
     "@fasterfixes/core": "^0.0.7",
     "@floating-ui/react": "^0.27.16",
-    "@lucide/astro": "^1.45.0",
-    "astro": "7.3.2",
-    "emdash": "^0.37.0",
+    "@lucide/astro": "^1.47.0",
+    "astro": "7.3.3",
+    "emdash": "^0.38.0",
     "leaflet": "^1.9.4",
     "libphonenumber-js": "^1.13.13",
     "modern-screenshot": "^4.6.8",
@@ -35,16 +35,16 @@
   },
   "devDependencies": {
     "@astrojs/check": "0.9.10",
-    "@cloudflare/workers-types": "^5.20260911.1",
+    "@cloudflare/workers-types": "^5.20260917.1",
     "@tailwindcss/vite": "^4.0.0",
     "@types/bun": "^1.4.2",
     "@types/leaflet": "^1.9.22",
     "@types/sanitize-html": "^2.16.0",
     "tailwindcss": "^4.0.0",
     "ulidx": "^2.4.1",
-    "wrangler": "^4.131.1"
+    "wrangler": "^4.133.0"
   },
   "patchedDependencies": {
-    "emdash@0.37.0": "patches/emdash@0.37.0.patch"
+    "emdash@0.38.0": "patches/emdash@0.38.0.patch"
   }
 }

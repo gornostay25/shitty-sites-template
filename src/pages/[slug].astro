@@ -3,21 +3,31 @@
  * Route: /{slug}
  * CMS pages — single full-width layout, Portable Text (+ plugin blocks).
  */
+import { getRelativeLocaleUrl } from "astro:i18n";
 import { getEmDashEntry, getSiteSettings } from "emdash";
 import Base from "../layouts/Base.astro";
 import BolPortableText from "../components/BolPortableText.astro";
 import { resolveSiteIdentity } from "../utils/site-identity";
 import { buildContentSeo } from "../utils/seo";
-import { isNonDefaultLocale, notFoundPath } from "../plugins/bol-theme/utils/i18n/index.ts";
+import {
+	getRequestLocale,
+	isNonDefaultLocale,
+	notFoundPath,
+} from "../plugins/bol-theme/utils/i18n/index.ts";
 
 const { slug } = Astro.params;
 if (slug && isNonDefaultLocale(slug)) {
 	const normalized = Astro.url.pathname.replace(/\/$/, "") || "/";
 	if (normalized === `/${slug}`) {
-		return Astro.rewrite("/");
+		return Astro.redirect(getRelativeLocaleUrl(slug, "/"), 301);
 	}
 }
 if (!slug) return Astro.redirect(notFoundPath(Astro.currentLocale));
+
+if (slug === "home") {
+	const requestLocale = getRequestLocale(Astro.originPathname);
+	return Astro.redirect(getRelativeLocaleUrl(requestLocale, "/"), 301);
+}
 
 const locale = Astro.currentLocale;
 const { entry: page, isPreview, cacheHint } = await getEmDashEntry("pages", slug, {

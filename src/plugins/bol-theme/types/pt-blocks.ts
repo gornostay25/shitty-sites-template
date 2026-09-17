@@ -1,3 +1,5 @@
+import type { ImageValue } from "emdash";
+
 export type BolHeroNode = {
 	_type?: "bol.hero";
 	_key?: string;
@@ -8,7 +10,7 @@ export type BolHeroNode = {
 	ctaMenu?: string;
 	ctaBook?: string;
 	scrollHint?: string;
-	backgroundImageUrl?: string;
+	backgroundImage?: ImageValue | string;
 };
 
 export type BolBenefitItem = {

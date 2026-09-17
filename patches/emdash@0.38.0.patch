@@ -1,7 +1,7 @@
-diff --git a/dist/zod-generator-BuYSQJB7.mjs b/dist/zod-generator-BuYSQJB7.mjs
-index ceadaea229b1a2b0bd9bdeee87a39ec0baf31d95..edb669ec7292e5e495f7d895515f44db9177c695 100644
---- a/dist/zod-generator-BuYSQJB7.mjs
-+++ b/dist/zod-generator-BuYSQJB7.mjs
+diff --git a/dist/zod-generator-CNRGdnBY.mjs b/dist/zod-generator-CNRGdnBY.mjs
+index eb338000a2262145bd3649d73168f285ccecb96a..68e69ddb06b2124675b0ef67b58e87166737a2d8 100644
+--- a/dist/zod-generator-CNRGdnBY.mjs
++++ b/dist/zod-generator-CNRGdnBY.mjs
 @@ -173,6 +173,7 @@ function generateTypeScript(collection, interfaceName = getInterfaceName(collect
  	lines.push(`  createdAt: Date;`);
  	lines.push(`  updatedAt: Date;`);

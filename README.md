@@ -54,3 +54,4 @@ Bindings: `bar-of-legends-CACHE`, `bar-of-legends-SESSION`. Prod IDs in gitignor
 - [docs/CLOUDFLARE-DEPLOYMENT.md](./docs/CLOUDFLARE-DEPLOYMENT.md)
 - [docs/SEED-REFERENCE.md](./docs/SEED-REFERENCE.md)
 - [EmDash docs](https://docs.emdashcms.com/) — MCP at `https://docs.emdashcms.com/mcp`
+- Shipped design archive: [docs/superpowers/archive/2026-09-17/](./docs/superpowers/archive/2026-09-17/) (Lighthouse perf, client interactivity polish, `ImageValue` hero)
